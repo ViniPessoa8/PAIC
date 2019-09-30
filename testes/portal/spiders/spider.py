@@ -1,4 +1,5 @@
 import scrapy
+from bs4 import BeautifulSoup
 
 class TestSpider(scrapy.Spider):
     name = 'teste'
@@ -15,11 +16,10 @@ class TestSpider(scrapy.Spider):
             yield scrapy.Request(url=url, callback=self.parse)
 
     def parse(self, response):
-        print("\n\n\n")
-        print(response)
-        print("\n\n\n")
-        for option in response.xpath('//select[@name="year"]/option/text()'):
-            self.log(option)
+        for option in response.xpath('//select[@name="year"]/option'):
+            yield {
+                'option': option.xpath('//option/text()').extract_first()
+            }
         # yield options
         
         
