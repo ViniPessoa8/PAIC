@@ -47,8 +47,8 @@ for orgao in orgaos:
                 btn_csv = b.find_element_by_xpath(".//*[@class='a-table']/tbody/tr["+str(i)+"]/td[2]/a[2]")
                 print(btn_csv.text)
                 btn_csv.click()
-            except:     
-                # 
+            except:   
+                print("Erro ao ler arquivo")
 
     b.quit()
     break
