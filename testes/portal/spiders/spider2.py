@@ -12,10 +12,9 @@ profile = webdriver.FirefoxProfile()
 profile.set_preference('browser.download.folderList', 2) # custom location
 profile.set_preference('browser.download.panel.shown', False)
 profile.set_preference('browser.download.manager.showWhenStarting', False)
-profile.set_preference('browser.helperApps.neverAsk.saveToDisk', 'application/csv,text/csv,application/pdf,application/x-pdf')
-profile.set_preference('browser.helperApps.neverAsk.openFile', 'application/csv,text/csv,application/pdf,application/x-pdf')
+profile.set_preference('browser.helperApps.neverAsk.saveToDisk', 'application/csv,text/csv')
+profile.set_preference('browser.helperApps.neverAsk.openFile', 'application/csv,text/csv')
 profile.set_preference('browser.download.dir', '/home/vini/git/PAIC/csv/')
-profile.set_preference("pdfjs.disabled", 'true')
 
 # Acesso do Driver
 b = webdriver.Firefox(profile)
@@ -49,9 +48,7 @@ for orgao in orgaos:
                 print(btn_csv.text)
                 btn_csv.click()
             except:     
-                btn_pdf = b.find_element_by_xpath(".//*[@class='a-table']/tbody/tr["+str(i)+"]/td[2]/a[1]")
-                print(btn_pdf.text)
-                btn_pdf.click()
+                # 
 
     b.quit()
     break
