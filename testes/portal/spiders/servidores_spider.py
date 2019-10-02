@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 import time
+import os
 
 # Preferencias do navegador
 profile = webdriver.FirefoxProfile()
@@ -10,10 +11,11 @@ profile.set_preference('browser.download.panel.shown', False)
 profile.set_preference('browser.download.manager.showWhenStarting', False)
 profile.set_preference('browser.helperApps.neverAsk.saveToDisk', 'application/csv,text/csv')
 profile.set_preference('browser.helperApps.neverAsk.openFile', 'application/csv,text/csv')
-profile.set_preference('browser.download.dir', '/home/vini/git/PAIC/csv/')
+profile.set_preference('browser.download.dir', '~/git/PAIC/csv/')
 
 # Criação do Driver
 b = webdriver.Firefox(profile)
+b.profile = profile
 
 # Acessa a página de remuneração dos servidores
 b.get('http://www.transparencia.am.gov.br/pessoal/')
