@@ -72,9 +72,9 @@ for orgao in orgaos:
             # Seleciona o mês de acordo como index da lista de meses
             mes_txt = b.find_element_by_xpath(".//*[@class='a-table']/tbody/tr["+str(i)+"]/td[1]").text
             
-            # [LOG] "Orgao_Ano_Mes"
 
             try:    
+                # [LOG] "Orgao_Ano_Mes"
                 print(orgao + "_" + ano + "_" + mes_txt, end='')
                 # Busca os botões de download ".csv" em cada mês da tabela
                 btn_csv = b.find_element_by_xpath(".//*[@class='a-table']/tbody/tr["+str(i)+"]/td[2]/a[2]")
