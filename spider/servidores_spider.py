@@ -1,4 +1,3 @@
-from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 import time
@@ -8,24 +7,25 @@ import shutil
 #### Funções ####
 def finaliza_spider(webdriver):
     webdriver.quit()
-    quit()
 
 def inicia_web_driver(url):
-    # Preferencias do navegador
-    profile = webdriver.FirefoxProfile()
-    profile.set_preference('browser.download.folderList', 2)
-    profile.set_preference('browser.download.panel.shown', False)
-    profile.set_preference('browser.download.manager.showWhenStarting', False)
-    profile.set_preference('browser.helperApps.neverAsk.saveToDisk', 'application/csv,text/csv')
-    profile.set_preference('browser.helperApps.neverAsk.openFile', 'application/csv,text/csv')
-    profile.set_preference('browser.download.dir', '~/git/PAIC/csv/')
+    options = webdriver.ChromeOptions()
+    download_path = r"/home/vini/git/PAIC/csv"
 
-    # Criação do Driver
-    web_driver = webdriver.Firefox(profile)
-    web_driver.profile = profile
+    # Define as preferências do webdriver
+    prefs = { 
+        "download.default_directory" : download_path,
+        "directory_upgrade": True
+    }
+    options.add_argument("disable-popup-blocking")
+    options.add_experimental_option("prefs", prefs)
+    
+    # Instancía o webdriver
+    web_driver = webdriver.Chrome(chrome_options=options)
 
     # Acessa a página de remuneração dos servidores
     web_driver.get(url)
+    
     return web_driver
 
 
@@ -52,7 +52,7 @@ def get_anos(orgao, web_driver):
 
 def cria_pasta(orgao):
     #cria pasta do órgão
-    caminho = os.path.join("./csv/", orgao)
+    caminho = os.path.join("../csv/", orgao)
     try:
         os.mkdir(caminho)
     except OSError:
@@ -109,11 +109,11 @@ def download_em_andamento():
     # Verifica se há aquivos sendo baixados
     baixando = True
     while (baixando):
-        files = os.listdir("./csv")
+        files = os.listdir("../csv")
         safe_move = True
         print("\n[Baixando arquivos]")
         for f in files:
-            if (f.endswith(".part")):
+            if (f.endswith(".crdownload")):
                 print("\n.part")
                 safe_move = False
 
@@ -122,11 +122,11 @@ def download_em_andamento():
 
 def move_arquivos(orgao):
     # Move arquivos para a pasta do órgão
-    files = os.listdir("./csv")
+    files = os.listdir("../csv")
     for f in files:
         if (f.endswith(".csv")):        
             try:
-                shutil.move(os.path.join("./csv/", f), os.path.join("./csv/", orgao))
+                shutil.move(os.path.join("../csv/", f), os.path.join("../csv/", orgao))
             except OSError:
                 print(f + " duplicado.")
 
@@ -135,7 +135,10 @@ def move_arquivos(orgao):
 def main():
     b = inicia_web_driver('http://www.transparencia.am.gov.br/pessoal/')
     orgaos = get_orgaos(b)
-
+    
+    fim = time.time()
+    print(fim - inicio)
+    
     for orgao in orgaos:
         cria_pasta(orgao)
         anos = get_anos(orgao, b)
@@ -151,4 +154,15 @@ def main():
     # Fecha o webdriver
     finaliza_spider(b)
 
+# Marca o incio do processamento
+inicio = time.time()
+
 main()
+
+# Marca o fim do processamento
+fim = time.time()
+
+# Printa o tempo decorrido em segundos 
+print(fim - inicio)
+
+quit()
