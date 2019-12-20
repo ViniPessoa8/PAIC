@@ -52,11 +52,15 @@ def get_anos(orgao, web_driver):
 
 def cria_pasta(orgao):
     #cria pasta do órgão
-    caminho = os.path.join("../csv/", orgao)
-    try:
+    caminho = 'csv/'
+    if (not os.path.exists(caminho)):
         os.mkdir(caminho)
-    except OSError:
-        print(caminho + ' já existe.')
+        
+    caminho = os.path.join("csv/", orgao)
+    if (not os.path.exists(caminho)):
+        os.mkdir(caminho)
+    else :
+        print(caminho + ": Diretório já existente")
 
 def carrega_tabela(orgao, ano, web_driver):
     # Seleciona a opção do select-box "Orgaos"
@@ -83,7 +87,6 @@ def download_csv_meses(orgao, ano, web_driver):
         meses_tr = None
 
     if (meses_tr != None):
-        print("\nRange(2, %d)" %(len(meses_tr)))
         for i in range(2, len(meses_tr)):
             try:
                 # Seleciona o mês de acordo como index da lista de meses
@@ -109,7 +112,7 @@ def download_em_andamento():
     # Verifica se há aquivos sendo baixados
     baixando = True
     while (baixando):
-        files = os.listdir("../csv")
+        files = os.listdir("./csv")
         safe_move = True
         print("\n[Baixando arquivos]")
         for f in files:
@@ -122,11 +125,11 @@ def download_em_andamento():
 
 def move_arquivos(orgao):
     # Move arquivos para a pasta do órgão
-    files = os.listdir("../csv")
+    files = os.listdir("./csv")
     for f in files:
         if (f.endswith(".csv")):        
             try:
-                shutil.move(os.path.join("../csv/", f), os.path.join("../csv/", orgao))
+                shutil.move(os.path.join("./csv/", f), os.path.join("./csv/", orgao))
             except OSError:
                 print(f + " duplicado.")
 
