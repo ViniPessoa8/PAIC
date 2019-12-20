@@ -55,7 +55,7 @@ def cria_pasta(orgao):
     caminho = 'csv/'
     if (not os.path.exists(caminho)):
         os.mkdir(caminho)
-        
+
     caminho = os.path.join("csv/", orgao)
     if (not os.path.exists(caminho)):
         os.mkdir(caminho)
@@ -75,10 +75,10 @@ def carrega_tabela(orgao, ano, web_driver):
         print("\n[Carregando tabela %s_%s]" %(orgao, ano))
         while ("display: none;" not in loading_flag):
             loading_flag = web_driver.find_element_by_class_name("main_loader").get_attribute("style")
-            time.sleep(1)
+            # time.sleep(1)
 
 def download_csv_meses(orgao, ano, web_driver):
-    time.sleep(1)
+    # time.sleep(1)
     
     # Recupera uma lista dos elementos <tr> da tabela de meses.
     try:
@@ -99,7 +99,6 @@ def download_csv_meses(orgao, ano, web_driver):
             try:    
                 # Busca os botões de download ".csv" em cada mês da tabela
                 btn_csv = web_driver.find_element_by_xpath(".//*[@class='a-table']/tbody/tr["+str(i)+"]/td[2]/a[2]")
-
                 # Realiza o download do arquivo .csv
                 btn_csv.click()
                 
@@ -109,19 +108,19 @@ def download_csv_meses(orgao, ano, web_driver):
         print()
 
 def download_em_andamento():
+    print("\n[Baixando arquivos]")
+    2
     # Verifica se há aquivos sendo baixados
     baixando = True
     while (baixando):
         files = os.listdir("./csv")
         safe_move = True
-        print("\n[Baixando arquivos]")
         for f in files:
             if (f.endswith(".crdownload")):
-                print("\n.part")
                 safe_move = False
-
         if (safe_move):
             baixando = False
+
 
 def move_arquivos(orgao):
     # Move arquivos para a pasta do órgão
