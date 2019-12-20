@@ -13,3 +13,8 @@
         ```
         $ pip install selenium
         ```
+
+### Execução
+```
+python servidores_spider.py
+```
