@@ -119,6 +119,7 @@ def download_em_andamento():
                 safe_move = False
         if (safe_move):
             baixando = False
+            time.sleep(1)
 
 
 def move_arquivos(orgao):
