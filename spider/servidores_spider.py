@@ -109,7 +109,6 @@ def download_csv_meses(orgao, ano, web_driver):
 
 def download_em_andamento():
     print("\n[Baixando arquivos]")
-    2
     # Verifica se há aquivos sendo baixados
     baixando = True
     while (baixando):
