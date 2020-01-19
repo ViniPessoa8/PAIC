@@ -135,7 +135,6 @@ def move_arquivos(orgao):
         if (f.endswith(".csv")):        
             try:
                 shutil.move(os.path.join("./csv/", f), os.path.join("./csv/", orgao))
-                os.remove()
             except OSError:
                 print(f + " duplicado.")
 
