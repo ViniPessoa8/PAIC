@@ -135,18 +135,19 @@ def move_arquivos(orgao):
         if (f.endswith(".csv")):        
             try:
                 shutil.move(os.path.join("./csv/", f), os.path.join("./csv/", orgao))
+                os.remove()
             except OSError:
                 print(f + " duplicado.")
 
 def remove_arquivos(dir):
-    filelist = [ f for f in os.listdir(dir) ]
-    for f in filelist:
-        os.remove(os.path.join(dir, f))
+    shutil.rmtree(dir)
+    # filelist = [ f for f in os.listdir(dir) ]
+    # for f in filelist:
 
 #### MAIN ####
 
 def main():
-    # remove_arquivos("")
+    remove_arquivos("./csv")
     b = inicia_web_driver('http://www.transparencia.am.gov.br/pessoal/')
     orgaos = get_orgaos(b)
     
