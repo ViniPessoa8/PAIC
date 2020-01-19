@@ -78,7 +78,6 @@ def carrega_tabela(orgao, ano, web_driver):
         time.sleep(1)
 
 def download_csv_meses(orgao, ano, web_driver):
-    # time.sleep(1)
     
     # Recupera uma lista dos elementos <tr> da tabela de meses.
     try:
@@ -140,8 +139,6 @@ def move_arquivos(orgao):
 
 def remove_arquivos(dir):
     shutil.rmtree(dir)
-    # filelist = [ f for f in os.listdir(dir) ]
-    # for f in filelist:
 
 #### MAIN ####
 
