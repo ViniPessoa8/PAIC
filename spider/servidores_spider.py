@@ -1,13 +1,13 @@
+#### Imports ####
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 import time
 import os
 import shutil
 
+#### Global Variables ####
 project_path = "/home/vini/git/"
-
 csv_path = project_path + "PAIC/csv/"
-
 
 #### Funções ####
 def finaliza_spider(webdriver):
