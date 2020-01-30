@@ -4,17 +4,21 @@ import time
 import os
 import shutil
 
+project_path = "/home/vini/git/"
+
+csv_path = project_path + "PAIC/csv/"
+
+
 #### Funções ####
 def finaliza_spider(webdriver):
     webdriver.quit()
 
 def inicia_web_driver(url):
     options = webdriver.ChromeOptions()
-    download_path = "/home/vini/git/PAIC/csv"
 
     # Define as preferências do webdriver
     prefs = { 
-        "download.default_directory" : download_path,
+        "download.default_directory" : csv_path,
         "directory_upgrade": True
     }
     options.add_argument("disable-popup-blocking")
@@ -52,11 +56,10 @@ def get_anos(orgao, web_driver):
 
 def cria_pasta(orgao):
     #cria pasta do órgão
-    caminho = 'csv/'
-    if (not os.path.exists(caminho)):
-        os.mkdir(caminho)
+    if (not os.path.exists(csv_path)):
+        os.mkdir(csv_path)
 
-    caminho = os.path.join("csv/", orgao)
+    caminho = os.path.join(csv_path, orgao)
     if (not os.path.exists(caminho)):
         os.mkdir(caminho)
     else :
@@ -117,7 +120,7 @@ def download_em_andamento():
     # Verifica se há aquivos sendo baixados
     baixando = True
     while (baixando):
-        files = os.listdir("./csv")
+        files = os.listdir(csv_path)
         safe_move = True
         for f in files:
             if (f.endswith(".crdownload")):
@@ -129,21 +132,22 @@ def download_em_andamento():
 
 def move_arquivos(orgao):
     # Move arquivos para a pasta do órgão
-    files = os.listdir("./csv")
+    files = os.listdir(csv_path)
     for f in files:
         if (f.endswith(".csv")):        
             try:
-                shutil.move(os.path.join("./csv/", f), os.path.join("./csv/", orgao))
+                shutil.move(os.path.join(csv_path, f), os.path.join(csv_path, orgao))
             except OSError:
                 print(f + " duplicado.")
 
 def remove_arquivos(dir):
-    shutil.rmtree(dir)
+    if os.path.isdir(dir):
+      shutil.rmtree(dir)
 
 #### MAIN ####
 
 def main():
-    remove_arquivos("./csv")
+    remove_arquivos(csv_path)
     b = inicia_web_driver('http://www.transparencia.am.gov.br/pessoal/')
     orgaos = get_orgaos(b)
     
