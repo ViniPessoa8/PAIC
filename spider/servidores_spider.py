@@ -1,8 +1,13 @@
+#### Imports ####
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 import time
 import os
 import shutil
+
+#### Global Variables ####
+project_path = "/home/vini/git/"
+csv_path = project_path + "PAIC/csv/"
 
 #### Funções ####
 def finaliza_spider(webdriver):
@@ -10,11 +15,10 @@ def finaliza_spider(webdriver):
 
 def inicia_web_driver(url):
     options = webdriver.ChromeOptions()
-    download_path = r"/home/vini/git/PAIC/csv"
 
     # Define as preferências do webdriver
     prefs = { 
-        "download.default_directory" : download_path,
+        "download.default_directory" : csv_path,
         "directory_upgrade": True
     }
     options.add_argument("disable-popup-blocking")
@@ -52,11 +56,10 @@ def get_anos(orgao, web_driver):
 
 def cria_pasta(orgao):
     #cria pasta do órgão
-    caminho = 'csv/'
-    if (not os.path.exists(caminho)):
-        os.mkdir(caminho)
+    if (not os.path.exists(csv_path)):
+        os.mkdir(csv_path)
 
-    caminho = os.path.join("csv/", orgao)
+    caminho = os.path.join(csv_path, orgao)
     if (not os.path.exists(caminho)):
         os.mkdir(caminho)
     else :
@@ -75,10 +78,9 @@ def carrega_tabela(orgao, ano, web_driver):
         print("\n[Carregando tabela %s_%s]" %(orgao, ano))
         while ("display: none;" not in loading_flag):
             loading_flag = web_driver.find_element_by_class_name("main_loader").get_attribute("style")
-            # time.sleep(1)
+        time.sleep(1)
 
 def download_csv_meses(orgao, ano, web_driver):
-    # time.sleep(1)
     
     # Recupera uma lista dos elementos <tr> da tabela de meses.
     try:
@@ -96,12 +98,18 @@ def download_csv_meses(orgao, ano, web_driver):
 
             # [LOG] "Orgao_Ano_Mes"
             print("\n" + orgao + "_" + ano + "_" + mes_txt, end='')
+
+            # Busca os botões de download ".csv" em cada mês da tabela
             try:    
-                # Busca os botões de download ".csv" em cada mês da tabela
                 btn_csv = web_driver.find_element_by_xpath(".//*[@class='a-table']/tbody/tr["+str(i)+"]/td[2]/a[2]")
-                # Realiza o download do arquivo .csv
-                btn_csv.click()
-                
+                if (btn_csv.text == '.csv'):
+                    # Realiza o download do arquivo .csv
+                    btn_csv.click()
+                else:
+                    btn_csv = web_driver.find_element_by_xpath(".//*[@class='a-table']/tbody/tr["+str(i)+"]/td[2]/a[1]")
+                    if (btn_csv.text == '.csv'):
+                        # Realiza o download do arquivo .csv
+                        btn_csv.click()
             except:   
                 print(" [CSV não disponível]", end='')
 
@@ -109,32 +117,37 @@ def download_csv_meses(orgao, ano, web_driver):
 
 def download_em_andamento():
     print("\n[Baixando arquivos]")
-    2
     # Verifica se há aquivos sendo baixados
     baixando = True
     while (baixando):
-        files = os.listdir("./csv")
+        files = os.listdir(csv_path)
         safe_move = True
         for f in files:
             if (f.endswith(".crdownload")):
                 safe_move = False
         if (safe_move):
             baixando = False
+            time.sleep(1)
 
 
 def move_arquivos(orgao):
     # Move arquivos para a pasta do órgão
-    files = os.listdir("./csv")
+    files = os.listdir(csv_path)
     for f in files:
         if (f.endswith(".csv")):        
             try:
-                shutil.move(os.path.join("./csv/", f), os.path.join("./csv/", orgao))
+                shutil.move(os.path.join(csv_path, f), os.path.join(csv_path, orgao))
             except OSError:
                 print(f + " duplicado.")
+
+def remove_arquivos(dir):
+    if os.path.isdir(dir):
+      shutil.rmtree(dir)
 
 #### MAIN ####
 
 def main():
+    remove_arquivos(csv_path)
     b = inicia_web_driver('http://www.transparencia.am.gov.br/pessoal/')
     orgaos = get_orgaos(b)
     
@@ -148,8 +161,9 @@ def main():
         for ano in anos:
             carrega_tabela(orgao, ano, b)
             download_csv_meses(orgao, ano, b)
+            time.sleep(1)
         
-        time.sleep(2)
+        time.sleep(1)
         download_em_andamento()
         move_arquivos(orgao)
         

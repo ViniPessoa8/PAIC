@@ -8,10 +8,10 @@
     - #### Linux:
         Ter o arquivo 'chromedriver' no PATH ou no diretório /user/bin/
 
-- ### Selenium
+- ### Ambiente Virtual
     - #### Linux:
         ```
-        $ pip install selenium
+        $ source ./bin/activate
         ```
 
 ### Execução
