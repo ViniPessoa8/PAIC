@@ -89,7 +89,7 @@ def download_csv_meses(orgao, ano, web_driver):
         meses_tr = None
 
     if (meses_tr != None):
-        for i in range(2, len(meses_tr)):
+        for i in range(2, len(meses_tr)+1):
             try:
                 # Seleciona o mês de acordo como index da lista de meses
                 mes_txt = web_driver.find_element_by_xpath(".//*[@class='a-table']/tbody/tr["+str(i)+"]/td[1]").text
