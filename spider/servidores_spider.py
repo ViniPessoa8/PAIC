@@ -135,7 +135,6 @@ def renomeia_arquivos():
   for f in files:
     if (f.endswith("(1).csv")):
       novo_nome = f[:8] + "13.csv" 
-      print("[DEBUG]",novo_nome)
       os.rename(csv_path+f, csv_path+novo_nome)
 
 def move_arquivos(orgao):
