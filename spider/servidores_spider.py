@@ -130,6 +130,14 @@ def download_em_andamento():
             time.sleep(1)
 
 
+def renomeia_arquivos():
+  files = os.listdir(csv_path)
+  for f in files:
+    if (f.endswith("(1).csv")):
+      novo_nome = f[:8] + "13.csv" 
+      print("[DEBUG]",novo_nome)
+      os.rename(csv_path+f, csv_path+novo_nome)
+
 def move_arquivos(orgao):
     # Move arquivos para a pasta do órgão
     files = os.listdir(csv_path)
@@ -165,6 +173,7 @@ def main():
         
         time.sleep(1)
         download_em_andamento()
+        renomeia_arquivos()
         move_arquivos(orgao)
         
     # Fecha o webdriver
