@@ -1,13 +1,16 @@
 #### Imports ####
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
+from collections import Counter
 import time
 import os
 import shutil
+import re
 
 #### Global Variables ####
 project_path = "/home/vini/git/"
 csv_path = project_path + "PAIC/csv/"
+pastas = {}
 
 #### Funções ####
 def finaliza_spider(webdriver):
@@ -55,10 +58,11 @@ def get_anos(orgao, web_driver):
 
 
 def cria_pasta(orgao):
-    #cria pasta do órgão
+    # Cria a pasta /csv
     if (not os.path.exists(csv_path)):
         os.mkdir(csv_path)
 
+    # Cria pasta do órgão
     caminho = os.path.join(csv_path, orgao)
     if (not os.path.exists(caminho)):
         os.mkdir(caminho)
@@ -129,13 +133,14 @@ def download_em_andamento():
             baixando = False
             time.sleep(1)
 
-
+# Renomeia os arquivos duplicados de dezembro. 
+# "...12(1).csv" -> "...13.csv"
 def renomeia_arquivos():
-  files = os.listdir(csv_path)
-  for f in files:
-    if (f.endswith("(1).csv")):
-      novo_nome = f[:8] + "13.csv" 
-      os.rename(csv_path+f, csv_path+novo_nome)
+    files = os.listdir(csv_path)
+    for f in files:
+        if (f.endswith("12 (1).csv")):
+            novo_nome = f.replace("12 (1).csv", "13.csv")
+            os.rename(csv_path+f, csv_path+novo_nome)
 
 def move_arquivos(orgao):
     # Move arquivos para a pasta do órgão
@@ -143,10 +148,41 @@ def move_arquivos(orgao):
     for f in files:
         if (f.endswith(".csv")):        
             try:
-                shutil.move(os.path.join(csv_path, f), os.path.join(csv_path, orgao))
+                org_num = re.split("_", f)
+                if org_num[0] in pastas.keys():
+                    shutil.move(os.path.join(csv_path, f), os.path.join(csv_path, pastas[org_num[0]]))
             except OSError:
                 print(f + " duplicado.")
 
+# Verifica se a pasta de um órgão já está mapeada
+def verif_pasta(orgao):
+    if orgao in pastas.values():
+        return True
+    else:
+        return False
+
+# Retorna o item mais frequente de uma lista
+def mais_freq(L):
+    x = Counter(L)
+    return x.most_common(1)[0][0]
+
+# Mapeia o código do arquivo com a pasta do respectivo órgão.
+# Usa o código mais frequente para determinar o órgão atual.
+def mapeia_pasta(orgao):
+    files = os.listdir(csv_path)
+    lista = []
+
+    if not verif_pasta(orgao):
+        for f in files:
+            if (f.endswith(".csv")):        
+                org_num = re.split("_", f)
+                lista.append(org_num[0])
+        
+        if len(lista) > 0:
+            mf = mais_freq(lista)
+            pastas[mf] = orgao
+
+# Apaga um diretório e tudo que tem nele
 def remove_arquivos(dir):
     if os.path.isdir(dir):
       shutil.rmtree(dir)
@@ -168,10 +204,11 @@ def main():
         for ano in anos:
             carrega_tabela(orgao, ano, b)
             download_csv_meses(orgao, ano, b)
-            time.sleep(1)
+            # time.sleep(1)
         
-        time.sleep(1)
+        # time.sleep(1)
         download_em_andamento()
+        mapeia_pasta(orgao)
         renomeia_arquivos()
         move_arquivos(orgao)
         
