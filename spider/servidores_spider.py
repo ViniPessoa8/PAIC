@@ -99,6 +99,7 @@ def download_csv_meses(orgao, ano, web_driver):
                 mes_txt = web_driver.find_element_by_xpath(".//*[@class='a-table']/tbody/tr["+str(i)+"]/td[1]").text
             except:
                 print("Erro ao ler mês")
+                exit()
 
             # [LOG] "Orgao_Ano_Mes"
             print("\n" + orgao + "_" + ano + "_" + mes_txt, end='')
@@ -204,7 +205,7 @@ def main():
         for ano in anos:
             carrega_tabela(orgao, ano, b)
             download_csv_meses(orgao, ano, b)
-            # time.sleep(1)
+            time.sleep(1)
         
         # time.sleep(1)
         download_em_andamento()
