@@ -8,14 +8,10 @@ import shutil
 import re
 
 #### Global Variables ####
-#project_path = "/home/vini/git/"
-#csv_path = project_path + "PAIC/csv/"
 project_path = os.getcwd()
 csv_path = project_path.replace('spider', 'csv/')
 pastas = {}
 
-print(csv_path)
-print(project_path)
 #### Funções ####
 def finaliza_spider(webdriver):
     webdriver.quit()
