@@ -17,7 +17,8 @@ def finaliza_spider(webdriver):
     webdriver.quit()
 
 def inicia_web_driver(url):
-    options = webdriver.ChromeOptions()
+    options     = webdriver.ChromeOptions()
+    driver_path = project_path.replace('spider', 'bin/chromedriver') 
 
     # Define as preferências do webdriver
     prefs = { 
@@ -28,7 +29,7 @@ def inicia_web_driver(url):
     options.add_experimental_option("prefs", prefs)
     
     # Instancía o webdriver
-    web_driver = webdriver.Chrome(chrome_options=options)
+    web_driver = webdriver.Chrome(driver_path, chrome_options=options)
 
     # Acessa a página de remuneração dos servidores
     web_driver.get(url)
@@ -184,9 +185,9 @@ def mapeia_pasta(orgao):
             pastas[mf] = orgao
 
 # Apaga um diretório e tudo que tem nele
-def remove_arquivos(dir):
-    if os.path.isdir(dir):
-      shutil.rmtree(dir)
+def remove_arquivos(direc):
+    if os.path.isdir(direc):
+      shutil.rmtree(direc)
 
 #### MAIN ####
 
