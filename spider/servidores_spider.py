@@ -185,9 +185,9 @@ def mapeia_pasta(orgao):
             pastas[mf] = orgao
 
 # Apaga um diretório e tudo que tem nele
-def remove_arquivos(dir):
-    if os.path.isdir(dir):
-      shutil.rmtree(dir)
+def remove_arquivos(direc):
+    if os.path.isdir(direc):
+      shutil.rmtree(direc)
 
 #### MAIN ####
 
