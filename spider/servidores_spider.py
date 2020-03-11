@@ -10,13 +10,18 @@ import re
 #### Global Variables ####
 project_path = os.getcwd()
 csv_path = project_path.replace('spider', 'csv/')
+log_file_path = project_path.replace('spider', 'log/')
 pastas = {}
 
 #### Funções ####
 def finaliza_spider(webdriver):
     webdriver.quit()
+    with get_log_file() as f:        
+        f.write("[INFO] Spider finalizada.\n")
 
 def inicia_web_driver(url):
+    with get_log_file() as f:
+        f.write("[INFO] Iniciando web driver\n")
     options     = webdriver.ChromeOptions()
     driver_path = project_path.replace('spider', 'bin/chromedriver') 
 
@@ -36,8 +41,18 @@ def inicia_web_driver(url):
     
     return web_driver
 
+# Cria o arquivo de log
+def get_log_file():
+    if not os.path.isdir(log_file_path):
+        os.mkdir(log_file_path)
+    
+    log_file = open(log_file_path+'spider_log.txt', 'at')
+    return log_file
+        
 
 def get_orgaos(web_driver):
+    with get_log_file() as f:
+        f.write("[INFO] Carregando órgãos\n")
     # Clica na caixa de seleção "Orgão"
     select_orgao = web_driver.find_element_by_id("nav_orgaos")
     select_orgao.click()
@@ -48,6 +63,8 @@ def get_orgaos(web_driver):
     return orgaos
 
 def get_anos(orgao, web_driver):
+    with get_log_file() as f:
+        f.write("[INFO] Carregado anos do órgão "+orgao+"\n")
     # Clica na caixa de seleção "Ano"
     select_ano = web_driver.find_element_by_id("nav_year")
     select_ano.click()
@@ -61,36 +78,43 @@ def get_anos(orgao, web_driver):
 def cria_pasta(orgao):
     # Cria a pasta /csv
     if (not os.path.exists(csv_path)):
+        with get_log_file() as f:
+            f.write("[INFO] Criando pasta csv/\n")
         os.mkdir(csv_path)
 
     # Cria pasta do órgão
     caminho = os.path.join(csv_path, orgao)
     if (not os.path.exists(caminho)):
+        with get_log_file() as f:
+            f.write("[INFO] Criando pasta do órgão "+orgao+"\n")
         os.mkdir(caminho)
     else :
         print(caminho + ": Diretório já existente")
 
 def carrega_tabela(orgao, ano, web_driver):
+    with get_log_file() as f:
+        f.write("[INFO] Carregando tabela %s_%s\n" %(orgao, ano))
     # Seleciona a opção do select-box "Orgaos"
-        se_orgao = Select(web_driver.find_element_by_id("nav_orgaos"))
-        se_orgao.select_by_visible_text(orgao)
+    se_orgao = Select(web_driver.find_element_by_id("nav_orgaos"))
+    se_orgao.select_by_visible_text(orgao)
 
-        # Seleciona a opção do select-box "Ano"
-        se_ano = Select(web_driver.find_element_by_id("nav_year"))
-        se_ano.select_by_visible_text(ano)
+    # Seleciona a opção do select-box "Ano"
+    se_ano = Select(web_driver.find_element_by_id("nav_year"))
+    se_ano.select_by_visible_text(ano)
 
+    loading_flag = web_driver.find_element_by_class_name("main_loader").get_attribute("style")
+    print("\n[Carregando tabela %s_%s]\n" %(orgao, ano))
+    while ("display: none;" not in loading_flag):
         loading_flag = web_driver.find_element_by_class_name("main_loader").get_attribute("style")
-        print("\n[Carregando tabela %s_%s]" %(orgao, ano))
-        while ("display: none;" not in loading_flag):
-            loading_flag = web_driver.find_element_by_class_name("main_loader").get_attribute("style")
-        time.sleep(1)
+    time.sleep(1)
 
 def download_csv_meses(orgao, ano, web_driver):
-    
     # Recupera uma lista dos elementos <tr> da tabela de meses.
     try:
         meses_tr = web_driver.find_elements_by_xpath(".//*[@class='a-table']/tbody/tr")
     except:
+        with get_log_file() as f:
+            f.write("\n[ERRO] Tabela não encontrada\n")
         meses_tr = None
 
     if (meses_tr != None):
@@ -100,29 +124,39 @@ def download_csv_meses(orgao, ano, web_driver):
                 mes_txt = web_driver.find_element_by_xpath(".//*[@class='a-table']/tbody/tr["+str(i)+"]/td[1]").text
             except:
                 print("Erro ao ler mês")
+                with get_log_file() as f:
+                    f.write("\n[BUG] Erro ao ler mês\n")
                 exit()
 
             # [LOG] "Orgao_Ano_Mes"
             print("\n" + orgao + "_" + ano + "_" + mes_txt, end='')
-
+            
             # Busca os botões de download ".csv" em cada mês da tabela
             try:    
                 btn_csv = web_driver.find_element_by_xpath(".//*[@class='a-table']/tbody/tr["+str(i)+"]/td[2]/a[2]")
                 if (btn_csv.text == '.csv'):
                     # Realiza o download do arquivo .csv
+                    with get_log_file() as f:
+                        f.write("[INFO] " + orgao + "_" + ano + "_" + mes_txt + "\n")
                     btn_csv.click()
                 else:
                     btn_csv = web_driver.find_element_by_xpath(".//*[@class='a-table']/tbody/tr["+str(i)+"]/td[2]/a[1]")
                     if (btn_csv.text == '.csv'):
+                        with get_log_file() as f:
+                            f.write("[INFO] " + orgao + "_" + ano + "_" + mes_txt + "\n")
                         # Realiza o download do arquivo .csv
                         btn_csv.click()
             except:   
                 print(" [CSV não disponível]", end='')
+                with get_log_file() as f:
+                    f.write("[WARN] " + orgao + "_" + ano + "_" + mes_txt + " - CSV indisponível\n")
 
         print()
 
 def download_em_andamento():
     print("\n[Baixando arquivos]")
+    with get_log_file() as f:
+        f.write("[INFO] Baixando arquivos\n")
     # Verifica se há aquivos sendo baixados
     baixando = True
     while (baixando):
@@ -138,6 +172,8 @@ def download_em_andamento():
 # Renomeia os arquivos duplicados de dezembro. 
 # "...12(1).csv" -> "...13.csv"
 def renomeia_arquivos():
+    with get_log_file() as f:
+        f.write("[INFO] Renomeando arquivos '12 (1).csv' para '13.csv'\n")
     files = os.listdir(csv_path)
     for f in files:
         if (f.endswith("12 (1).csv")):
@@ -145,6 +181,8 @@ def renomeia_arquivos():
             os.rename(csv_path+f, csv_path+novo_nome)
 
 def move_arquivos(orgao):
+    with get_log_file() as f:
+        f.write("[INFO] Movendo arquivos para a pasta destino\n")
     # Move arquivos para a pasta do órgão
     files = os.listdir(csv_path)
     for f in files:
@@ -154,6 +192,8 @@ def move_arquivos(orgao):
                 if org_num[0] in pastas.keys():
                     shutil.move(os.path.join(csv_path, f), os.path.join(csv_path, pastas[org_num[0]]))
             except OSError:
+                with get_log_file() as f:
+                    f.write("\n[ERRO] arquivo duplicado:" + f + "\n")
                 print(f + " duplicado.")
 
 # Verifica se a pasta de um órgão já está mapeada
@@ -187,11 +227,13 @@ def mapeia_pasta(orgao):
 # Apaga um diretório e tudo que tem nele
 def remove_arquivos(direc):
     if os.path.isdir(direc):
-      shutil.rmtree(direc)
+        with get_log_file() as f:
+            f.write("[INFO] Removendo arquivos de '"+direc+"'\n")
+        shutil.rmtree(direc)
 
 #### MAIN ####
-
 def main():
+    os.remove(log_file_path+'spider_log.txt')
     remove_arquivos(csv_path)
     b = inicia_web_driver('http://www.transparencia.am.gov.br/pessoal/')
     orgaos = get_orgaos(b)
