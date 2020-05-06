@@ -25,9 +25,14 @@ df_temp = df.drop_duplicates(['ORGAO', 'NOME'])
 df_temp = df_temp.groupby('ORGAO', as_index=False)['NOME'].count()
 df_temp = df_temp.sort_values('NOME', ascending=False)
 df_temp = df_temp.rename(columns={'NOME':'Funcionários', 'ORGAO':'Órgão'})
+df_temp = df_temp[df_temp['Funcionários'] > 1]
 
-fig_num_func_reg = px.bar(df_temp, x='Órgão', y='Funcionários', title='Número de funcionários registrados (Por órgão)', height=700, width=1000)
-fig_num_func_reg.update_yaxes(nticks=10) 
+fig_num_func_reg = px.bar(
+    df_temp, 
+    x='Órgão', y='Funcionários', 
+    title='Número de funcionários registrados (Por órgão)', 
+    height=700, width=1100
+)
 
 ## Ativos
 dt_atual = df['DATA'].max()
@@ -39,7 +44,12 @@ df_temp = df_temp.rename(columns={'NOME':'Funcionários', 'ORGAO':'Órgão'})
 
 dt_formatada = str(dt_atual.month)+'/'+str(dt_atual.year)
 
-fig_num_func_ativo = px.bar(df_temp, x='Órgão', y='Funcionários', title='Número de funcionários ativos em '+dt_formatada+' (Por órgão)', height=700, width=1000)
+fig_num_func_ativo = px.bar(
+    df_temp, 
+    x='Órgão', y='Funcionários', 
+    title='Número de funcionários ativos em '+dt_formatada+' (Por órgão)', 
+    height=700, width=1000
+)
 
 ### Layout ###
 app.layout = html.Div(className='main-container', children=[
