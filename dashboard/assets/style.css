@@ -13,7 +13,6 @@ body {
 }
 
 .main-container {
-    border: 2px solid red;
     font-family: monospace;
     height: 1000px;
     display: flex;
@@ -42,13 +41,21 @@ body {
     position: relative;
 }
 
+.plot-2 {
+    flex-direction: row;
+}
+
 .plot-header {
     text-align: center;
-    font-size: 30px;
+    font-size: 40px;
     margin: 0;
     padding: 0;
     color: var(--color-4);
     background-color: var(--color-2);
+}
+
+.plot-header h4 {
+    margin: 15px;
 }
 
 .plot-container { 
