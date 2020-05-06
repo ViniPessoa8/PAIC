@@ -24,6 +24,8 @@ body {
     background-color: var(--color-5);
     text-align: center;
     font-size: 190%;
+    padding-left: 8%;
+    padding-right: 8%;
 }
 
 .input {
@@ -40,10 +42,40 @@ body {
     position: relative;
 }
 
+.plot-header {
+    text-align: center;
+    font-size: 30px;
+    margin: 0;
+    padding: 0;
+    color: var(--color-4);
+    background-color: var(--color-2);
+}
+
 .plot-container { 
     background-color: var(--color-3);
     text-align: center;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-around;
+}
+
+.graph {
+    margin: 20px;
+}
+
+.footer {
+    text-align: center;
+    background-color: var(--color-4);
+}
+
+a:link {
+    color: var(--color-3);
+}
+
+a:hover {
+    color: var(--color-2);
+}
+
+a:visited {
+    color: var(--color-5);
 }

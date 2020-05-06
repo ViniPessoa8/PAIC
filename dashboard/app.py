@@ -2,6 +2,7 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import pandas as pd
+import plotly.express as px
 from dash.dependencies import Input, Output
 
 app = dash.Dash(__name__)
@@ -12,7 +13,10 @@ df = pd.read_csv('../ds/remuneracao_servidores.csv', sep=',', header=0, decimal=
 orgaos = df.sort_values(['ORGAO'], ascending=True)['ORGAO'].unique()
 anos = df['DATA'].dt.year.drop_duplicates().sort_values()
 
-print(anos)
+df_temp = df.loc[:, ['REMUNERACAO LEGAL TOTAL(R$)', 'DATA', 'ORGAO']].groupby(by=['ORGAO', 'DATA'], as_index=False).sum()
+df_rem_total = df_temp[df_temp['REMUNERACAO LEGAL TOTAL(R$)'] > 10000000]
+fig = px.line(df_rem_total, title='Remuneração Legal Total de cada órgão ', x='DATA', y="REMUNERACAO LEGAL TOTAL(R$)", color='ORGAO', width=900, height=500)
+fig.update_yaxes(automargin=True)
 
 ### Layout ###
 app.layout = html.Div(className='main-container', children=[
@@ -26,37 +30,62 @@ app.layout = html.Div(className='main-container', children=[
         ])
     ]),
 
+    html.Div(className='plot-header', children=[
+        html.H4(className='', children=[
+            'Órgãos'
+        ])
+    ]),
+
     html.Div(className='plot-container', children=[
+
         html.Div(className='plot-1 plot', children=[
-            html.H3(id='out', children=['plot 1']),
+            html.H2('Maior Remuneração Legal Total (R$)'),
+            dcc.Graph(
+                id='graph',
+                className='graph',
+                figure=fig,
+            )
+        ]),
+
+        html.Div(className='plot-2 plot', children=[
+            html.H2('Remuneração Legal Total Individual (R$)'),
             dcc.Dropdown(
-                id='dropdown1',
+                id='dropdown2',
                 className='input',
                 options=[{'label':i, 'value':i} for i in orgaos],
-                value='-',
+                value=orgaos[0],
                 placeholder='Selecione um Órgão',
                 clearable=False,
                 searchable=False
             ),
             dcc.Graph(
-                id='graph'
+                id='graph2',
+                className='graph'
             )
-        ]),
+        ])
+    ]),
 
-        html.Div(className='plot-2 plot', children=[
-            html.H3('plot 2')
+    html.Footer(className='footer', children=[
+        html.P(children=[
+            'Fonte: ',
+            html.A(href='http://www.transparencia.am.gov.br/pessoal/', children=[
+                'http://www.transparencia.am.gov.br/pessoal/'
+            ])
         ])
     ])
 ])
 
 ### Calbacks ###
 @app.callback(
-    Output('out', 'children'),
-    [Input('dropdown1', 'value')]
+    Output('graph2', 'figure'),
+    [Input('dropdown2', 'value')]
 )
-def update_org_name(input):
-    print(input)
-    return input 
+def rem_org(input):
+    df_org = df.loc[(df.ORGAO == input), ['REMUNERACAO LEGAL TOTAL(R$)', 'DATA', 'ORGAO']].groupby(by=['DATA'], as_index=False).sum()
 
+    fig2 = px.line(df_org, title='Remuneração Legal Total - '+input, x='DATA', y='REMUNERACAO LEGAL TOTAL(R$)', width=1000, height=500)
+    return fig2
+
+### Server Run ###
 if (__name__ == '__main__'):
     app.run_server(debug=True)
