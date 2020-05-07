@@ -66,6 +66,16 @@ body {
     justify-content: space-around;
 }
 
+.options-container {
+    display:flex;
+    flex-direction: row;
+}
+
+.options-container h4 {
+    margin:0;
+    margin-bottom: 5px;
+}
+
 .graph {
     margin: 20px;
 }
