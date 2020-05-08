@@ -141,6 +141,11 @@ def load_layout():
                             id='dt_serv_mais_org',
                             columns=[{"name": col, "id": col} for col in pl.serv_mais_org().columns],
                             data=pl.serv_mais_org().to_dict('records'),
+                            style_table={
+                                'display': 'flex',
+                                'flex-direction': 'column',
+                                'align-itens': 'center'
+                            },
                             style_header={
                                 'backgroundColor': 'rgb(30, 30, 30)',
                                 'textAlign': 'center'
@@ -162,12 +167,17 @@ def load_layout():
                         html.Div(
                             className='serv_dupl_container',
                             children=[
-                                html.Div(children=[
-                                    html.H3('Por órgão'),
+                                html.Div(className='dt-container', children=[
+                                    html.H2('Por órgão'),
                                     dt.DataTable(
                                         id='dt_serv_dupl_org',
                                         columns=[{'name': col, 'id': col} for col in pl.serv_duplicados('org').columns],
                                         data=pl.serv_duplicados('org').to_dict('records'),
+                                        style_table={
+                                            'display': 'flex',
+                                            'flex-direction': 'column',
+                                            'align-itens': 'center'
+                                        },
                                         style_header={
                                             'backgroundColor': 'rgb(30, 30, 30)',
                                             'textAlign': 'center'
@@ -181,11 +191,16 @@ def load_layout():
                                     )
                                 ]),
                                 html.Div(children=[
-                                    html.H3('Por ano'),
+                                    html.H2('Por ano'),
                                     dt.DataTable(
                                         id='dt_serv_dupl_ano',
                                         columns=[{'name': col, 'id': col} for col in pl.serv_duplicados('data').reset_index().columns],
                                         data=pl.serv_duplicados('data').reset_index().to_dict('records'),
+                                        style_table={
+                                            'display': 'flex',
+                                            'flex-direction': 'column',
+                                            'align-itens': 'center'
+                                        },
                                         style_header={
                                             'backgroundColor': 'rgb(30, 30, 30)',
                                             'textAlign': 'center'
@@ -251,9 +266,12 @@ def load_layout():
                                 'textAlign': 'left'
                             },
                             style_table={
+                                'display': 'flex',
+                                'flex-direction': 'column',
+                                'align-itens': 'center',
                                 'overflowX': 'auto',
                                 'minWidth': '50%',
-                                'maxWidth': '1000px'
+                                'maxWidth': '1000px',
                             },
                             page_size=15
                         )

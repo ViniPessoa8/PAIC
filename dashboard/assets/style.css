@@ -33,13 +33,14 @@ body {
 }
 
 .plot {
-    border: 1px solid var(--color-2);
+    border-bottom: 1px solid var(--color-2);
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
     position: relative;
+    padding-bottom: 10px;
 }
 
 .plot-2 {
@@ -82,12 +83,13 @@ body {
     width: 50%;
 }
 
-#dt_serv_dupl_busca {
-    width: 100%;
+.dt-container {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
+
 
 .footer {
     text-align: center;
