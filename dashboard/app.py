@@ -61,6 +61,17 @@ def serv_busca_duplicados(org, ano, mes):
 def serv_busca_duplicados(org, ano, mes):
     return [{'name': col, 'id': col} for col in pl.serv_duplicados_busca(org, ano, mes).columns]
 
+# Busca individual de servidor
+@app.callback(
+    Output('graph_serv_busca','figure'),
+    [Input('serv_busca_input','value')]
+)
+def serv_busca(nome):
+    if(nome == None):
+        raise PreventUpdate
+    else:    
+        return pl.serv_busca(nome)
+
 ### Server Run ###
 if (__name__ == '__main__'):
     app.run_server(debug=True)

@@ -5,8 +5,9 @@ import dash_html_components as html
 import plotting as pl
 import pandas as pd
 
-df = pd.read_csv('../ds/remuneracao_servidores.csv', sep=',', header=0, decimal='.', parse_dates=['DATA'])
+df = pl.df#pd.read_csv('../ds/remuneracao_servidores.csv', sep=',', header=0, decimal='.', parse_dates=['DATA'])
 
+nomes = df['NOME'].drop_duplicates()
 orgaos = pl.orgaos
 anos = pl.anos
 meses = pl.meses
@@ -274,6 +275,28 @@ def load_layout():
                                 'maxWidth': '1000px',
                             },
                             page_size=15
+                        )
+                    ]
+                ),
+                html.Div(
+                    id='serv_busca',
+                    className='plot',
+                    children=[
+                        html.H1('Busca Individual de Servidores'),
+                        html.Div(
+                            className='options-container',
+                            children=[
+                                dcc.Dropdown(
+                                    id='serv_busca_input',
+                                    className='input',
+                                    placeholder='Nome do servidor',
+                                    options=[{'label':opt, 'value':opt} for opt in nomes]
+                                )
+                            ]
+                        ),
+                        dcc.Graph(
+                            id='graph_serv_busca',
+                            className='graph'
                         )
                     ]
                 )

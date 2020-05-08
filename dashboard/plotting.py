@@ -6,8 +6,9 @@ graph_y = 500
 
 pd.set_option('display.float_format', lambda x: '%.2f' % x) # Remove a notação científica dos valores
 df = pd.read_csv('../ds/remuneracao_servidores.csv', sep=',', header=0, decimal='.', parse_dates=['DATA']).drop(columns=['Unnamed: 0'])
+df = df.sort_values(by=['ORGAO', 'DATA'])
 
-orgaos = df.sort_values(['ORGAO'], ascending=True)['ORGAO'].unique()
+orgaos = df['ORGAO'].unique()
 anos = df['DATA'].dt.year.drop_duplicates().sort_values()
 meses = df['DATA'].dt.month.drop_duplicates().sort_values()
 
@@ -147,3 +148,9 @@ def serv_duplicados_busca(org, ano, mes):
     duplicados = df_temp[df_temp.duplicated(['NOME'], keep=False)].sort_values('NOME')
 
     return duplicados
+
+def serv_busca(nome):
+    registros_serv = df.loc[(df.NOME == nome), :].sort_values('DATA')
+    fig = px.line(registros_serv, title='Remuneração de '+nome, y='REMUNERACAO LEGAL TOTAL(R$)', x='DATA', color='ORGAO')
+
+    return fig
