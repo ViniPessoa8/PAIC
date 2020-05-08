@@ -5,7 +5,7 @@ graph_x = 1000
 graph_y = 500
 
 pd.set_option('display.float_format', lambda x: '%.2f' % x) # Remove a notação científica dos valores
-df = pd.read_csv('../ds/remuneracao_servidores.csv', sep=',', header=0, decimal='.', parse_dates=['DATA'])
+df = pd.read_csv('../ds/remuneracao_servidores.csv', sep=',', header=0, decimal='.', parse_dates=['DATA']).drop(columns=['Unnamed: 0'])
 
 orgaos = df.sort_values(['ORGAO'], ascending=True)['ORGAO'].unique()
 anos = df['DATA'].dt.year.drop_duplicates().sort_values()
@@ -80,6 +80,7 @@ def serv_mais_org():
     df_temp = df_temp.groupby('NOME', as_index=False)[['ORGAO']].count()
     df_temp = df_temp[df_temp['ORGAO'] > 1]
     df_temp = df_temp.sort_values(['ORGAO'], ascending=False)
+    df_temp.rename(columns={'NOME':'Número de Servidores'})
 
     return df_temp
 
@@ -123,3 +124,26 @@ def org_aumento(mes, ano):
     fig_temp = px.bar(orgs_aum_prin, y='Remuneração Legal Total (Soma)', x='Órgão', width=graph_x, height=graph_y)
 
     return fig_temp
+
+def serv_duplicados(filter):
+    # Preparação dos dados
+    df_temp    = df[['NOME', 'DATA', 'ORGAO']]
+    df_bool    = df_temp.duplicated()
+    duplicados = df_temp[df_bool]
+    duplicados = duplicados.rename(columns={'NOME':'Número de Servidores'})
+
+    if (filter == 'data'):
+        duplicados_data  = duplicados.groupby(duplicados['DATA'].dt.year)['Número de Servidores'].count()
+        
+        return duplicados_data
+
+    duplicados_orgao = duplicados.groupby(['ORGAO'], as_index=False)['Número de Servidores'].count()
+    duplicados_orgao = duplicados_orgao.sort_values('Número de Servidores', ascending=False)
+
+    return duplicados_orgao
+
+def serv_duplicados_busca(org, ano, mes):
+    df_temp = df.loc[(df.ORGAO == org) & (df['DATA'].dt.year == ano) & (df['DATA'].dt.month == mes)]
+    duplicados = df_temp[df_temp.duplicated(['NOME'], keep=False)].sort_values('NOME')
+
+    return duplicados

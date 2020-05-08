@@ -22,6 +22,7 @@ dt_formatada = layout.dt_formatada
 app.layout = layout.load_layout()
 
 ### Calbacks ###
+# Remuneração Total Individual
 @app.callback(
     Output('graph_org_rem_total_indiv', 'figure'),
     [Input('dropdown2', 'value')]
@@ -29,6 +30,7 @@ app.layout = layout.load_layout()
 def rem_org(input):
     return pl.org_rem_total_ind(input)
 
+# Aumento/cortes Remuneração Total
 @app.callback(
     Output('graph_aumento','figure'),
     [Input('dropdown_meses_1','value'),
@@ -39,6 +41,25 @@ def org_aumento(mes, ano):
         raise PreventUpdate
     else:
         return pl.org_aumento(mes, ano) 
+
+# Busca servidores duplicados
+@app.callback(
+    Output('dt_serv_dupl_busca','data'),
+    [Input('dropdown_busca_org','value'),
+    Input('dropdown_busca_ano','value'),
+    Input('dropdown_busca_mes','value')]
+)
+def serv_busca_duplicados(org, ano, mes):
+    return pl.serv_duplicados_busca(org, ano, mes).to_dict('records')
+
+@app.callback(
+    Output('dt_serv_dupl_busca','columns'),
+    [Input('dropdown_busca_org','value'),
+    Input('dropdown_busca_ano','value'),
+    Input('dropdown_busca_mes','value')]
+)
+def serv_busca_duplicados(org, ano, mes):
+    return [{'name': col, 'id': col} for col in pl.serv_duplicados_busca(org, ano, mes).columns]
 
 ### Server Run ###
 if (__name__ == '__main__'):

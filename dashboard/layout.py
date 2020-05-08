@@ -48,14 +48,16 @@ def load_layout():
             html.Div(className='plot', children=[
                 html.H2('Remuneração Legal Total Individual (R$)'),
                 html.H3('Soma da Remuneração Legal Total por órgão.'),
-                dcc.Dropdown(
-                    id='dropdown2',
-                    className='input',
-                    options=[{'label':i, 'value':i} for i in orgaos],
-                    value=orgaos[0],
-                    placeholder='Selecione um Órgão',
-                    clearable=False
-                ),
+                html.Div(className='options-container', children=[
+                    dcc.Dropdown(
+                        id='dropdown2',
+                        className='input',
+                        options=[{'label':i, 'value':i} for i in orgaos],
+                        value=orgaos[0],
+                        placeholder='Selecione um Órgão',
+                        clearable=False
+                    )
+                ]),
                 dcc.Graph(
                     id='graph_org_rem_total_indiv',
                     className='graph'
@@ -137,7 +139,7 @@ def load_layout():
                         html.H1('Funcionários com mais órgãos'),
                         dt.DataTable(
                             id='dt_serv_mais_org',
-                            columns=[{"name": col, "id": col} for col in df_teste.columns],
+                            columns=[{"name": col, "id": col} for col in pl.serv_mais_org().columns],
                             data=pl.serv_mais_org().to_dict('records'),
                             style_header={
                                 'backgroundColor': 'rgb(30, 30, 30)',
@@ -147,6 +149,111 @@ def load_layout():
                                 'backgroundColor': 'rgb(50, 50, 50)',
                                 'color': 'white',
                                 'textAlign': 'left'
+                            },
+                            page_size=15
+                        )
+                    ]
+                ),
+                html.Div(
+                    id='serv-dupl-mesmo-org',
+                    className='plot',
+                    children=[
+                        html.H1('Servidores duplicados no mesmo órgão.'),
+                        html.Div(
+                            className='serv_dupl_container',
+                            children=[
+                                html.Div(children=[
+                                    html.H3('Por órgão'),
+                                    dt.DataTable(
+                                        id='dt_serv_dupl_org',
+                                        columns=[{'name': col, 'id': col} for col in pl.serv_duplicados('org').columns],
+                                        data=pl.serv_duplicados('org').to_dict('records'),
+                                        style_header={
+                                            'backgroundColor': 'rgb(30, 30, 30)',
+                                            'textAlign': 'center'
+                                        },
+                                        style_cell={
+                                            'backgroundColor': 'rgb(50, 50, 50)',
+                                            'color': 'white',
+                                            'textAlign': 'left'
+                                        },
+                                        page_size=15
+                                    )
+                                ]),
+                                html.Div(children=[
+                                    html.H3('Por ano'),
+                                    dt.DataTable(
+                                        id='dt_serv_dupl_ano',
+                                        columns=[{'name': col, 'id': col} for col in pl.serv_duplicados('data').reset_index().columns],
+                                        data=pl.serv_duplicados('data').reset_index().to_dict('records'),
+                                        style_header={
+                                            'backgroundColor': 'rgb(30, 30, 30)',
+                                            'textAlign': 'center'
+                                        },
+                                        style_cell={
+                                            'backgroundColor': 'rgb(50, 50, 50)',
+                                            'color': 'white',
+                                            'textAlign': 'left'
+                                        },
+                                        page_size=15
+                                    )
+                                ])
+                            ]
+                        ),
+                        html.H2('Busca de servidores duplicados'),
+                        html.Div(className='options-container', children=[
+                            html.Div(children=[
+                                html.H2('Órgão'),
+                                dcc.Dropdown(
+                                    id='dropdown_busca_org',
+                                    className='input',
+                                    options=[{'label':i, 'value':i} for i in orgaos],
+                                    value=orgaos[3],
+                                    placeholder='Mês',
+                                    clearable=False,
+                                    searchable=False
+                                )
+                            ]),
+                            html.Div(children=[
+                                html.H2('Ano'),
+                                dcc.Dropdown(
+                                    id='dropdown_busca_ano',
+                                    className='input',
+                                    options=[{'label':i, 'value':i} for i in anos],
+                                    value=dt_atual.year,
+                                    placeholder='Mês',
+                                    clearable=False,
+                                    searchable=False
+                                )
+                            ]),
+                            html.Div(children=[
+                                html.H2('Mês'),
+                                dcc.Dropdown(
+                                    id='dropdown_busca_mes',
+                                    className='input',
+                                    options=[{'label':i, 'value':i} for i in meses],
+                                    value=dt_atual.month,
+                                    placeholder='Mês',
+                                    clearable=False,
+                                    searchable=False
+                                )
+                            ])
+                        ]),
+                        dt.DataTable(
+                            id='dt_serv_dupl_busca',
+                            style_header={
+                                'backgroundColor': 'rgb(30, 30, 30)',
+                                'textAlign': 'center'
+                            },
+                            style_cell={
+                                'backgroundColor': 'rgb(50, 50, 50)',
+                                'color': 'white',
+                                'textAlign': 'left'
+                            },
+                            style_table={
+                                'overflowX': 'auto',
+                                'minWidth': '50%',
+                                'maxWidth': '1000px'
                             },
                             page_size=15
                         )
