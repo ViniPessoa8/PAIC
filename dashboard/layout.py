@@ -37,6 +37,7 @@ def load_layout():
 
             html.Div(className='plot', children=[
                 html.H2('Maior Remuneração Legal Total (R$)'),
+                html.H3('Soma da Remuneração Legal Total de cada órgão por mês. No gráfico, somente os que receberam acima de 10 milhões.'),
                 dcc.Graph(
                     id='graph',
                     className='graph',
@@ -46,14 +47,14 @@ def load_layout():
 
             html.Div(className='plot', children=[
                 html.H2('Remuneração Legal Total Individual (R$)'),
+                html.H3('Soma da Remuneração Legal Total por órgão.'),
                 dcc.Dropdown(
                     id='dropdown2',
                     className='input',
                     options=[{'label':i, 'value':i} for i in orgaos],
                     value=orgaos[0],
                     placeholder='Selecione um Órgão',
-                    clearable=False,
-                    searchable=False
+                    clearable=False
                 ),
                 dcc.Graph(
                     id='graph_org_rem_total_indiv',
@@ -106,11 +107,11 @@ def load_layout():
         html.Div(id='servidores', className='plot-container', children=[
 
             html.Div(className=' plot', children=[
-                html.H1('Numero de Funcionários'),
                 html.Div(
                     id='registrados-container',
                     className='plot',
                     children=[
+                        html.H1('Numero de Funcionários'),
                         html.H2(children=[
                             'Registrados (', anos.min(), ' - ', anos.max(), ')'
                         ]),
@@ -119,12 +120,6 @@ def load_layout():
                             className='graph',
                             figure=pl.serv_num_reg()
                         ),
-                    ]
-                ),
-                html.Div(
-                    id='ativos-container',
-                    className='plot',
-                    children=[
                         html.H2(children=[
                             'Ativos (', dt_formatada, ')'
                         ]),
@@ -135,11 +130,11 @@ def load_layout():
                         )
                     ]
                 ),
-                html.H1('Funcionários com mais órgãos'),
                 html.Div(
                     id='serv-mais-org-container',
                     className='plot',
                     children=[
+                        html.H1('Funcionários com mais órgãos'),
                         dt.DataTable(
                             id='dt_serv_mais_org',
                             columns=[{"name": col, "id": col} for col in df_teste.columns],
