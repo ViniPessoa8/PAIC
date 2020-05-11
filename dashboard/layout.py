@@ -41,7 +41,6 @@ def load_layout():
                 html.H3('Soma da Remuneração Legal Total de cada órgão por mês. No gráfico, somente os que receberam acima de 10 milhões.'),
                 dcc.Graph(
                     id='graph',
-                    className='graph',
                     figure=pl.org_rem_total(),
                 )
             ]),
@@ -61,7 +60,6 @@ def load_layout():
                 ]),
                 dcc.Graph(
                     id='graph_org_rem_total_indiv',
-                    className='graph'
                 )
             ]),
 
@@ -96,7 +94,6 @@ def load_layout():
                 ]),
                 dcc.Graph(
                     id='graph_aumento',
-                    className='graph'
                 )
             ])
         ]),
@@ -120,7 +117,6 @@ def load_layout():
                         ]),
                         dcc.Graph(
                             id='graph_serv_num_reg',
-                            className='graph',
                             figure=pl.serv_num_reg()
                         ),
                         html.H2(children=[
@@ -128,7 +124,6 @@ def load_layout():
                         ]),
                         dcc.Graph(
                             id='graph_serv_num_ativo',
-                            className='graph',
                             figure=pl.serv_num_ativos()
                         )
                     ]
@@ -137,7 +132,7 @@ def load_layout():
                     id='serv-mais-org-container',
                     className='plot',
                     children=[
-                        html.H1('Funcionários com mais órgãos'),
+                        html.H1('Funcionários presentes em mais de um órgão.'),
                         dt.DataTable(
                             id='dt_serv_mais_org',
                             columns=[{"name": col, "id": col} for col in pl.serv_mais_org().columns],
@@ -296,7 +291,6 @@ def load_layout():
                         ),
                         dcc.Graph(
                             id='graph_serv_busca',
-                            className='graph'
                         )
                     ]
                 )
