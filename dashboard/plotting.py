@@ -86,10 +86,6 @@ def serv_mais_org():
     return df_temp
 
 def org_aumento(mes, ano):
-    # Dados
-    # ano = 2018
-    # mes = 8
-
     # Cálculo do mês anterior
     if mes == 1:
         mes_ant = 12
@@ -116,8 +112,6 @@ def org_aumento(mes, ano):
     orgs_aum['Órgão'] = rem_atual['ORGAO']
     orgs_aum['Remuneração Legal Total (Soma)'] = diff
     orgs_aum = orgs_aum.sort_values('Remuneração Legal Total (Soma)', ascending=False)
-
-    maior_diff   = diff.index.values.astype(int)[0]
 
     num = 50000
 
