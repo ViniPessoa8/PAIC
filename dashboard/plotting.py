@@ -1,9 +1,11 @@
 import pandas as pd
 import plotly.express as px
 
+# Configurações do Gráfico
 graph_x = 1000
 graph_y = 500
 
+# Preparação dos Dados 
 pd.set_option('display.float_format', lambda x: '%.2f' % x) # Remove a notação científica dos valores
 df = pd.read_csv('../ds/remuneracao_servidores.csv', sep=',', header=0, decimal='.', parse_dates=['DATA']).drop(columns=['Unnamed: 0'])
 df = df.sort_values(by=['ORGAO', 'DATA'])
@@ -148,3 +150,16 @@ def serv_busca(nome):
     fig = px.line(registros_serv, title='Remuneração de '+nome, y='REMUNERACAO LEGAL TOTAL(R$)', x='DATA', color='ORGAO')
 
     return fig
+
+def serv_liq():
+    df_temp = df.loc[(df['LIQUIDO DISPONIVEL(R$)'] > 35000)]
+    df_out  = pd.DataFrame()
+
+    df_out['Nome']  = df_temp['NOME']
+    df_out['Líquido Disponível(R$)'] = df_temp['LIQUIDO DISPONIVEL(R$)']
+    df_out['Órgão'] = df_temp['ORGAO']
+    df_out['Data']  = df_temp['DATA']
+
+    df_out = df_out.sort_values(by='Líquido Disponível(R$)', ascending=False)
+
+    return df_out

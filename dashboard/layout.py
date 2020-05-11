@@ -109,7 +109,7 @@ def load_layout():
             html.Div(className=' plot', children=[
                 html.Div(
                     id='registrados-container',
-                    className='plot',
+                    className='sub-plot',
                     children=[
                         html.H1('Numero de Funcionários'),
                         html.H2(children=[
@@ -130,7 +130,7 @@ def load_layout():
                 ),
                 html.Div(
                     id='serv-mais-org-container',
-                    className='plot',
+                    className='sub-plot',
                     children=[
                         html.H1('Funcionários presentes em mais de um órgão.'),
                         dt.DataTable(
@@ -157,7 +157,7 @@ def load_layout():
                 ),
                 html.Div(
                     id='serv-dupl-mesmo-org',
-                    className='plot',
+                    className='sub-plot',
                     children=[
                         html.H1('Servidores duplicados no mesmo órgão.'),
                         html.Div(
@@ -275,7 +275,7 @@ def load_layout():
                 ),
                 html.Div(
                     id='serv_busca',
-                    className='plot',
+                    className='sub-plot',
                     children=[
                         html.H1('Busca Individual de Servidores'),
                         html.Div(
@@ -291,6 +291,36 @@ def load_layout():
                         ),
                         dcc.Graph(
                             id='graph_serv_busca',
+                        )
+                    ]
+                ),
+                html.Div(
+                    id='serv-liq',
+                    className='sub-plot',
+                    children=[
+                        html.H1('Maior líquido disponível (R$)'),
+                        dt.DataTable(
+                            id='dt_serv_liq',
+                            columns=[{'name': col, 'id': col} for col in pl.serv_liq().columns],
+                            data=pl.serv_liq().to_dict('records'),
+                            style_header={
+                                'backgroundColor': 'rgb(30, 30, 30)',
+                                'textAlign': 'center'
+                            },
+                            style_cell={
+                                'backgroundColor': 'rgb(50, 50, 50)',
+                                'color': 'white',
+                                'textAlign': 'left'
+                            },
+                            style_table={
+                                'display': 'flex',
+                                'flex-direction': 'column',
+                                'align-itens': 'center',
+                                'overflowX': 'auto',
+                                'minWidth': '50%',
+                                'maxWidth': '1000px',
+                            },
+                            page_size=15
                         )
                     ]
                 )
