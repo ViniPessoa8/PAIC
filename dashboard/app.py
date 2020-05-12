@@ -63,14 +63,24 @@ def serv_busca_duplicados(org, ano, mes):
 
 # Busca individual de servidor
 @app.callback(
-    Output('graph_serv_busca','figure'),
+    Output('graph_serv_busca_orgao','figure'),
     [Input('serv_busca_input','value')]
 )
 def serv_busca(nome):
     if(nome == None):
         raise PreventUpdate
     else:    
-        return pl.serv_busca(nome)
+        return pl.serv_busca(nome, 'orgao')
+
+@app.callback(
+    Output('graph_serv_busca_cargo','figure'),
+    [Input('serv_busca_input','value')]
+)
+def serv_busca(nome):
+    if(nome == None):
+        raise PreventUpdate
+    else:    
+        return pl.serv_busca(nome, 'cargo')
 
 ### Server Run ###
 if (__name__ == '__main__'):

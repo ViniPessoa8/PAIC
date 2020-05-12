@@ -149,9 +149,12 @@ def serv_duplicados_busca(org, ano, mes):
 
     return duplicados
 
-def serv_busca(nome):
+def serv_busca(nome, filter='orgao'):
     registros_serv = df.loc[(df.NOME == nome), :].sort_values('DATA')
-    fig = px.line(registros_serv, title='Remuneração de '+nome, y='REMUNERACAO LEGAL TOTAL(R$)', x='DATA', color='ORGAO')
+    if (filter == 'orgao'):
+        fig = px.line(registros_serv, title='Remuneração de '+nome, y='REMUNERACAO LEGAL TOTAL(R$)', x='DATA', color='ORGAO')
+    else:
+        fig = px.line(registros_serv, title='Remuneração Legal Total de '+nome+' por Cargo e Data', y='REMUNERACAO LEGAL TOTAL(R$)', x='DATA', color='CARGO')
 
     return fig
 
