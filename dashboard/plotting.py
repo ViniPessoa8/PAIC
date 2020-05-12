@@ -1,5 +1,7 @@
 import pandas as pd
 import plotly.express as px
+import pathlib 
+import os
 
 # Configurações do Gráfico
 graph_x = 1000
@@ -7,7 +9,9 @@ graph_y = 500
 
 # Preparação dos Dados 
 pd.set_option('display.float_format', lambda x: '%.2f' % x) # Remove a notação científica dos valores
-df = pd.read_csv('../ds/remuneracao_servidores.csv', sep=',', header=0, decimal='.', parse_dates=['DATA']).drop(columns=['Unnamed: 0'])
+path = pathlib.Path(__file__).parent.parent.absolute()
+ds_path = str(path) + '/ds/remuneracao_servidores.csv'
+df = pd.read_csv(ds_path, sep=',', header=0, decimal='.', parse_dates=['DATA']).drop(columns=['Unnamed: 0'])
 df = df.sort_values(by=['ORGAO', 'DATA'])
 
 orgaos = df['ORGAO'].unique()
