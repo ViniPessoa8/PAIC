@@ -11,7 +11,7 @@ from dash.dependencies import Input, Output
 app = dash.Dash(__name__)
 
 ### DATA ###
-df = pd.read_csv('../ds/remuneracao_servidores.csv', sep=',', header=0, decimal='.', parse_dates=['DATA'])
+df = pl.df
 
 orgaos = pl.orgaos
 anos = pl.anos
