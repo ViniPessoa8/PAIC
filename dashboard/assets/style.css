@@ -12,11 +12,51 @@ body {
     color: var(--color-1)
 }
 
-.main-container {
+.container {
     font-family: monospace;
     height: 1000px;
     display: flex;
     flex-direction: column;
+}
+
+.sidenav {
+    height: inherit;
+    width: 160px;
+    position: relative;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: var(--color-4);
+    color: var(--color-1);
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+  
+.sidenav a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 15px;
+    color: var(--color-2);
+    display: block;
+}
+  
+.sidenav a:hover {
+    color: var(--color-1); 
+}
+  
+.main {
+    margin-left: 160px; /* Same as the width of the sidenav */
+    font-size: 28px; /* Increased text to enable scrolling */
+    padding: 0px 10px;
+}
+  
+/* @media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+} */
+
+.main-container {
+    display: flex;
 }
 
 .header-container {
@@ -32,18 +72,23 @@ body {
     color:black;
 }
 
-.sub-plot {
-    border-top: 1px solid var(--color-1);
+
+.plot-container {
+    position: relative; 
+    /* margin-left: 160px; */
     width: 100%;
+    background-color: var(--color-3);
+    text-align: center;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: space-around;
+    align-items: center;
     position: relative;
-    padding-bottom: 10px;
 }
 
 .plot-header {
+    position: inherit;
+    width: 100%;
     text-align: center;
     font-size: 40px;
     margin: 0;
@@ -53,18 +98,19 @@ body {
 }
 
 .plot-header h4 {
-    margin: 15px;
+    padding: 15px;
+    margin: 0;
 }
 
-.plot-container { 
+.sub-plot {
+    border-top: 1px solid var(--color-2);
     width: 100%;
-    background-color: var(--color-3);
-    text-align: center;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
     align-items: center;
+    justify-content: space-around;
     position: relative;
+    padding-bottom: 30px;
 }
 
 .options-container {
@@ -104,6 +150,7 @@ body {
 }
 
 .footer {
+    width: 100%;
     text-align: center;
     background-color: var(--color-4);
 }
@@ -113,15 +160,12 @@ a:link {
 }
 
 a:hover {
-    color: var(--color-3);
+    color: var(--color-1);
 }
 
-a:visited {
-    color: var(--color-4);
-}
 
-.dash-table-container {
+/* .dash-table-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
-}
+} */

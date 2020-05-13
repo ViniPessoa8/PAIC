@@ -21,7 +21,7 @@ dt_formatada = str(dt_atual.month)+'/'+str(dt_atual.year)
 df_teste = df[df['DATA'] == dt_atual][['NOME', 'ORGAO']].head(10)
 
 def load_layout(app):
-    component = html.Div(className='main-container', children=[
+    component = html.Div(className='container', children=[
         html.Div(className='header-container', children=[
             html.H1(className='header', children=[
                 'Transparência do Governo do Amazonas'
@@ -36,306 +36,310 @@ def load_layout(app):
                 ])
             ]),
         ]),
-        html.Div(className='plot-header', children=[
-            html.H4(className='', children=[
-                'Órgãos'
-            ])
-        ]),
-        html.Div(id='orgaos', className='plot-container', children=[
-            html.Div(className='sub-plot', children=[
-                html.H2('Maior Remuneração Legal Total (R$)'),
-                html.H3('Soma da Remuneração Legal Total de cada órgão por mês. No gráfico, somente os que receberam acima de 10 milhões.'),
-                dcc.Graph(
-                    id='graph',
-                    figure=pl.org_rem_total(),
-                )
+        html.Div(className='main-container', children =[
+            html.Div(className='sidenav', children=[
+                html.A(href='#orgaos', children=['Órgãos']),
+                html.A(href='#servidores', children=['Servidores'])
             ]),
-            html.Div(className='sub-plot', children=[
-                html.H2('Remuneração Legal Total Individual (R$)'),
-                html.H3('Soma da Remuneração Legal Total por órgão.'),
-                html.Div(className='options-container', children=[
-                    dcc.Dropdown(
-                        id='dropdown2',
-                        className='input',
-                        options=[{'label':i, 'value':i} for i in orgaos],
-                        value=orgaos[0],
-                        placeholder='Selecione um Órgão',
-                        clearable=False
-                    )
-                ]),
-                dcc.Graph(
-                    id='graph_org_rem_total_indiv',
-                )
-            ]),
-            html.Div(className='sub-plot', children=[
-                html.H2('Aumento/Corte no orçamento'),
-                html.H4('Diferença da soma da remuneração legal total de um mês para o outro. Sendo a diferença maior ou menor que 50.000.'),
-                html.Div(className='options-container', children=[
-                    html.Div(children=[
-                        html.H4('Mês'),
-                        dcc.Dropdown(
-                            id='dropdown_meses_1',
-                            className='input',
-                            options=[{'label':i, 'value':i} for i in meses],
-                            value=dt_atual.month,
-                            placeholder='Mês',
-                            clearable=False,
-                            searchable=False
-                        ),
+            html.Div(className='plot-container', children=[
+                html.Div(id='orgaos', className='plot-container', children=[
+                    html.Div(className='plot-header', children=[
+                        html.H4('Órgãos')
                     ]),
-                    html.Div(children=[
-                        html.H4('Ano'),
-                        dcc.Dropdown(
-                            id='dropdown_anos_1',
-                            className='input',
-                            options=[{'label':i, 'value':i} for i in anos],
-                            value=dt_atual.year,
-                            placeholder='Ano',
-                            clearable=False,
-                            searchable=False
+                    html.Div(className='sub-plot', children=[
+                        html.H2('Maior Remuneração Legal Total (R$)'),
+                        html.H3('Soma da Remuneração Legal Total de cada órgão por mês. No gráfico, somente os que receberam acima de 10 milhões.'),
+                        dcc.Graph(
+                            id='graph',
+                            figure=pl.org_rem_total(),
+                        )
+                    ]),
+                    html.Div(className='sub-plot', children=[
+                        html.H2('Remuneração Legal Total Individual (R$)'),
+                        html.H3('Soma da Remuneração Legal Total por órgão.'),
+                        html.Div(className='options-container', children=[
+                            dcc.Dropdown(
+                                id='dropdown2',
+                                className='input',
+                                options=[{'label':i, 'value':i} for i in orgaos],
+                                value=orgaos[0],
+                                placeholder='Selecione um Órgão',
+                                clearable=False
+                            )
+                        ]),
+                        dcc.Graph(
+                            id='graph_org_rem_total_indiv',
+                        )
+                    ]),
+                    html.Div(className='sub-plot', children=[
+                        html.H2('Aumento/Corte no orçamento'),
+                        html.H4('Diferença da soma da remuneração legal total de um mês para o outro. Sendo a diferença maior ou menor que 50.000.'),
+                        html.Div(className='options-container', children=[
+                            html.Div(children=[
+                                html.H4('Mês'),
+                                dcc.Dropdown(
+                                    id='dropdown_meses_1',
+                                    className='input',
+                                    options=[{'label':i, 'value':i} for i in meses],
+                                    value=dt_atual.month,
+                                    placeholder='Mês',
+                                    clearable=False,
+                                    searchable=False
+                                ),
+                            ]),
+                            html.Div(children=[
+                                html.H4('Ano'),
+                                dcc.Dropdown(
+                                    id='dropdown_anos_1',
+                                    className='input',
+                                    options=[{'label':i, 'value':i} for i in anos],
+                                    value=dt_atual.year,
+                                    placeholder='Ano',
+                                    clearable=False,
+                                    searchable=False
+                                )
+                            ])
+                        ]),
+                        dcc.Graph(
+                            id='graph_aumento',
                         )
                     ])
                 ]),
-                dcc.Graph(
-                    id='graph_aumento',
-                )
-            ])
-        ]),
-        html.Div(className='plot-header', children=[
-            html.H4(className='', children=[
-                'Servidores'
-            ])
-        ]),
-        html.Div(id='servidores', className='plot-container', children=[
-            html.Div(
-                id='registrados-container',
-                className='sub-plot',
-                children=[
-                    html.H1('Numero de Funcionários'),
-                    html.H2(children=[
-                        'Registrados (', anos.min(), ' - ', anos.max(), ')'
-                    ]),
-                    dcc.Graph(
-                        id='graph_serv_num_reg',
-                        figure=pl.serv_num_reg()
-                    ),
-                    html.H2(children=[
-                        'Ativos (', dt_formatada, ')'
-                    ]),
-                    dcc.Graph(
-                        id='graph_serv_num_ativo',
-                        figure=pl.serv_num_ativos()
-                    )
-                ]
-            ),
-            html.Div(
-                id='serv-mais-org-container',
-                className='sub-plot',
-                children=[
-                    html.H1('Funcionários presentes em mais de um órgão.'),
-                    dt.DataTable(
-                        id='dt_serv_mais_org',
-                        columns=[{"name": col, "id": col} for col in pl.serv_mais_org().columns],
-                        data=pl.serv_mais_org().to_dict('records'),
-                        style_table={
-                            'display': 'flex',
-                            'flex-direction': 'column',
-                            'align-itens': 'center'
-                        },
-                        style_header={
-                            'backgroundColor': 'rgb(30, 30, 30)',
-                            'textAlign': 'center'
-                        },
-                        style_cell={
-                            'backgroundColor': 'rgb(50, 50, 50)',
-                            'color': 'white',
-                            'textAlign': 'left'
-                        },
-                        page_size=15
-                    )
-                ]
-            ),
-            html.Div(
-                id='serv-dupl-mesmo-org',
-                className='sub-plot',
-                children=[
-                    html.H1('Servidores duplicados no mesmo órgão.'),
-                    html.Div(
-                        className='serv_dupl_container',
-                        children=[
-                            html.Div(className='dt-container', children=[
-                                html.H2('Por órgão'),
-                                dt.DataTable(
-                                    id='dt_serv_dupl_org',
-                                    columns=[{'name': col, 'id': col} for col in pl.serv_duplicados('org').columns],
-                                    data=pl.serv_duplicados('org').to_dict('records'),
-                                    style_table={
-                                        'display': 'flex',
-                                        'flex-direction': 'column',
-                                        'align-itens': 'center'
-                                    },
-                                    style_header={
-                                        'backgroundColor': 'rgb(30, 30, 30)',
-                                        'textAlign': 'center'
-                                    },
-                                    style_cell={
-                                        'backgroundColor': 'rgb(50, 50, 50)',
-                                        'color': 'white',
-                                        'textAlign': 'left'
-                                    },
-                                    page_size=15
-                                )
-                            ]),
-                            html.Div(children=[
-                                html.H2('Por ano'),
-                                dt.DataTable(
-                                    id='dt_serv_dupl_ano',
-                                    columns=[{'name': col, 'id': col} for col in pl.serv_duplicados('data').reset_index().columns],
-                                    data=pl.serv_duplicados('data').reset_index().to_dict('records'),
-                                    style_table={
-                                        'display': 'flex',
-                                        'flex-direction': 'column',
-                                        'align-itens': 'center'
-                                    },
-                                    style_header={
-                                        'backgroundColor': 'rgb(30, 30, 30)',
-                                        'textAlign': 'center'
-                                    },
-                                    style_cell={
-                                        'backgroundColor': 'rgb(50, 50, 50)',
-                                        'color': 'white',
-                                        'textAlign': 'left'
-                                    },
-                                    page_size=15
-                                )
-                            ])
-                        ]
-                    ),
-                    html.H2('Busca de servidores duplicados'),
-                    html.Div(className='options-container', children=[
-                        html.Div(children=[
-                            html.H2('Órgão'),
-                            dcc.Dropdown(
-                                id='dropdown_busca_org',
-                                className='input',
-                                options=[{'label':i, 'value':i} for i in orgaos],
-                                value=orgaos[3],
-                                placeholder='Mês',
-                                clearable=False,
-                                searchable=False
-                            )
-                        ]),
-                        html.Div(children=[
-                            html.H2('Ano'),
-                            dcc.Dropdown(
-                                id='dropdown_busca_ano',
-                                className='input',
-                                options=[{'label':i, 'value':i} for i in anos],
-                                value=dt_atual.year,
-                                placeholder='Mês',
-                                clearable=False,
-                                searchable=False
-                            )
-                        ]),
-                        html.Div(children=[
-                            html.H2('Mês'),
-                            dcc.Dropdown(
-                                id='dropdown_busca_mes',
-                                className='input',
-                                options=[{'label':i, 'value':i} for i in meses],
-                                value=dt_atual.month,
-                                placeholder='Mês',
-                                clearable=False,
-                                searchable=False
-                            )
+                html.Div(id='servidores', className='plot-container', children=[
+                    html.Div(className='plot-header', children=[
+                        html.H4(className='', children=[
+                            'Servidores'
                         ])
                     ]),
-                    dt.DataTable(
-                        id='dt_serv_dupl_busca',
-                        style_header={
-                            'backgroundColor': 'rgb(30, 30, 30)',
-                            'textAlign': 'center'
-                        },
-                        style_cell={
-                            'backgroundColor': 'rgb(50, 50, 50)',
-                            'color': 'white',
-                            'textAlign': 'left'
-                        },
-                        style_table={
-                            'display': 'flex',
-                            'flex-direction': 'column',
-                            'align-itens': 'center',
-                            'overflowX': 'auto',
-                            'minWidth': '50%',
-                            'maxWidth': '1000px',
-                        },
-                        page_size=15
-                    )
-                ]
-            ),
-            html.Div(
-                id='serv_busca',
-                className='sub-plot',
-                children=[
-                    html.H1('Busca Individual de Servidores'),
                     html.Div(
-                        className='options-container',
+                        id='registrados-container',
+                        className='sub-plot',
                         children=[
-                            dcc.Dropdown(
-                                id='serv_busca_input',
-                                className='input',
-                                placeholder='Nome do servidor',
-                                options=[{'label':opt, 'value':opt} for opt in nomes]
+                            html.H1('Numero de Funcionários'),
+                            html.H2(children=[
+                                'Registrados (', anos.min(), ' - ', anos.max(), ')'
+                            ]),
+                            dcc.Graph(
+                                id='graph_serv_num_reg',
+                                figure=pl.serv_num_reg()
+                            ),
+                            html.H2(children=[
+                                'Ativos (', dt_formatada, ')'
+                            ]),
+                            dcc.Graph(
+                                id='graph_serv_num_ativo',
+                                figure=pl.serv_num_ativos()
                             )
                         ]
                     ),
-                    html.H2('Por orgão'),
-                    dcc.Graph(
-                        id='graph_serv_busca_orgao',
+                    html.Div(
+                        id='serv-mais-org-container',
+                        className='sub-plot',
+                        children=[
+                            html.H1('Funcionários presentes em mais de um órgão.'),
+                            dt.DataTable(
+                                id='dt_serv_mais_org',
+                                columns=[{"name": col, "id": col} for col in pl.serv_mais_org().columns],
+                                data=pl.serv_mais_org().to_dict('records'),
+                                style_table={
+                                    'display': 'flex',
+                                    'flex-direction': 'column',
+                                    'align-itens': 'center'
+                                },
+                                style_header={
+                                    'backgroundColor': 'rgb(30, 30, 30)',
+                                    'textAlign': 'center'
+                                },
+                                style_cell={
+                                    'backgroundColor': 'rgb(50, 50, 50)',
+                                    'color': 'white',
+                                    'textAlign': 'left'
+                                },
+                                page_size=15
+                            )
+                        ]
                     ),
-                    html.H2('Por cargo'),
-                    dcc.Graph(
-                        id='graph_serv_busca_cargo'
+                    html.Div(
+                        id='serv-dupl-mesmo-org',
+                        className='sub-plot',
+                        children=[
+                            html.H1('Servidores duplicados no mesmo órgão.'),
+                            html.Div(
+                                className='serv_dupl_container',
+                                children=[
+                                    html.Div(className='dt-container', children=[
+                                        html.H2('Por órgão'),
+                                        dt.DataTable(
+                                            id='dt_serv_dupl_org',
+                                            columns=[{'name': col, 'id': col} for col in pl.serv_duplicados('org').columns],
+                                            data=pl.serv_duplicados('org').to_dict('records'),
+                                            style_table={
+                                                'display': 'flex',
+                                                'flex-direction': 'column',
+                                                'align-itens': 'center'
+                                            },
+                                            style_header={
+                                                'backgroundColor': 'rgb(30, 30, 30)',
+                                                'textAlign': 'center'
+                                            },
+                                            style_cell={
+                                                'backgroundColor': 'rgb(50, 50, 50)',
+                                                'color': 'white',
+                                                'textAlign': 'left'
+                                            },
+                                            page_size=15
+                                        )
+                                    ]),
+                                    html.Div(children=[
+                                        html.H2('Por ano'),
+                                        dt.DataTable(
+                                            id='dt_serv_dupl_ano',
+                                            columns=[{'name': col, 'id': col} for col in pl.serv_duplicados('data').reset_index().columns],
+                                            data=pl.serv_duplicados('data').reset_index().to_dict('records'),
+                                            style_table={
+                                                'display': 'flex',
+                                                'flex-direction': 'column',
+                                                'align-itens': 'center'
+                                            },
+                                            style_header={
+                                                'backgroundColor': 'rgb(30, 30, 30)',
+                                                'textAlign': 'center'
+                                            },
+                                            style_cell={
+                                                'backgroundColor': 'rgb(50, 50, 50)',
+                                                'color': 'white',
+                                                'textAlign': 'left'
+                                            },
+                                            page_size=15
+                                        )
+                                    ])
+                                ]
+                            ),
+                            html.H2('Busca de servidores duplicados'),
+                            html.Div(className='options-container', children=[
+                                html.Div(children=[
+                                    html.H2('Órgão'),
+                                    dcc.Dropdown(
+                                        id='dropdown_busca_org',
+                                        className='input',
+                                        options=[{'label':i, 'value':i} for i in orgaos],
+                                        value=orgaos[3],
+                                        placeholder='Mês',
+                                        clearable=False,
+                                        searchable=False
+                                    )
+                                ]),
+                                html.Div(children=[
+                                    html.H2('Ano'),
+                                    dcc.Dropdown(
+                                        id='dropdown_busca_ano',
+                                        className='input',
+                                        options=[{'label':i, 'value':i} for i in anos],
+                                        value=dt_atual.year,
+                                        placeholder='Mês',
+                                        clearable=False,
+                                        searchable=False
+                                    )
+                                ]),
+                                html.Div(children=[
+                                    html.H2('Mês'),
+                                    dcc.Dropdown(
+                                        id='dropdown_busca_mes',
+                                        className='input',
+                                        options=[{'label':i, 'value':i} for i in meses],
+                                        value=dt_atual.month,
+                                        placeholder='Mês',
+                                        clearable=False,
+                                        searchable=False
+                                    )
+                                ])
+                            ]),
+                            dt.DataTable(
+                                id='dt_serv_dupl_busca',
+                                style_header={
+                                    'backgroundColor': 'rgb(30, 30, 30)',
+                                    'textAlign': 'center'
+                                },
+                                style_cell={
+                                    'backgroundColor': 'rgb(50, 50, 50)',
+                                    'color': 'white',
+                                    'textAlign': 'left'
+                                },
+                                style_table={
+                                    'display': 'flex',
+                                    'flex-direction': 'column',
+                                    'align-itens': 'center',
+                                    'overflowX': 'auto',
+                                    'minWidth': '50%',
+                                    'maxWidth': '1000px',
+                                },
+                                page_size=15
+                            )
+                        ]
+                    ),
+                    html.Div(
+                        id='serv_busca',
+                        className='sub-plot',
+                        children=[
+                            html.H1('Busca Individual de Servidores'),
+                            html.Div(
+                                className='options-container',
+                                children=[
+                                    dcc.Dropdown(
+                                        id='serv_busca_input',
+                                        className='input',
+                                        placeholder='Nome do servidor',
+                                        options=[{'label':opt, 'value':opt} for opt in nomes]
+                                    )
+                                ]
+                            ),
+                            html.H2('Por orgão'),
+                            dcc.Graph(
+                                id='graph_serv_busca_orgao',
+                            ),
+                            html.H2('Por cargo'),
+                            dcc.Graph(
+                                id='graph_serv_busca_cargo'
+                            )
+                        ]
+                    ),
+                    html.Div(
+                        id='serv-liq',
+                        className='sub-plot',
+                        children=[
+                            html.H1('Maior líquido disponível (R$)'),
+                            dt.DataTable(
+                                id='dt_serv_liq',
+                                columns=[{'name': col, 'id': col} for col in pl.serv_liq().columns],
+                                data=pl.serv_liq().to_dict('records'),
+                                style_header={
+                                    'backgroundColor': 'rgb(30, 30, 30)',
+                                    'textAlign': 'center'
+                                },
+                                style_cell={
+                                    'backgroundColor': 'rgb(50, 50, 50)',
+                                    'color': 'white',
+                                    'textAlign': 'left'
+                                },
+                                style_table={
+                                    'display': 'flex',
+                                    'flex-direction': 'column',
+                                    'align-itens': 'center',
+                                    'overflowX': 'auto',
+                                    'minWidth': '50%',
+                                    'maxWidth': '1000px',
+                                },
+                                page_size=15
+                            )
+                        ]
                     )
-                ]
-            ),
-            html.Div(
-                id='serv-liq',
-                className='sub-plot',
-                children=[
-                    html.H1('Maior líquido disponível (R$)'),
-                    dt.DataTable(
-                        id='dt_serv_liq',
-                        columns=[{'name': col, 'id': col} for col in pl.serv_liq().columns],
-                        data=pl.serv_liq().to_dict('records'),
-                        style_header={
-                            'backgroundColor': 'rgb(30, 30, 30)',
-                            'textAlign': 'center'
-                        },
-                        style_cell={
-                            'backgroundColor': 'rgb(50, 50, 50)',
-                            'color': 'white',
-                            'textAlign': 'left'
-                        },
-                        style_table={
-                            'display': 'flex',
-                            'flex-direction': 'column',
-                            'align-itens': 'center',
-                            'overflowX': 'auto',
-                            'minWidth': '50%',
-                            'maxWidth': '1000px',
-                        },
-                        page_size=15
-                    )
-                ]
-            )
+                ])
+            ])
         ]),
-
         html.Footer(className='footer', children=[
             html.Div(className='footer-image-container', children=[
                 html.Img(src=app.get_asset_url('media/UEA-EST.png')),
                 html.Img(src=app.get_asset_url('media/LSI.jpg')),
-
             ])
         ])
     ])
