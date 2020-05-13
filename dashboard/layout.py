@@ -4,6 +4,10 @@ import dash_core_components as dcc
 import dash_html_components as html
 import plotting as pl
 import pandas as pd
+import pathlib
+
+uea_logo = str(pl.dash_path) + '/assets/UEA-EST.png'
+print(uea_logo)
 
 df = pl.df#pd.read_csv('../ds/remuneracao_servidores.csv', sep=',', header=0, decimal='.', parse_dates=['DATA'])
 
@@ -16,7 +20,7 @@ dt_formatada = str(dt_atual.month)+'/'+str(dt_atual.year)
 
 df_teste = df[df['DATA'] == dt_atual][['NOME', 'ORGAO']].head(10)
 
-def load_layout():
+def load_layout(app):
     component = html.Div(className='main-container', children=[
         html.Div(className='header-container', children=[
             html.H1(className='header', children=[
@@ -335,6 +339,11 @@ def load_layout():
                 html.A(href='http://www.transparencia.am.gov.br/pessoal/', children=[
                     'http://www.transparencia.am.gov.br/pessoal/'
                 ])
+            ]),
+            html.Div(className='footer-image-container', children=[
+                html.Img(src=app.get_asset_url('media/UEA-EST.png')),
+                html.Img(src=app.get_asset_url('media/LSI.jpg')),
+
             ])
         ])
     ])

@@ -8,9 +8,11 @@ graph_x = 1000
 graph_y = 500
 
 # Preparação dos Dados 
+dash_path = pathlib.Path(__file__).parent.absolute()
+project_path = dash_path.parent.absolute()
+ds_path = str(project_path) + '/ds/remuneracao_servidores.csv'
+
 pd.set_option('display.float_format', lambda x: '%.2f' % x) # Remove a notação científica dos valores
-path = pathlib.Path(__file__).parent.parent.absolute()
-ds_path = str(path) + '/ds/remuneracao_servidores.csv'
 df = pd.read_csv(ds_path, sep=',', header=0, decimal='.', parse_dates=['DATA']).drop(columns=['Unnamed: 0'])
 df = df.sort_values(by=['ORGAO', 'DATA'])
 
@@ -18,6 +20,7 @@ orgaos = df['ORGAO'].unique()
 anos = df['DATA'].dt.year.drop_duplicates().sort_values()
 meses = df['DATA'].dt.month.drop_duplicates().sort_values()
 
+# Métodos
 def org_rem_total():
     df_temp = df.loc[:, ['REMUNERACAO LEGAL TOTAL(R$)', 'DATA', 'ORGAO']].groupby(by=['ORGAO', 'DATA'], as_index=False).sum()
     df_rem_total = df_temp[df_temp['REMUNERACAO LEGAL TOTAL(R$)'] > 10000000]

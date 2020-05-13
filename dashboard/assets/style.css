@@ -89,6 +89,19 @@ body {
     justify-content: center;
 }
 
+.footer-image-container {
+    padding-right: 150px;
+    padding-left: 150px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.footer-image-container img {
+    width: auto;
+    height: fit-content;
+}
 
 .footer {
     text-align: center;
