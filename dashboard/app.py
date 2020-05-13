@@ -19,6 +19,7 @@ dt_atual = layout.dt_atual
 dt_formatada = layout.dt_formatada
 
 ### Layout ###
+print('Loading layout...')
 app.layout = layout.load_layout(app)
 
 ### Calbacks ###

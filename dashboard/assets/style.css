@@ -21,7 +21,7 @@ body {
 
 .sidenav {
     height: inherit;
-    width: 160px;
+    width: 190px;
     position: relative;
     z-index: 1;
     top: 0;
@@ -35,15 +35,38 @@ body {
 .sidenav a {
     padding: 6px 8px 6px 16px;
     text-decoration: none;
-    font-size: 15px;
     color: var(--color-2);
     display: block;
 }
   
 .sidenav a:hover {
     color: var(--color-1); 
+    /* font-size: 18px;
+    transition: .2s; */
 }
-  
+
+.sum-header1 {
+    font-size: 19px;
+    transition: .2s;
+}
+
+.sum-header1:hover {
+    transition: .2s;
+    -webkit-transform: scale(1.1);
+}
+
+.sum-header2 {
+    margin-left: 15px;
+    font-size: 15px;
+    transition: .2s;
+}
+
+.sum-header2:hover {
+    margin-left: 15px;
+    transition: .2s;
+    -webkit-transform: scale(1.1);
+}
+
 .main {
     margin-left: 160px; /* Same as the width of the sidenav */
     font-size: 28px; /* Increased text to enable scrolling */

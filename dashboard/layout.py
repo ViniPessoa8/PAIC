@@ -7,7 +7,7 @@ import pandas as pd
 import pathlib
 
 uea_logo = str(pl.dash_path) + '/assets/UEA-EST.png'
-print(uea_logo)
+print('Dataset path:', uea_logo)
 
 df = pl.df#pd.read_csv('../ds/remuneracao_servidores.csv', sep=',', header=0, decimal='.', parse_dates=['DATA'])
 
@@ -20,7 +20,7 @@ dt_formatada = str(dt_atual.month)+'/'+str(dt_atual.year)
 
 df_teste = df[df['DATA'] == dt_atual][['NOME', 'ORGAO']].head(10)
 
-def load_layout(app):
+def load_layout(app):    
     component = html.Div(className='container', children=[
         html.Div(className='header-container', children=[
             html.H1(className='header', children=[
@@ -38,15 +38,23 @@ def load_layout(app):
         ]),
         html.Div(className='main-container', children =[
             html.Div(className='sidenav', children=[
-                html.A(href='#orgaos', children=['Órgãos']),
-                html.A(href='#servidores', children=['Servidores'])
+                html.A(className='sum-header1', href='#orgaos', children=['Órgãos']),
+                html.A(className='sum-header2', href='#org-rem-leg-total', children=['Remuneração Legal Total (Maior)']),
+                html.A(className='sum-header2', href='#org-rem-leg-indiv', children=['Remuneração Legal Total (Individual)']),
+                html.A(className='sum-header2', href='#org-aum-corte', children=['Aumentos e Cortes']),
+                html.A(className='sum-header1', href='#servidores', children=['Servidores']),
+                html.A(className='sum-header2', href='#serv-busca', children=['Busca']),
+                html.A(className='sum-header2', href='#serv-reg', children=['Quantidade por órgão']),
+                html.A(className='sum-header2', href='#serv-mais-org', children=['Presentes em mais de um órgão']),
+                html.A(className='sum-header2', href='#serv-dupl-mesmo-org', children=['Duplicados no mesmo órgão']),
+                html.A(className='sum-header2', href='#serv-liq', children=['Maior Líquido']),
             ]),
             html.Div(className='plot-container', children=[
                 html.Div(id='orgaos', className='plot-container', children=[
                     html.Div(className='plot-header', children=[
                         html.H4('Órgãos')
                     ]),
-                    html.Div(className='sub-plot', children=[
+                    html.Div(id='org-rem-leg-total', className='sub-plot', children=[
                         html.H2('Maior Remuneração Legal Total (R$)'),
                         html.H3('Soma da Remuneração Legal Total de cada órgão por mês. No gráfico, somente os que receberam acima de 10 milhões.'),
                         dcc.Graph(
@@ -54,7 +62,7 @@ def load_layout(app):
                             figure=pl.org_rem_total(),
                         )
                     ]),
-                    html.Div(className='sub-plot', children=[
+                    html.Div(id='org-rem-leg-indiv', className='sub-plot', children=[
                         html.H2('Remuneração Legal Total Individual (R$)'),
                         html.H3('Soma da Remuneração Legal Total por órgão.'),
                         html.Div(className='options-container', children=[
@@ -71,7 +79,7 @@ def load_layout(app):
                             id='graph_org_rem_total_indiv',
                         )
                     ]),
-                    html.Div(className='sub-plot', children=[
+                    html.Div(id='org-aum-corte', className='sub-plot', children=[
                         html.H2('Aumento/Corte no orçamento'),
                         html.H4('Diferença da soma da remuneração legal total de um mês para o outro. Sendo a diferença maior ou menor que 50.000.'),
                         html.Div(className='options-container', children=[
@@ -112,7 +120,33 @@ def load_layout(app):
                         ])
                     ]),
                     html.Div(
-                        id='registrados-container',
+                        id='serv-busca',
+                        className='sub-plot',
+                        children=[
+                            html.H1('Busca Individual de Servidores'),
+                            html.Div(
+                                className='options-container',
+                                children=[
+                                    dcc.Dropdown(
+                                        id='serv_busca_input',
+                                        className='input',
+                                        placeholder='Nome do servidor',
+                                        options=[{'label':opt, 'value':opt} for opt in nomes]
+                                    )
+                                ]
+                            ),
+                            html.H2('Por orgão'),
+                            dcc.Graph(
+                                id='graph_serv_busca_orgao',
+                            ),
+                            html.H2('Por cargo'),
+                            dcc.Graph(
+                                id='graph_serv_busca_cargo'
+                            )
+                        ]
+                    ),
+                    html.Div(
+                        id='serv-reg',
                         className='sub-plot',
                         children=[
                             html.H1('Numero de Funcionários'),
@@ -133,7 +167,7 @@ def load_layout(app):
                         ]
                     ),
                     html.Div(
-                        id='serv-mais-org-container',
+                        id='serv-mais-org',
                         className='sub-plot',
                         children=[
                             html.H1('Funcionários presentes em mais de um órgão.'),
@@ -274,32 +308,6 @@ def load_layout(app):
                                     'maxWidth': '1000px',
                                 },
                                 page_size=15
-                            )
-                        ]
-                    ),
-                    html.Div(
-                        id='serv_busca',
-                        className='sub-plot',
-                        children=[
-                            html.H1('Busca Individual de Servidores'),
-                            html.Div(
-                                className='options-container',
-                                children=[
-                                    dcc.Dropdown(
-                                        id='serv_busca_input',
-                                        className='input',
-                                        placeholder='Nome do servidor',
-                                        options=[{'label':opt, 'value':opt} for opt in nomes]
-                                    )
-                                ]
-                            ),
-                            html.H2('Por orgão'),
-                            dcc.Graph(
-                                id='graph_serv_busca_orgao',
-                            ),
-                            html.H2('Por cargo'),
-                            dcc.Graph(
-                                id='graph_serv_busca_cargo'
                             )
                         ]
                     ),
