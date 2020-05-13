@@ -109,15 +109,15 @@ body {
 }
 
 a:link {
-    color: var(--color-3);
-}
-
-a:hover {
     color: var(--color-2);
 }
 
+a:hover {
+    color: var(--color-3);
+}
+
 a:visited {
-    color: var(--color-5);
+    color: var(--color-4);
 }
 
 .dash-table-container {

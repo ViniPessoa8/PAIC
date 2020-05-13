@@ -26,20 +26,22 @@ def load_layout(app):
             html.H1(className='header', children=[
                 'Transparência do Governo do Amazonas'
             ]),
-            
             html.H4(className='info', children=[
                 'Portal de análise dos dados referentes à remuneração dos servidores públicos do governo  do Amazonas.'
-            ])
+            ]),
+            html.P(children=[
+                'Fonte: ',
+                html.A(href='http://www.transparencia.am.gov.br/pessoal/', children=[
+                    'http://www.transparencia.am.gov.br/pessoal/'
+                ])
+            ]),
         ]),
-
         html.Div(className='plot-header', children=[
             html.H4(className='', children=[
                 'Órgãos'
             ])
         ]),
-
         html.Div(id='orgaos', className='plot-container', children=[
-
             html.Div(className='sub-plot', children=[
                 html.H2('Maior Remuneração Legal Total (R$)'),
                 html.H3('Soma da Remuneração Legal Total de cada órgão por mês. No gráfico, somente os que receberam acima de 10 milhões.'),
@@ -48,7 +50,6 @@ def load_layout(app):
                     figure=pl.org_rem_total(),
                 )
             ]),
-
             html.Div(className='sub-plot', children=[
                 html.H2('Remuneração Legal Total Individual (R$)'),
                 html.H3('Soma da Remuneração Legal Total por órgão.'),
@@ -66,7 +67,6 @@ def load_layout(app):
                     id='graph_org_rem_total_indiv',
                 )
             ]),
-
             html.Div(className='sub-plot', children=[
                 html.H2('Aumento/Corte no orçamento'),
                 html.H4('Diferença da soma da remuneração legal total de um mês para o outro. Sendo a diferença maior ou menor que 50.000.'),
@@ -101,13 +101,11 @@ def load_layout(app):
                 )
             ])
         ]),
-
         html.Div(className='plot-header', children=[
             html.H4(className='', children=[
                 'Servidores'
             ])
         ]),
-
         html.Div(id='servidores', className='plot-container', children=[
             html.Div(
                 id='registrados-container',
@@ -334,12 +332,6 @@ def load_layout(app):
         ]),
 
         html.Footer(className='footer', children=[
-            html.P(children=[
-                'Fonte: ',
-                html.A(href='http://www.transparencia.am.gov.br/pessoal/', children=[
-                    'http://www.transparencia.am.gov.br/pessoal/'
-                ])
-            ]),
             html.Div(className='footer-image-container', children=[
                 html.Img(src=app.get_asset_url('media/UEA-EST.png')),
                 html.Img(src=app.get_asset_url('media/LSI.jpg')),
