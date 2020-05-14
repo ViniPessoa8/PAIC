@@ -68,6 +68,7 @@ body {
 .sum-header1:hover {
     transition: .2s;
     -webkit-transform: scale(1.1);
+    transform: scale(1.1);
 }
 
 .sum-header2 {
@@ -80,6 +81,7 @@ body {
     margin-left: 15px;
     transition: .2s;
     -webkit-transform: scale(1.1);
+    transform: scale(1.1);
 }
 
 .main {
