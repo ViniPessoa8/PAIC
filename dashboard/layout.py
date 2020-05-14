@@ -9,7 +9,7 @@ import pathlib
 uea_logo = str(pl.dash_path) + '/assets/UEA-EST.png'
 print('Dataset path:', uea_logo)
 
-df = pl.df#pd.read_csv('../ds/remuneracao_servidores.csv', sep=',', header=0, decimal='.', parse_dates=['DATA'])
+df = pl.df
 
 nomes = df['NOME'].drop_duplicates()
 orgaos = pl.orgaos
@@ -38,16 +38,18 @@ def load_layout(app):
         ]),
         html.Div(className='main-container', children =[
             html.Div(className='sidenav', children=[
-                html.A(className='sum-header1', href='#orgaos', children=['Órgãos']),
-                html.A(className='sum-header2', href='#org-rem-leg-total', children=['Remuneração Legal Total (Maior)']),
-                html.A(className='sum-header2', href='#org-rem-leg-indiv', children=['Remuneração Legal Total (Individual)']),
-                html.A(className='sum-header2', href='#org-aum-corte', children=['Aumentos e Cortes']),
-                html.A(className='sum-header1', href='#servidores', children=['Servidores']),
-                html.A(className='sum-header2', href='#serv-busca', children=['Busca']),
-                html.A(className='sum-header2', href='#serv-reg', children=['Quantidade por órgão']),
-                html.A(className='sum-header2', href='#serv-mais-org', children=['Presentes em mais de um órgão']),
-                html.A(className='sum-header2', href='#serv-dupl-mesmo-org', children=['Duplicados no mesmo órgão']),
-                html.A(className='sum-header2', href='#serv-liq', children=['Maior Líquido']),
+                html.Div(className='summary', children=[
+                    html.A(className='sum-header1', href='#orgaos', children=['Órgãos']),
+                    html.A(className='sum-header2', href='#org-rem-leg-total', children=['Remuneração Legal Total (Maior)']),
+                    html.A(className='sum-header2', href='#org-rem-leg-indiv', children=['Remuneração Legal Total (Individual)']),
+                    html.A(className='sum-header2', href='#org-aum-corte', children=['Aumentos e Cortes']),
+                    html.A(className='sum-header1', href='#servidores', children=['Servidores']),
+                    html.A(className='sum-header2', href='#serv-busca', children=['Busca']),
+                    html.A(className='sum-header2', href='#serv-reg', children=['Quantidade por órgão']),
+                    html.A(className='sum-header2', href='#serv-mais-org', children=['Presentes em mais de um órgão']),
+                    html.A(className='sum-header2', href='#serv-dupl-mesmo-org', children=['Duplicados no mesmo órgão']),
+                    html.A(className='sum-header2', href='#serv-liq', children=['Maior Líquido']),
+                ])
             ]),
             html.Div(className='plot-container', children=[
                 html.Div(id='orgaos', className='plot-container', children=[

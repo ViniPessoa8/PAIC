@@ -7,6 +7,10 @@
 
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     margin: 0;
     color: var(--color-1)
@@ -19,30 +23,41 @@ body {
     flex-direction: column;
 }
 
-.sidenav {
-    height: inherit;
-    width: 190px;
-    position: relative;
-    z-index: 1;
+.main-container {
+    display: flex;
+    position: -webkit-sticky;
+    position: sticky;
     top: 0;
-    left: 0;
+}
+
+.sidenav {
+    /* height: inherit; */
+    width: 190px;
+    /* z-index: 1; */
+    /* left: 0; */
     background-color: var(--color-4);
     color: var(--color-1);
-    overflow-x: hidden;
-    padding-top: 20px;
+    /* overflow-x: hidden; */
+    /* padding-top: 20px; */
 }
-  
+
 .sidenav a {
     padding: 6px 8px 6px 16px;
     text-decoration: none;
     color: var(--color-2);
     display: block;
 }
-  
+
 .sidenav a:hover {
     color: var(--color-1); 
     /* font-size: 18px;
     transition: .2s; */
+}
+
+.summary {
+    position: sticky;
+    top: 0;
+    padding-top: 20px;
 }
 
 .sum-header1 {
@@ -72,15 +87,12 @@ body {
     font-size: 28px; /* Increased text to enable scrolling */
     padding: 0px 10px;
 }
-  
+
 /* @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}
     .sidenav a {font-size: 18px;}
 } */
 
-.main-container {
-    display: flex;
-}
 
 .header-container {
     background-color: var(--color-5);
