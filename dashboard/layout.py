@@ -39,24 +39,24 @@ def load_layout(app):
         html.Div(className='main-container', children =[
             html.Div(className='sidenav', children=[
                 html.Div(className='summary', children=[
-                    html.A(className='sum-header1', href='#orgaos', children=['Órgãos']),
-                    html.A(className='sum-header2', href='#org-rem-leg-total', children=['Remuneração Legal Total (Maior)']),
-                    html.A(className='sum-header2', href='#org-rem-leg-indiv', children=['Remuneração Legal Total (Individual)']),
-                    html.A(className='sum-header2', href='#org-aum-corte', children=['Aumentos e Cortes']),
-                    html.A(className='sum-header1', href='#servidores', children=['Servidores']),
-                    html.A(className='sum-header2', href='#serv-busca', children=['Busca']),
-                    html.A(className='sum-header2', href='#serv-reg', children=['Quantidade por órgão']),
-                    html.A(className='sum-header2', href='#serv-mais-org', children=['Presentes em mais de um órgão']),
-                    html.A(className='sum-header2', href='#serv-dupl-mesmo-org', children=['Duplicados no mesmo órgão']),
-                    html.A(className='sum-header2', href='#serv-liq', children=['Maior Líquido']),
+                    html.A(className='sum-header', href='#orgaos', children=['Órgãos']),
+                    html.A(className='', href='#org-rem-leg-total', children=['Remuneração Legal Total (Maior)']),
+                    html.A(className='', href='#org-rem-leg-indiv', children=['Remuneração Legal Total (Individual)']),
+                    html.A(className='', href='#org-aum-corte', children=['Aumentos e Cortes']),
+                    html.A(className='sum-header', href='#servidores', children=['Servidores']),
+                    html.A(className='', href='#serv-busca', children=['Busca']),
+                    html.A(className='', href='#serv-reg', children=['Quantidade por órgão']),
+                    html.A(className='', href='#serv-mais-org', children=['Presentes em mais de um órgão']),
+                    html.A(className='', href='#serv-dupl-mesmo-org', children=['Duplicados no mesmo órgão']),
+                    html.A(className='', href='#serv-liq', children=['Maior Líquido']),
                 ])
             ]),
             html.Div(className='plot-container', children=[
-                html.Div(id='orgaos', className='plot-container', children=[
+                html.Div(id='orgaos', className='plot-container section', children=[
                     html.Div(className='plot-header', children=[
                         html.H4('Órgãos')
                     ]),
-                    html.Div(id='org-rem-leg-total', className='sub-plot', children=[
+                    html.Div(id='org-rem-leg-total', className='sub-plot  section', children=[
                         html.H2('Maior Remuneração Legal Total (R$)'),
                         html.H3('Soma da Remuneração Legal Total de cada órgão por mês. No gráfico, somente os que receberam acima de 10 milhões.'),
                         dcc.Graph(
@@ -64,7 +64,7 @@ def load_layout(app):
                             figure=pl.org_rem_total(),
                         )
                     ]),
-                    html.Div(id='org-rem-leg-indiv', className='sub-plot', children=[
+                    html.Div(id='org-rem-leg-indiv', className='sub-plot  section', children=[
                         html.H2('Remuneração Legal Total Individual (R$)'),
                         html.H3('Soma da Remuneração Legal Total por órgão.'),
                         html.Div(className='options-container', children=[
@@ -81,7 +81,7 @@ def load_layout(app):
                             id='graph_org_rem_total_indiv',
                         )
                     ]),
-                    html.Div(id='org-aum-corte', className='sub-plot', children=[
+                    html.Div(id='org-aum-corte', className='sub-plot section', children=[
                         html.H2('Aumento/Corte no orçamento'),
                         html.H4('Diferença da soma da remuneração legal total de um mês para o outro. Sendo a diferença maior ou menor que 50.000.'),
                         html.Div(className='options-container', children=[
@@ -115,7 +115,7 @@ def load_layout(app):
                         )
                     ])
                 ]),
-                html.Div(id='servidores', className='plot-container', children=[
+                html.Div(id='servidores', className='plot-container section', children=[
                     html.Div(className='plot-header', children=[
                         html.H4(className='', children=[
                             'Servidores'
@@ -123,7 +123,7 @@ def load_layout(app):
                     ]),
                     html.Div(
                         id='serv-busca',
-                        className='sub-plot',
+                        className='sub-plot section',
                         children=[
                             html.H1('Busca Individual de Servidores'),
                             html.Div(
@@ -149,7 +149,7 @@ def load_layout(app):
                     ),
                     html.Div(
                         id='serv-reg',
-                        className='sub-plot',
+                        className='sub-plot section',
                         children=[
                             html.H1('Numero de Funcionários'),
                             html.H2(children=[
@@ -170,7 +170,7 @@ def load_layout(app):
                     ),
                     html.Div(
                         id='serv-mais-org',
-                        className='sub-plot',
+                        className='sub-plot section',
                         children=[
                             html.H1('Funcionários presentes em mais de um órgão.'),
                             dt.DataTable(
@@ -197,7 +197,7 @@ def load_layout(app):
                     ),
                     html.Div(
                         id='serv-dupl-mesmo-org',
-                        className='sub-plot',
+                        className='sub-plot section',
                         children=[
                             html.H1('Servidores duplicados no mesmo órgão.'),
                             html.Div(
@@ -315,7 +315,7 @@ def load_layout(app):
                     ),
                     html.Div(
                         id='serv-liq',
-                        className='sub-plot',
+                        className='sub-plot section',
                         children=[
                             html.H1('Maior líquido disponível (R$)'),
                             dt.DataTable(
