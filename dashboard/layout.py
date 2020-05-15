@@ -144,6 +144,7 @@ def load_layout(app):
                                         id='serv_busca_input',
                                         className='input',
                                         placeholder='Nome do servidor',
+                                        value=nomes.iloc[0],
                                         options=[{'label':opt, 'value':opt} for opt in nomes]
                                     )
                                 ]

@@ -150,6 +150,7 @@ def serv_duplicados(filter):
 def serv_duplicados_busca(org, ano, mes):
     df_temp = df.loc[(df.ORGAO == org) & (df['DATA'].dt.year == ano) & (df['DATA'].dt.month == mes)]
     duplicados = df_temp[df_temp.duplicated(['NOME'], keep=False)].sort_values('NOME')
+    duplicados = duplicados.drop(columns=['DATA', 'ORGAO'])
 
     return duplicados
 
