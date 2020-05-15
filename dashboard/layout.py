@@ -5,9 +5,10 @@ import dash_html_components as html
 import plotting as pl
 import pandas as pd
 import pathlib
+import math
 
 uea_logo = str(pl.dash_path) + '/assets/UEA-EST.png'
-print('Dataset path:', uea_logo)
+print('Dataset path:', pl.ds_path)
 
 df = pl.df
 
@@ -17,6 +18,7 @@ anos = pl.anos
 meses = pl.meses
 dt_atual = df['DATA'].max()
 dt_formatada = str(dt_atual.month)+'/'+str(dt_atual.year)
+max_sal = df['REMUNERACAO LEGAL TOTAL(R$)'].max()
 
 df_teste = df[df['DATA'] == dt_atual][['NOME', 'ORGAO']].head(10)
 
@@ -58,10 +60,19 @@ def load_layout(app):
                     ]),
                     html.Div(id='org-rem-leg-total', className='sub-plot  section', children=[
                         html.H2('Maior Remuneração Legal Total (R$)'),
-                        html.H3('Soma da Remuneração Legal Total de cada órgão por mês. No gráfico, somente os que receberam acima de 10 milhões.'),
+                        html.H3('Soma da Remuneração Legal Total de cada órgão por mês.'),
+                        dcc.RangeSlider(
+                            id         = 'slider_rem_leg_total',
+                            className  = 'slider',
+                            min        = 0,
+                            max        = 140000000,
+                            step       = None,
+                            allowCross = False,
+                            value      = [10000000, 140000000],
+                            marks      = {i: '{}M'.format(math.trunc(i/1000000)) for i in range (10000000, 140000001, 10000000)}
+                        ),
                         dcc.Graph(
-                            id='graph',
-                            figure=pl.org_rem_total(),
+                            id='graph_rem_leg_total',
                         )
                     ]),
                     html.Div(id='org-rem-leg-indiv', className='sub-plot  section', children=[

@@ -179,9 +179,7 @@ a:hover {
     color: var(--color-1);
 }
 
-
-/* .dash-table-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-} */
+.slider {
+    width: 600px;
+    font-size: 60px;
+}

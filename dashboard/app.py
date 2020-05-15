@@ -23,6 +23,14 @@ print('Loading layout...')
 app.layout = layout.load_layout(app)
 
 ### Calbacks ###
+# Mior Remuneração Legal Total
+@app.callback(
+    Output('graph_rem_leg_total','figure'),
+    [Input('slider_rem_leg_total','value')]
+)
+def rem_leg_total(value):
+    return pl.org_rem_total(value[0], value[1])
+
 # Remuneração Total Individual
 @app.callback(
     Output('graph_org_rem_total_indiv', 'figure'),

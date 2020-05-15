@@ -21,9 +21,10 @@ anos = df['DATA'].dt.year.drop_duplicates().sort_values()
 meses = df['DATA'].dt.month.drop_duplicates().sort_values()
 
 # Métodos
-def org_rem_total():
+def org_rem_total(init, end):
     df_temp = df.loc[:, ['REMUNERACAO LEGAL TOTAL(R$)', 'DATA', 'ORGAO']].groupby(by=['ORGAO', 'DATA'], as_index=False).sum()
-    df_rem_total = df_temp[df_temp['REMUNERACAO LEGAL TOTAL(R$)'] > 10000000]
+    rem = df_temp['REMUNERACAO LEGAL TOTAL(R$)']
+    df_rem_total = df_temp.loc[(rem > init) & (rem < end)]
 
     fig = px.line(
         df_rem_total,
