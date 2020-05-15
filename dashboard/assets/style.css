@@ -182,3 +182,9 @@ a:hover {
 .slider {
     width: 900px;
 }
+
+.dash-table-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
