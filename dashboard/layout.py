@@ -6,6 +6,7 @@ import plotting as pl
 import pandas as pd
 import pathlib
 import math
+# import json
 
 uea_logo = str(pl.dash_path) + '/assets/UEA-EST.png'
 print('Dataset path:', pl.ds_path)
@@ -22,8 +23,22 @@ max_sal = df['REMUNERACAO LEGAL TOTAL(R$)'].max()
 
 df_teste = df[df['DATA'] == dt_atual][['NOME', 'ORGAO']].head(10)
 
+# def export_names():
+#     print('Exporting names.')
+#     names = {
+#         'names': [{'name':i} for i in nomes]
+#     }
+
+#     with open('names.json', 'w') as json_file:
+#         json.dump(names, json_file)
+
+#     print('Json file created.')
+
+# export_names()
+
 def load_layout(app):    
     component = html.Div(className='container', children=[
+        html.Div(id='datalist-container', className='datalist-container'),
         html.Div(className='header-container', children=[
             html.H1(className='header', children=[
                 'Transparência do Governo do Amazonas'
@@ -140,12 +155,11 @@ def load_layout(app):
                             html.Div(
                                 className='options-container',
                                 children=[
-                                    dcc.Dropdown(
+                                    dcc.Input(
                                         id='serv_busca_input',
                                         className='input',
                                         placeholder='Nome do servidor',
-                                        value=nomes.iloc[0],
-                                        options=[{'label':opt, 'value':opt} for opt in nomes]
+                                        # list=nomes.values
                                     )
                                 ]
                             ),
