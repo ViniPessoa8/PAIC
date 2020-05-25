@@ -23,19 +23,6 @@ max_sal = df['REMUNERACAO LEGAL TOTAL(R$)'].max()
 
 df_teste = df[df['DATA'] == dt_atual][['NOME', 'ORGAO']].head(10)
 
-# def export_names():
-#     print('Exporting names.')
-#     names = {
-#         'names': [{'name':i} for i in nomes]
-#     }
-
-#     with open('names.json', 'w') as json_file:
-#         json.dump(names, json_file)
-
-#     print('Json file created.')
-
-# export_names()
-
 def load_layout(app):    
     component = html.Div(className='container', children=[
         html.Div(id='datalist-container', className='datalist-container'),
