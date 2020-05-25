@@ -42,15 +42,16 @@ def rem_org(input):
 
 # Aumento/cortes Remuneração Total
 @app.callback(
-    Output('graph_aumento','figure'),
+    Output('graph_org_aumento','figure'),
     [Input('dropdown_meses_1','value'),
-    Input('dropdown_anos_1','value')]
+    Input('dropdown_anos_1','value'),
+    Input('slider_org_aum', 'value')]
 )
-def org_aumento(mes, ano):
+def org_aumento(mes, ano, valor):
     if (mes == None or ano == None):
         raise PreventUpdate
     else:
-        return pl.org_aumento(mes, ano) 
+        return pl.org_aumento(mes, ano, valor) 
 
 # Busca servidores duplicados
 @app.callback(
@@ -91,6 +92,19 @@ def serv_busca(nome):
         raise PreventUpdate
     else:    
         return pl.serv_busca(nome, 'cargo')
+
+# Aumentos/Cortes remuneração servidor
+@app.callback(
+    Output('graph_serv_aumento_bar','figure'),
+    [Input('dropdown_meses_2','value'),
+    Input('dropdown_anos_2','value'),
+    Input('dropdown_orgao','value')]
+)
+def serv_aumento(mes, ano, orgao):
+    if (mes == None or ano == None):
+        raise PreventUpdate
+    else:
+        return pl.serv_aumento(mes, ano, orgao) 
 
 ### Server Run ###
 if (__name__ == '__main__'):

@@ -188,3 +188,11 @@ a:hover {
     flex-direction: column;
     justify-content: center;
 }
+
+#graph_org_aumento .svg-container {
+    width: 1500px;
+}
+
+#slider_org_aum {
+    width: 500px;
+}

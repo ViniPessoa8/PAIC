@@ -66,6 +66,7 @@ def load_layout(app):
                     html.A(className='', href='#serv-mais-org', children=['Presentes em mais de um órgão']),
                     html.A(className='', href='#serv-dupl-mesmo-org', children=['Duplicados no mesmo órgão']),
                     html.A(className='', href='#serv-liq', children=['Maior Líquido']),
+                    html.A(className='', href='#serv-aum-corte', children=['Aumentos e Cortes'])
                 ])
             ]),
             html.Div(className='plot-container', children=[
@@ -134,10 +135,22 @@ def load_layout(app):
                                     clearable=False,
                                     searchable=False
                                 )
-                            ])
+                            ]),
+                        ]),
+                        html.Div(children=[
+                            html.H4('Valor de intervalo'),
+                            dcc.Slider(
+                                id         = 'slider_org_aum',
+                                # className  = 'slider',
+                                min        = 0,
+                                max        = 1000000,
+                                step       = None,
+                                value      = 100000,
+                                marks      = {0:'0', 10000:'10K', 100000:'100K', 500000:'500K', 1000000:'1M', 10000000:'10M'}
+                            ),
                         ]),
                         dcc.Graph(
-                            id='graph_aumento',
+                            id='graph_org_aumento',
                         )
                     ])
                 ]),
@@ -368,7 +381,52 @@ def load_layout(app):
                                 page_size=15
                             )
                         ]
-                    )
+                    ),
+                    html.Div(id='serv-aum-corte', className='sub-plot section', children=[
+                        html.H2('Aumento/Corte no orçamento'),
+                        html.H4('Diferença da soma da remuneração legal total de um mês para o outro. Sendo a diferença maior ou menor que 50.000.'),
+                        html.Div(className='options-container', children=[
+                            html.Div(children=[
+                                html.H4('Mês'),
+                                dcc.Dropdown(
+                                    id='dropdown_meses_2',
+                                    className='input',
+                                    options=[{'label':i, 'value':i} for i in meses],
+                                    value=dt_atual.month,
+                                    placeholder='Mês',
+                                    clearable=False,
+                                    searchable=False
+                                ),
+                            ]),
+                            html.Div(children=[
+                                html.H4('Ano'),
+                                dcc.Dropdown(
+                                    id='dropdown_anos_2',
+                                    className='input',
+                                    options=[{'label':i, 'value':i} for i in anos],
+                                    value=dt_atual.year,
+                                    placeholder='Ano',
+                                    clearable=False,
+                                    searchable=False
+                                )
+                            ]),
+                            html.Div(children=[
+                                html.H4('Órgão'),
+                                dcc.Dropdown(
+                                    id='dropdown_orgao',
+                                    className='input',
+                                    options=[{'label':i, 'value':i} for i in orgaos],
+                                    value=orgaos[0],
+                                    placeholder='Órgão',
+                                    clearable=False,
+                                    searchable=False
+                                )
+                            ])
+                        ]),
+                        dcc.Graph(
+                            id='graph_serv_aumento_bar',
+                        )
+                    ])
                 ])
             ])
         ]),

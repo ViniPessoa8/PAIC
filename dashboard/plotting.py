@@ -1,5 +1,6 @@
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 import pathlib 
 import os
 
@@ -95,7 +96,7 @@ def serv_mais_org():
 
     return df_temp
 
-def org_aumento(mes, ano):
+def org_aumento(mes, ano, valor):
     # Cálculo do mês anterior
     if mes == 1:
         mes_ant = 12
@@ -123,12 +124,63 @@ def org_aumento(mes, ano):
     orgs_aum['Remuneração Legal Total (Soma)'] = diff
     orgs_aum = orgs_aum.sort_values('Remuneração Legal Total (Soma)', ascending=False)
 
-    num = 50000
+    orgs_aum_prin   = orgs_aum[(orgs_aum['Remuneração Legal Total (Soma)'] > valor)]
+    orgs_corte_prin = orgs_aum[(orgs_aum['Remuneração Legal Total (Soma)'] < -valor)]
+    
+    fig = px.bar(orgs_aum_prin, y='Remuneração Legal Total (Soma)', x='Órgão', width=graph_x, height=graph_y)
+    fig.add_trace(
+        go.Bar(
+            x = orgs_corte_prin['Órgão'],
+            y = orgs_corte_prin['Remuneração Legal Total (Soma)'],
+            base = 0
+        )
+    )
 
-    orgs_aum_prin = orgs_aum[(orgs_aum['Remuneração Legal Total (Soma)'] > num) | (orgs_aum['Remuneração Legal Total (Soma)'] < -num)]
-    fig_temp = px.bar(orgs_aum_prin, y='Remuneração Legal Total (Soma)', x='Órgão', width=graph_x, height=graph_y)
+    return fig
 
-    return fig_temp
+def serv_aumento(mes, ano, orgao):
+    # Cálculo do mês anterior
+    if mes == 1:
+        mes_ant = 12
+        ano_ant = ano-1
+    else:
+        mes_ant = mes-1
+        ano_ant = ano
+
+    # Preparação dos dados
+    df_mes_atual    = df.loc[(df['DATA'].dt.month == mes) & (df['DATA'].dt.year == ano) & (df['ORGAO'] == orgao)]
+    df_mes_atual    = df_mes_atual.groupby(['NOME', 'DATA', 'ORGAO'], as_index=False)['REMUNERACAO LEGAL TOTAL(R$)'].sum()
+    df_mes_anterior = df.loc[(df['DATA'].dt.month == mes_ant) & (df['DATA'].dt.year == ano_ant) & (df['ORGAO'] == orgao)]
+    df_mes_anterior = df_mes_anterior.groupby(['NOME', 'DATA', 'ORGAO'], as_index=False)['REMUNERACAO LEGAL TOTAL(R$)'].sum()
+
+    rem_atual       = df_mes_atual[['NOME', 'REMUNERACAO LEGAL TOTAL(R$)', 'ORGAO', 'DATA']]
+    rem_anterior    = df_mes_anterior[['NOME', 'REMUNERACAO LEGAL TOTAL(R$)', 'ORGAO', 'DATA']]
+
+    inner_join      = pd.merge(rem_anterior, rem_atual, how='inner', on='NOME', suffixes=(' ANTERIOR', ' ATUAL'))
+
+    diff            = inner_join['REMUNERACAO LEGAL TOTAL(R$) ATUAL'] - inner_join['REMUNERACAO LEGAL TOTAL(R$) ANTERIOR']
+    diff            = diff.sort_values(ascending=False)
+
+    orgs_aum = pd.DataFrame()
+    orgs_aum['Nome'] = rem_atual['NOME']
+    orgs_aum['Remuneração Legal Total (Soma)'] = diff
+    orgs_aum = orgs_aum.sort_values('Remuneração Legal Total (Soma)', ascending=False)
+
+    num = 0
+
+    orgs_aum_prin   = orgs_aum[(orgs_aum['Remuneração Legal Total (Soma)'] > num)]
+    orgs_corte_prin = orgs_aum[(orgs_aum['Remuneração Legal Total (Soma)'] < -num)].sort_values('Remuneração Legal Total (Soma)', ascending=False)
+
+    fig = px.bar(orgs_aum_prin, x='Nome', y='Remuneração Legal Total (Soma)')    
+    fig.add_trace(
+        go.Bar(
+            y = orgs_corte_prin['Remuneração Legal Total (Soma)'], 
+            x = orgs_corte_prin['Nome'], 
+            base=0
+        )
+    )
+
+    return fig
 
 def serv_duplicados(filter):
     # Preparação dos dados
@@ -155,7 +207,7 @@ def serv_duplicados_busca(org, ano, mes):
     return duplicados
 
 def serv_busca(nome, filter='orgao'):
-    registros_serv = df.loc[(df.NOME == nome), :].sort_values('DATA')
+    registros_serv = df.loc[(df.NOME == nome)].sort_values('DATA', 'NOME')
     if (filter == 'orgao'):
         fig = px.line(registros_serv, title='Remuneração de '+nome, y='REMUNERACAO LEGAL TOTAL(R$)', x='DATA', color='ORGAO')
     else:
