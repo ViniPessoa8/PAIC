@@ -72,7 +72,7 @@ def load_layout(app):
                             step       = None,
                             allowCross = False,
                             value      = [10000000, 140000000],
-                            marks      = {i: '{}M'.format(math.trunc(i/1000000)) for i in range (0, 140000001, 5000000)}
+                            marks      = {0:'0', 500000:'500K', 1000000:'1M', 10000000:'10M', 50000000:'50M', 100000000:'100M', 140000000:'140M'}
                         ),
                         dcc.Graph(
                             id='graph_rem_leg_total',
