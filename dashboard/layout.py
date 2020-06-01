@@ -128,6 +128,7 @@ def load_layout(app):
                             html.H4('Valor mínimo'),
                             dcc.Slider(
                                 id         = 'slider_org_aum',
+                                className  = 'slider-2',
                                 min        = 0,
                                 max        = 1000000,
                                 step       = None,
@@ -370,7 +371,7 @@ def load_layout(app):
                     ),
                     html.Div(id='serv-aum-corte', className='sub-plot section', children=[
                         html.H2('Aumento/Corte no orçamento'),
-                        html.H4('Diferença da soma da remuneração legal total de um mês para o outro. Sendo a diferença maior ou menor que 50.000.'),
+                        html.H4(id='serv_aum_corte_h4'),
                         html.Div(className='options-container', children=[
                             html.Div(children=[
                                 html.H4('Mês'),
@@ -408,6 +409,18 @@ def load_layout(app):
                                     searchable=False
                                 )
                             ])
+                        ]),
+                        html.Div(children=[
+                            html.H4('Valor mínimo'),
+                            dcc.Slider(
+                                id         = 'slider_serv_aum',
+                                className  = 'slider-2',
+                                min        = 0,
+                                max        = 500000,
+                                step       = None,
+                                value      = 0,
+                                marks      = {0:'0', 10000:'10K', 50000:'50K', 100000:'100K', 500000:'500K'}
+                            ),
                         ]),
                         dcc.Graph(
                             id='graph_serv_aumento_bar',

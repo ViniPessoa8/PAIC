@@ -138,7 +138,7 @@ def org_aumento(mes, ano, valor):
 
     return fig
 
-def serv_aumento(mes, ano, orgao):
+def serv_aumento(mes, ano, orgao, valor):
     # Cálculo do mês anterior
     if mes == 1:
         mes_ant = 12
@@ -166,16 +166,14 @@ def serv_aumento(mes, ano, orgao):
     orgs_aum['Remuneração Legal Total (Soma)'] = diff
     orgs_aum = orgs_aum.sort_values('Remuneração Legal Total (Soma)', ascending=False)
 
-    num = 0
+    orgs_aum_prin   = orgs_aum[(orgs_aum['Remuneração Legal Total (Soma)'] > valor)]
+    orgs_corte_prin = orgs_aum[(orgs_aum['Remuneração Legal Total (Soma)'] < -valor)]
 
-    orgs_aum_prin   = orgs_aum[(orgs_aum['Remuneração Legal Total (Soma)'] > num)]
-    orgs_corte_prin = orgs_aum[(orgs_aum['Remuneração Legal Total (Soma)'] < -num)].sort_values('Remuneração Legal Total (Soma)', ascending=False)
-
-    fig = px.bar(orgs_aum_prin, x='Nome', y='Remuneração Legal Total (Soma)')    
+    fig = px.bar(orgs_aum_prin, x='Nome', y='Remuneração Legal Total (Soma)', width=graph_x, height=700)    
     fig.add_trace(
         go.Bar(
             y = orgs_corte_prin['Remuneração Legal Total (Soma)'], 
-            x = orgs_corte_prin['Nome'], 
+            x = orgs_corte_prin['Nome'],
             base=0
         )
     )
@@ -207,10 +205,6 @@ def serv_duplicados_busca(org, ano, mes):
     return duplicados
 
 def serv_busca(nome, filter='orgao'):
-    ## DEBUG
-    # print(df[df['NOME'] == 'FRANCISCO DAS CHAGAS DA SILVA' ])
-    ## DEBUG
-    
     df_bool = (df['NOME'] == nome)
     registros_serv = df.loc[df_bool].sort_values('DATA')
     if (filter == 'orgao'):
@@ -227,7 +221,7 @@ def serv_liq():
     df_out['Nome']  = df_temp['NOME']
     df_out['Líquido Disponível(R$)'] = df_temp['LIQUIDO DISPONIVEL(R$)']
     df_out['Órgão'] = df_temp['ORGAO']
-    df_out['Data']  = df_temp['DATA']
+    df_out['Data']  = df_temp['DATA'].dt.date
 
     df_out = df_out.sort_values(by='Líquido Disponível(R$)', ascending=False)
 

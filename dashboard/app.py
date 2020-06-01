@@ -58,7 +58,7 @@ def org_aumento(mes, ano, valor):
     [Input('slider_org_aum', 'value')]
 )
 def org_aumento(valor):
-    str_out = 'Diferença da soma da remuneração legal total de um mês para o outro. Sendo a diferença maior ou menor que '+util.format_number(valor)
+    str_out = 'Diferença da soma da remuneração legal total de um mês para o outro. Sendo a diferença maior ou menor que '+util.format_number(valor)+'.'
     return str_out 
 
 # Busca servidores duplicados
@@ -106,13 +106,22 @@ def serv_busca(nome):
     Output('graph_serv_aumento_bar','figure'),
     [Input('dropdown_meses_2','value'),
     Input('dropdown_anos_2','value'),
-    Input('dropdown_orgao','value')]
+    Input('dropdown_orgao','value'),
+    Input('slider_serv_aum','value')]
 )
-def serv_aumento(mes, ano, orgao):
+def serv_aumento(mes, ano, orgao, valor):
     if (mes == None or ano == None):
         raise PreventUpdate
     else:
-        return pl.serv_aumento(mes, ano, orgao) 
+        return pl.serv_aumento(mes, ano, orgao, valor) 
+
+@app.callback(
+    Output('serv_aum_corte_h4','children'),
+    [Input('slider_serv_aum', 'value')]
+)
+def org_aumento(valor):
+    str_out = 'Diferença da soma da remuneração legal total de um mês para o outro. Sendo a diferença maior ou menor que '+util.format_number(valor)+'.'
+    return str_out 
 
 ### Server Run ###
 if (__name__ == '__main__'):
