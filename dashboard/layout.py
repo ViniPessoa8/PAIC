@@ -167,13 +167,17 @@ def load_layout(app):
                                     html.Button('Pesquisar', id='serv-submit-btn')
                                 ]
                             ),
-                            html.H1('Por orgão'),
+                            html.H1('Por órgão'),
                             dcc.Graph(
                                 id='graph_serv_busca_orgao',
                             ),
                             html.H1('Por cargo'),
                             dcc.Graph(
                                 id='graph_serv_busca_cargo'
+                            ),
+                            html.H1('Por função'),
+                            dcc.Graph(
+                                id='graph_serv_busca_funcao'
                             )
                         ]
                     ),

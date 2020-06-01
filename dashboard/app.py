@@ -106,6 +106,7 @@ def serv_busca_duplicados(org, ano, mes):
         print('Erro: Entrada inválida.')
 
 # Busca individual de servidor
+## Por órgão
 @app.callback(
     Output('graph_serv_busca_orgao','figure'),
     [Input('serv_busca_input','value')]
@@ -121,7 +122,7 @@ def serv_busca(nome):
         else:
             print('Erro: Entrada inválida.')
             
-
+## Por cargo 
 @app.callback(
     Output('graph_serv_busca_cargo','figure'),
     [Input('serv_busca_input','value')]
@@ -135,6 +136,22 @@ def serv_busca(nome):
             return response
         else:
             print('Erro: Entrada inválida.')
+
+## Por Funcao
+@app.callback(
+    Output('graph_serv_busca_funcao','figure'),
+    [Input('serv_busca_input','value')]
+)
+def serv_busca(nome):
+    if((nome == None) or (nome not in pl.nomes.values)):
+        raise PreventUpdate
+    else:
+        response = pl.serv_busca(nome, 'funcao')
+        if (response != None ):
+            return response
+        else:
+            print('Erro: Entrada inválida.')
+
 
 # Aumentos/Cortes remuneração servidor
 @app.callback(

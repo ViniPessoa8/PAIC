@@ -213,9 +213,11 @@ def serv_busca(nome, filter='orgao'):
     df_bool = (df['NOME'] == nome)
     registros_serv = df.loc[df_bool].sort_values('DATA')
     if (filter == 'orgao'):
-        fig = px.line(registros_serv, title='Remuneração de '+nome, y='REMUNERACAO LEGAL TOTAL(R$)', x='DATA', color='ORGAO', width=graph_x, height=graph_y)
-    else:
+        fig = px.line(registros_serv, title='Remuneração de '+nome+'por Órgão e Data', y='REMUNERACAO LEGAL TOTAL(R$)', x='DATA', color='ORGAO', width=graph_x, height=graph_y)
+    elif (filter == 'cargo'):
         fig = px.line(registros_serv, title='Remuneração Legal Total de '+nome+' por Cargo e Data', y='REMUNERACAO LEGAL TOTAL(R$)', x='DATA', color='CARGO', width=graph_x, height=graph_y)
+    else:
+        fig = px.line(registros_serv, title='Remuneração Legal Total de '+nome+' por Função e Data', y='REMUNERACAO LEGAL TOTAL(R$)', x='DATA', color='FUNCAO', width=graph_x, height=graph_y)
 
     return fig
 
