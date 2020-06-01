@@ -127,7 +127,11 @@ def org_aumento(mes, ano, valor):
     orgs_aum_prin   = orgs_aum[(orgs_aum['Remuneração Legal Total (Soma)'] > valor)]
     orgs_corte_prin = orgs_aum[(orgs_aum['Remuneração Legal Total (Soma)'] < -valor)]
     
-    fig = px.bar(orgs_aum_prin, y='Remuneração Legal Total (Soma)', x='Órgão', width=graph_x, height=graph_y)
+    fig = px.bar(
+        orgs_aum_prin, 
+        y='Remuneração Legal Total (Soma)', x='Órgão', 
+        width=graph_x, height=graph_y
+    )
     fig.add_trace(
         go.Bar(
             x = orgs_corte_prin['Órgão'],
