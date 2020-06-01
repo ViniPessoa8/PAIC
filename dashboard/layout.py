@@ -157,10 +157,13 @@ def load_layout(app):
                                 children=[
                                     dcc.Input(
                                         id='serv_busca_input',
-                                        className='input',
+                                        className='input_name',
+                                        type='search',
+                                        debounce=True,
                                         placeholder='Nome do servidor',
-                                        value='FRANCISCO DAS CHAGAS DA SILVA'
-                                    )
+                                        value='FRANCISCO DAS CHAGAS DA SILVA',
+                                    ),
+                                    html.Button('Pesquisar', id='serv-submit-btn')
                                 ]
                             ),
                             html.H2('Por orgão'),

@@ -87,6 +87,11 @@ body {
     color:black;
 }
 
+.input_name {
+    width: 400px;
+    height: 20px;
+}
+
 
 .plot-container {
     position: relative; 
@@ -132,7 +137,7 @@ body {
     display:flex;
     flex-direction: row;
     margin: 10px;
-    justify-content: space-around;
+    justify-content: center;
     width: 50%;
 }
 
@@ -195,4 +200,8 @@ a:hover {
 
 .slider-2 {
     width: 800px;
+}
+
+#serv-submit-btn {
+    margin-left: 10px;
 }
