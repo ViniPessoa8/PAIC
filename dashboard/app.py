@@ -34,10 +34,10 @@ app.layout = layout.load_layout(app)
 )
 def rem_leg_total(value):
     response = pl.org_rem_total(value[0], value[1])
-    if (response):
+    if (response != None ):
         return response
     else:
-        alert('Erro: Entrada inválida.')
+        print('Erro: Entrada inválida.')
 
 # Remuneração Total Individual
 @app.callback(
@@ -46,10 +46,10 @@ def rem_leg_total(value):
 )
 def rem_org(input):
     response = pl.org_rem_total_ind(input) 
-    if (response):
+    if (response != None ):
         return response
     else:
-        alert('Erro: Entrada inválida.')
+        print('Erro: Entrada inválida.')
 
 # Aumento/cortes Remuneração Total
 @app.callback(
@@ -61,13 +61,15 @@ def rem_org(input):
 def org_aumento(mes, ano, valor):
     if (mes == None or ano == None):
         raise PreventUpdate
-    elif (reponse):
-        return pl.org_aumento(mes, ano, valor) 
     else:
-        alert('Erro: Entrada inválida.')
+        response = pl.org_aumento(mes, ano, valor)
+        if (response != None ):
+            return response   
+        else:
+            print('Erro: Entrada inválida.')
 
 @app.callback(
-    Output('org_aum_corte_h4','children'),
+    Output('org_aum_corte_H3','children'),
     [Input('slider_org_aum', 'value')]
 )
 def org_aumento(valor):
@@ -85,10 +87,10 @@ def org_aumento(valor):
 )
 def serv_busca_duplicados(org, ano, mes):
     response = pl.serv_duplicados_busca(org, ano, mes).to_dict('records') 
-    if (response):
+    if (response != None ):
         return response
     else:
-        alert('Erro: Entrada inválida.')
+        print('Erro: Entrada inválida.')
 
 @app.callback(
     Output('dt_serv_dupl_busca','columns'),
@@ -97,11 +99,11 @@ def serv_busca_duplicados(org, ano, mes):
     Input('dropdown_busca_mes','value')]
 )
 def serv_busca_duplicados(org, ano, mes):
-    response = pl.serv_duplicados_busca(org, ano, mes)
-    if (response):
-        return [{'name': col, 'id': col} for col in response.columns]
+    response = pl.serv_duplicados_busca(org, ano, mes).columns
+    if (response.any()):
+        return [{'name': col, 'id': col} for col in response]
     else:
-        alert('Erro: Entrada inválida.')
+        print('Erro: Entrada inválida.')
 
 # Busca individual de servidor
 @app.callback(
@@ -113,10 +115,10 @@ def serv_busca(nome):
         raise PreventUpdate
     else:    
         response = pl.serv_busca(nome, 'orgao')
-        if(reponse):
-            return reponse
+        if(response != None ):
+            return response
         else:
-            alert('Erro: Entrada inválida.')
+            print('Erro: Entrada inválida.')
             
 
 @app.callback(
@@ -128,10 +130,10 @@ def serv_busca(nome):
         raise PreventUpdate
     else:
         response = pl.serv_busca(nome, 'cargo')
-        if (reponse):
+        if (response != None ):
             return response
         else:
-            alert('Erro: Entrada inválida.')
+            print('Erro: Entrada inválida.')
 
 # Aumentos/Cortes remuneração servidor
 @app.callback(
@@ -146,13 +148,13 @@ def serv_aumento(mes, ano, orgao, valor):
         raise PreventUpdate
     else:
         response = pl.serv_aumento(mes, ano, orgao, valor)  
-        if (response):
+        if (response != None ):
             return response
         else:
-            alert('Erro: Entrada inválida.')
+            print('Erro: Entrada inválida.')
 
 @app.callback(
-    Output('serv_aum_corte_h4','children'),
+    Output('serv_aum_corte_H3','children'),
     [Input('slider_serv_aum', 'value')]
 )
 def org_aumento(valor):

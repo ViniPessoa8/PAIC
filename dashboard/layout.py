@@ -30,7 +30,7 @@ def load_layout(app):
             html.H1(className='header', children=[
                 'Transparência do Governo do Amazonas'
             ]),
-            html.H4(className='info', children=[
+            html.H3(className='info', children=[
                 'Portal de análise dos dados referentes à remuneração dos servidores públicos do governo  do Amazonas.'
             ]),
             html.P(children=[
@@ -59,11 +59,11 @@ def load_layout(app):
             html.Div(className='plot-container', children=[
                 html.Div(id='orgaos', className='plot-container section', children=[
                     html.Div(className='plot-header', children=[
-                        html.H4('Órgãos')
+                        html.H3('Órgãos')
                     ]),
                     html.Div(id='org-rem-leg-total', className='sub-plot  section', children=[
-                        html.H2('Maior Remuneração Legal Total (R$)'),
-                        html.H3('Soma da Remuneração Legal Total de cada órgão por mês.'),
+                        html.H1('Maior Remuneração Legal Total (R$)'),
+                        html.H2('Soma da Remuneração Legal Total de cada órgão por mês.'),
                         dcc.RangeSlider(
                             id         = 'slider_rem_leg_total',
                             className  = 'slider',
@@ -79,8 +79,8 @@ def load_layout(app):
                         )
                     ]),
                     html.Div(id='org-rem-leg-indiv', className='sub-plot  section', children=[
-                        html.H2('Remuneração Legal Total Individual (R$)'),
-                        html.H3('Soma da Remuneração Legal Total por órgão.'),
+                        html.H1('Remuneração Legal Total Individual (R$)'),
+                        html.H2('Soma da Remuneração Legal Total por órgão.'),
                         html.Div(className='options-container', children=[
                             dcc.Dropdown(
                                 id='dropdown2',
@@ -96,11 +96,11 @@ def load_layout(app):
                         )
                     ]),
                     html.Div(id='org-aum-corte', className='sub-plot section', children=[
-                        html.H2('Aumento/Corte no orçamento'),
-                        html.H4(id='org_aum_corte_h4'),
+                        html.H1('Aumento/Corte no orçamento'),
+                        html.H3(id='org_aum_corte_H3'),
                         html.Div(className='options-container', children=[
                             html.Div(children=[
-                                html.H4('Mês'),
+                                html.H3('Mês'),
                                 dcc.Dropdown(
                                     id='dropdown_meses_1',
                                     className='input',
@@ -112,7 +112,7 @@ def load_layout(app):
                                 ),
                             ]),
                             html.Div(children=[
-                                html.H4('Ano'),
+                                html.H3('Ano'),
                                 dcc.Dropdown(
                                     id='dropdown_anos_1',
                                     className='input',
@@ -125,7 +125,7 @@ def load_layout(app):
                             ]),
                         ]),
                         html.Div(children=[
-                            html.H4('Valor mínimo'),
+                            html.H3('Valor mínimo'),
                             dcc.Slider(
                                 id         = 'slider_org_aum',
                                 className  = 'slider-2',
@@ -143,7 +143,7 @@ def load_layout(app):
                 ]),
                 html.Div(id='servidores', className='plot-container section', children=[
                     html.Div(className='plot-header', children=[
-                        html.H4(className='', children=[
+                        html.H3(className='', children=[
                             'Servidores'
                         ])
                     ]),
@@ -166,11 +166,11 @@ def load_layout(app):
                                     html.Button('Pesquisar', id='serv-submit-btn')
                                 ]
                             ),
-                            html.H2('Por orgão'),
+                            html.H1('Por orgão'),
                             dcc.Graph(
                                 id='graph_serv_busca_orgao',
                             ),
-                            html.H2('Por cargo'),
+                            html.H1('Por cargo'),
                             dcc.Graph(
                                 id='graph_serv_busca_cargo'
                             )
@@ -181,14 +181,14 @@ def load_layout(app):
                         className='sub-plot section',
                         children=[
                             html.H1('Numero de Funcionários'),
-                            html.H2(children=[
+                            html.H1(children=[
                                 'Registrados (', anos.min(), ' - ', anos.max(), ')'
                             ]),
                             dcc.Graph(
                                 id='graph_serv_num_reg',
                                 figure=pl.serv_num_reg()
                             ),
-                            html.H2(children=[
+                            html.H1(children=[
                                 'Ativos (', dt_formatada, ')'
                             ]),
                             dcc.Graph(
@@ -233,7 +233,7 @@ def load_layout(app):
                                 className='serv_dupl_container',
                                 children=[
                                     html.Div(className='dt-container', children=[
-                                        html.H2('Por órgão'),
+                                        html.H1('Por órgão'),
                                         dt.DataTable(
                                             id='dt_serv_dupl_org',
                                             columns=[{'name': col, 'id': col} for col in pl.serv_duplicados('org').columns],
@@ -256,7 +256,7 @@ def load_layout(app):
                                         )
                                     ]),
                                     html.Div(children=[
-                                        html.H2('Por ano'),
+                                        html.H1('Por ano'),
                                         dt.DataTable(
                                             id='dt_serv_dupl_ano',
                                             columns=[{'name': col, 'id': col} for col in pl.serv_duplicados('data').reset_index().columns],
@@ -280,10 +280,10 @@ def load_layout(app):
                                     ])
                                 ]
                             ),
-                            html.H2('Busca de servidores duplicados'),
+                            html.H1('Busca de servidores duplicados'),
                             html.Div(className='options-container', children=[
                                 html.Div(children=[
-                                    html.H2('Órgão'),
+                                    html.H1('Órgão'),
                                     dcc.Dropdown(
                                         id='dropdown_busca_org',
                                         className='input',
@@ -295,7 +295,7 @@ def load_layout(app):
                                     )
                                 ]),
                                 html.Div(children=[
-                                    html.H2('Ano'),
+                                    html.H1('Ano'),
                                     dcc.Dropdown(
                                         id='dropdown_busca_ano',
                                         className='input',
@@ -307,7 +307,7 @@ def load_layout(app):
                                     )
                                 ]),
                                 html.Div(children=[
-                                    html.H2('Mês'),
+                                    html.H1('Mês'),
                                     dcc.Dropdown(
                                         id='dropdown_busca_mes',
                                         className='input',
@@ -373,11 +373,11 @@ def load_layout(app):
                         ]
                     ),
                     html.Div(id='serv-aum-corte', className='sub-plot section', children=[
-                        html.H2('Aumento/Corte no orçamento'),
-                        html.H4(id='serv_aum_corte_h4'),
+                        html.H1('Aumento/Corte no orçamento'),
+                        html.H3(id='serv_aum_corte_H3'),
                         html.Div(className='options-container', children=[
                             html.Div(children=[
-                                html.H4('Mês'),
+                                html.H3('Mês'),
                                 dcc.Dropdown(
                                     id='dropdown_meses_2',
                                     className='input',
@@ -389,7 +389,7 @@ def load_layout(app):
                                 ),
                             ]),
                             html.Div(children=[
-                                html.H4('Ano'),
+                                html.H3('Ano'),
                                 dcc.Dropdown(
                                     id='dropdown_anos_2',
                                     className='input',
@@ -401,7 +401,7 @@ def load_layout(app):
                                 )
                             ]),
                             html.Div(children=[
-                                html.H4('Órgão'),
+                                html.H3('Órgão'),
                                 dcc.Dropdown(
                                     id='dropdown_orgao',
                                     className='input',
@@ -414,7 +414,7 @@ def load_layout(app):
                             ])
                         ]),
                         html.Div(children=[
-                            html.H4('Valor mínimo'),
+                            html.H3('Valor mínimo'),
                             dcc.Slider(
                                 id         = 'slider_serv_aum',
                                 className  = 'slider-2',
