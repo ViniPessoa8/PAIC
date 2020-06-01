@@ -51,9 +51,17 @@ body {
     font-weight: bold;
     margin-left: 5px;
     padding-top: 20px;
+    animation: ease-in-out;
     transition: .2s;
     -webkit-transform: scale(1.2);
     transform: scale(1.2);
+}
+
+.sidenav .sum-header:hover {
+    animation: ease-in-out;
+    transition: .2s;
+    -webkit-transform: scale(1.25);
+    transform: scale(1.25);
 }
 
 .summary {
@@ -178,10 +186,16 @@ body {
 a {
     color: var(--color-2);
     text-decoration: none;
+    animation: ease-in-out;
+    transform: scale(1);
+    transition: .2s;
 }
 
 a:hover {
     color: var(--color-1);
+    animation: ease-in-out;
+    transform: scale(1.1);
+    transition: .2s;
 }
 
 .slider {
