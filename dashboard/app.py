@@ -24,13 +24,20 @@ print('Loading layout...')
 app.layout = layout.load_layout(app)
 
 ### Calbacks ###
+
+### ÓRGÃOS
+
 # Mior Remuneração Legal Total
 @app.callback(
     Output('graph_rem_leg_total','figure'),
     [Input('slider_rem_leg_total','value')]
 )
 def rem_leg_total(value):
-    return pl.org_rem_total(value[0], value[1])
+    response = pl.org_rem_total(value[0], value[1])
+    if (response):
+        return response
+    else:
+        alert('Erro: Entrada inválida.')
 
 # Remuneração Total Individual
 @app.callback(
@@ -38,7 +45,11 @@ def rem_leg_total(value):
     [Input('dropdown2', 'value')]
 )
 def rem_org(input):
-    return pl.org_rem_total_ind(input)
+    response = pl.org_rem_total_ind(input) 
+    if (response):
+        return response
+    else:
+        alert('Erro: Entrada inválida.')
 
 # Aumento/cortes Remuneração Total
 @app.callback(
@@ -50,8 +61,10 @@ def rem_org(input):
 def org_aumento(mes, ano, valor):
     if (mes == None or ano == None):
         raise PreventUpdate
-    else:
+    elif (reponse):
         return pl.org_aumento(mes, ano, valor) 
+    else:
+        alert('Erro: Entrada inválida.')
 
 @app.callback(
     Output('org_aum_corte_h4','children'),
@@ -61,6 +74,8 @@ def org_aumento(valor):
     str_out = 'Diferença da soma da remuneração legal total de um mês para o outro. Sendo a diferença maior ou menor que '+util.format_number(valor)+'.'
     return str_out 
 
+### SERVIDORES
+
 # Busca servidores duplicados
 @app.callback(
     Output('dt_serv_dupl_busca','data'),
@@ -69,7 +84,11 @@ def org_aumento(valor):
     Input('dropdown_busca_mes','value')]
 )
 def serv_busca_duplicados(org, ano, mes):
-    return pl.serv_duplicados_busca(org, ano, mes).to_dict('records')
+    response = pl.serv_duplicados_busca(org, ano, mes).to_dict('records') 
+    if (response):
+        return response
+    else:
+        alert('Erro: Entrada inválida.')
 
 @app.callback(
     Output('dt_serv_dupl_busca','columns'),
@@ -78,7 +97,11 @@ def serv_busca_duplicados(org, ano, mes):
     Input('dropdown_busca_mes','value')]
 )
 def serv_busca_duplicados(org, ano, mes):
-    return [{'name': col, 'id': col} for col in pl.serv_duplicados_busca(org, ano, mes).columns]
+    response = pl.serv_duplicados_busca(org, ano, mes)
+    if (response):
+        return [{'name': col, 'id': col} for col in response.columns]
+    else:
+        alert('Erro: Entrada inválida.')
 
 # Busca individual de servidor
 @app.callback(
@@ -89,7 +112,12 @@ def serv_busca(nome):
     if(nome == None):
         raise PreventUpdate
     else:    
-        return pl.serv_busca(nome, 'orgao')
+        response = pl.serv_busca(nome, 'orgao')
+        if(reponse):
+            return reponse
+        else:
+            alert('Erro: Entrada inválida.')
+            
 
 @app.callback(
     Output('graph_serv_busca_cargo','figure'),
@@ -99,7 +127,11 @@ def serv_busca(nome):
     if(nome == None):
         raise PreventUpdate
     else:
-        return pl.serv_busca(nome, 'cargo')
+        response = pl.serv_busca(nome, 'cargo')
+        if (reponse):
+            return response
+        else:
+            alert('Erro: Entrada inválida.')
 
 # Aumentos/Cortes remuneração servidor
 @app.callback(
@@ -113,7 +145,11 @@ def serv_aumento(mes, ano, orgao, valor):
     if (mes == None or ano == None):
         raise PreventUpdate
     else:
-        return pl.serv_aumento(mes, ano, orgao, valor) 
+        response = pl.serv_aumento(mes, ano, orgao, valor)  
+        if (response):
+            return response
+        else:
+            alert('Erro: Entrada inválida.')
 
 @app.callback(
     Output('serv_aum_corte_h4','children'),
