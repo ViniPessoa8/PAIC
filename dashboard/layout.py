@@ -13,7 +13,7 @@ print('Dataset path:', pl.ds_path)
 
 df = pl.df
 
-nomes = df['NOME'].drop_duplicates()
+nomes = pl.nomes
 orgaos = pl.orgaos
 anos = pl.anos
 meses = pl.meses
@@ -161,6 +161,7 @@ def load_layout(app):
                                         type='search',
                                         debounce=True,
                                         placeholder='Nome do servidor',
+                                        list=str(pl.nomes),
                                         value='FRANCISCO DAS CHAGAS DA SILVA',
                                     ),
                                     html.Button('Pesquisar', id='serv-submit-btn')

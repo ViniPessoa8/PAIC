@@ -111,7 +111,8 @@ def serv_busca_duplicados(org, ano, mes):
     [Input('serv_busca_input','value')]
 )
 def serv_busca(nome):
-    if(nome == None):
+    
+    if((nome == None) or (nome not in pl.nomes.values)):
         raise PreventUpdate
     else:    
         response = pl.serv_busca(nome, 'orgao')
@@ -126,7 +127,7 @@ def serv_busca(nome):
     [Input('serv_busca_input','value')]
 )
 def serv_busca(nome):
-    if(nome == None):
+    if((nome == None) or (nome not in pl.nomes.values)):
         raise PreventUpdate
     else:
         response = pl.serv_busca(nome, 'cargo')

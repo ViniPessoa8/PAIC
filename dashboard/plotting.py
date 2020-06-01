@@ -20,6 +20,7 @@ df = df.sort_values(by=['ORGAO', 'DATA'])
 orgaos = df['ORGAO'].unique()
 anos   = df['DATA'].dt.year.drop_duplicates().sort_values()
 meses  = df['DATA'].dt.month.drop_duplicates().sort_values()
+nomes  = df['NOME'].drop_duplicates()
 
 # Métodos
 def org_rem_total(init, end):
