@@ -6,6 +6,7 @@ import pandas as pd
 import plotly.express as px
 import plotting as pl
 import layout
+import util
 from dash.dependencies import Input, Output
 
 app = dash.Dash(__name__)
@@ -52,6 +53,14 @@ def org_aumento(mes, ano, valor):
     else:
         return pl.org_aumento(mes, ano, valor) 
 
+@app.callback(
+    Output('org_aum_corte_h4','children'),
+    [Input('slider_org_aum', 'value')]
+)
+def org_aumento(valor):
+    str_out = 'Diferença da soma da remuneração legal total de um mês para o outro. Sendo a diferença maior ou menor que '+util.format_number(valor)
+    return str_out 
+
 # Busca servidores duplicados
 @app.callback(
     Output('dt_serv_dupl_busca','data'),
@@ -89,7 +98,7 @@ def serv_busca(nome):
 def serv_busca(nome):
     if(nome == None):
         raise PreventUpdate
-    else:    
+    else:
         return pl.serv_busca(nome, 'cargo')
 
 # Aumentos/Cortes remuneração servidor

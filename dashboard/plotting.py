@@ -18,8 +18,8 @@ df = pd.read_csv(ds_path, sep=',', header=0, decimal='.', parse_dates=['DATA']).
 df = df.sort_values(by=['ORGAO', 'DATA'])
 
 orgaos = df['ORGAO'].unique()
-anos = df['DATA'].dt.year.drop_duplicates().sort_values()
-meses = df['DATA'].dt.month.drop_duplicates().sort_values()
+anos   = df['DATA'].dt.year.drop_duplicates().sort_values()
+meses  = df['DATA'].dt.month.drop_duplicates().sort_values()
 
 # Métodos
 def org_rem_total(init, end):
@@ -207,11 +207,16 @@ def serv_duplicados_busca(org, ano, mes):
     return duplicados
 
 def serv_busca(nome, filter='orgao'):
-    registros_serv = df.loc[(df.NOME == nome)].sort_values('DATA', 'NOME')
+    ## DEBUG
+    # print(df[df['NOME'] == 'FRANCISCO DAS CHAGAS DA SILVA' ])
+    ## DEBUG
+    
+    df_bool = (df['NOME'] == nome)
+    registros_serv = df.loc[df_bool].sort_values('DATA')
     if (filter == 'orgao'):
-        fig = px.line(registros_serv, title='Remuneração de '+nome, y='REMUNERACAO LEGAL TOTAL(R$)', x='DATA', color='ORGAO')
+        fig = px.line(registros_serv, title='Remuneração de '+nome, y='REMUNERACAO LEGAL TOTAL(R$)', x='DATA', color='ORGAO', width=graph_x, height=graph_y)
     else:
-        fig = px.line(registros_serv, title='Remuneração Legal Total de '+nome+' por Cargo e Data', y='REMUNERACAO LEGAL TOTAL(R$)', x='DATA', color='CARGO')
+        fig = px.line(registros_serv, title='Remuneração Legal Total de '+nome+' por Cargo e Data', y='REMUNERACAO LEGAL TOTAL(R$)', x='DATA', color='CARGO', width=graph_x, height=graph_y)
 
     return fig
 

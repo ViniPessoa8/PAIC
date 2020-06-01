@@ -97,7 +97,7 @@ def load_layout(app):
                     ]),
                     html.Div(id='org-aum-corte', className='sub-plot section', children=[
                         html.H2('Aumento/Corte no orçamento'),
-                        html.H4('Diferença da soma da remuneração legal total de um mês para o outro. Sendo a diferença maior ou menor que 50.000.'),
+                        html.H4(id='org_aum_corte_h4'),
                         html.Div(className='options-container', children=[
                             html.Div(children=[
                                 html.H4('Mês'),
@@ -125,10 +125,9 @@ def load_layout(app):
                             ]),
                         ]),
                         html.Div(children=[
-                            html.H4('Valor de intervalo'),
+                            html.H4('Valor mínimo'),
                             dcc.Slider(
                                 id         = 'slider_org_aum',
-                                # className  = 'slider',
                                 min        = 0,
                                 max        = 1000000,
                                 step       = None,
@@ -159,7 +158,7 @@ def load_layout(app):
                                         id='serv_busca_input',
                                         className='input',
                                         placeholder='Nome do servidor',
-                                        # list=nomes.values
+                                        value='FRANCISCO DAS CHAGAS DA SILVA'
                                     )
                                 ]
                             ),
