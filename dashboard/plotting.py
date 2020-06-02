@@ -23,11 +23,15 @@ meses  = df['DATA'].dt.month.drop_duplicates().sort_values()
 nomes  = df['NOME'].drop_duplicates()
 
 # Métodos
+## ÓRGÃO
+### Soma da remuneração legal total por órgão
 def org_rem_total(init, end):
+    # Preparação dos Dados 
     df_temp = df.loc[:, ['REMUNERACAO LEGAL TOTAL(R$)', 'DATA', 'ORGAO']].groupby(by=['ORGAO', 'DATA'], as_index=False).sum()
     rem = df_temp['REMUNERACAO LEGAL TOTAL(R$)']
     df_rem_total = df_temp.loc[(rem > init) & (rem < end)]
 
+    # Plot
     fig = px.line(
         df_rem_total,
         title='Remuneração Legal Total de cada órgão ', 
@@ -39,10 +43,12 @@ def org_rem_total(init, end):
 
     return fig
 
-
+### Soma da remuneração legal total individual de um órgão, por mês.
 def org_rem_total_ind(input):
+    # Preparação dos Dados 
     df_org = df.loc[(df.ORGAO == input), ['REMUNERACAO LEGAL TOTAL(R$)', 'DATA', 'ORGAO']].groupby(by=['DATA'], as_index=False).sum()
 
+    # Plot
     fig = px.line(
         df_org, 
         title='Remuneração Legal Total - '+input,
@@ -52,13 +58,17 @@ def org_rem_total_ind(input):
 
     return fig
 
+## SERVIDORES
+### Órgãos com mais servidores registrados
 def serv_num_reg():
+    # Preparação dos Dados 
     df_temp = df.drop_duplicates(['ORGAO', 'NOME'])
     df_temp = df_temp.groupby('ORGAO', as_index=False)['NOME'].count()
     df_temp = df_temp.sort_values('NOME', ascending=False)
     df_temp = df_temp.rename(columns={'NOME':'Funcionários', 'ORGAO':'Órgão'})
     df_temp = df_temp[df_temp['Funcionários'] > 1]
 
+    # Plot
     fig = px.bar(
         df_temp, 
         x='Órgão', y='Funcionários', 
@@ -68,7 +78,9 @@ def serv_num_reg():
 
     return fig
 
+### Número de servidores ativos por órgão
 def serv_num_ativos():
+    # Preparação dos Dados 
     dt_atual = df['DATA'].max()
     df_temp = df[df['DATA'] == dt_atual]
     df_temp = df_temp.drop_duplicates(['ORGAO', 'NOME'])
@@ -78,6 +90,7 @@ def serv_num_ativos():
 
     dt_formatada = str(dt_atual.month)+'/'+str(dt_atual.year)
 
+    # Plot 
     fig = px.bar(
         df_temp, 
         x='Órgão', y='Funcionários', 
@@ -89,6 +102,7 @@ def serv_num_ativos():
 
 
 def serv_mais_org():
+    # Preparação dos Dados 
     df_temp = df.drop_duplicates(['NOME','ORGAO'])
     df_temp = df_temp.groupby('NOME', as_index=False)[['ORGAO']].count()
     df_temp = df_temp[df_temp['ORGAO'] > 1]
@@ -98,6 +112,7 @@ def serv_mais_org():
     return df_temp
 
 def org_aumento(mes, ano, valor):
+    # Preparação dos Dados 
     # Cálculo do mês anterior
     if mes == 1:
         mes_ant = 12
@@ -106,7 +121,6 @@ def org_aumento(mes, ano, valor):
         mes_ant = mes-1
         ano_ant = ano
 
-    # Preparação dos dados
     df_mes_atual    = df.loc[(df['DATA'].dt.month == mes) & (df['DATA'].dt.year == ano)]
     df_mes_atual    = df_mes_atual.groupby(['ORGAO', 'DATA'], as_index=False)['REMUNERACAO LEGAL TOTAL(R$)'].sum()
     df_mes_anterior = df.loc[(df['DATA'].dt.month == mes_ant) & (df['DATA'].dt.year == ano_ant)]
@@ -128,6 +142,7 @@ def org_aumento(mes, ano, valor):
     orgs_aum_prin   = orgs_aum[(orgs_aum['Remuneração Legal Total (Soma)'] > valor)]
     orgs_corte_prin = orgs_aum[(orgs_aum['Remuneração Legal Total (Soma)'] < -valor)]
     
+    # Plot
     fig = px.bar(
         orgs_aum_prin, 
         y='Remuneração Legal Total (Soma)', x='Órgão', 
@@ -142,6 +157,64 @@ def org_aumento(mes, ano, valor):
     )
 
     return fig
+
+### Busca de servidores
+def serv_busca(nome, filter='orgao'):
+    # Preparação dos Dados 
+    df_bool = (df['NOME'] == nome)
+    registros_serv = df.loc[df_bool].sort_values('DATA')
+
+    # Plot
+    if (filter == 'orgao'):
+        fig = px.line(registros_serv, title='Remuneração de '+nome+'por Órgão e Data', y='REMUNERACAO LEGAL TOTAL(R$)', x='DATA', color='ORGAO', width=graph_x, height=graph_y)
+    elif (filter == 'cargo'):
+        fig = px.line(registros_serv, title='Remuneração Legal Total de '+nome+' por Cargo e Data', y='REMUNERACAO LEGAL TOTAL(R$)', x='DATA', color='CARGO', width=graph_x, height=graph_y)
+    else:
+        fig = px.line(registros_serv, title='Remuneração Legal Total de '+nome+' por Função e Data', y='REMUNERACAO LEGAL TOTAL(R$)', x='DATA', color='FUNCAO', width=graph_x, height=graph_y)
+
+    return fig
+
+### Servidores duplicados
+def serv_duplicados(filter):
+    # Preparação dos Dados 
+    df_temp    = df[['NOME', 'DATA', 'ORGAO']]
+    df_bool    = df_temp.duplicated()
+    duplicados = df_temp[df_bool]
+    duplicados = duplicados.rename(columns={'NOME':'Número de Servidores'})
+
+    if (filter == 'data'):
+        duplicados_data  = duplicados.groupby(duplicados['DATA'].dt.year)['Número de Servidores'].count()
+        
+        return duplicados_data
+
+    duplicados_orgao = duplicados.groupby(['ORGAO'], as_index=False)['Número de Servidores'].count()
+    duplicados_orgao = duplicados_orgao.sort_values('Número de Servidores', ascending=False)
+
+    return duplicados_orgao
+
+### Busca de servidores duplicados
+def serv_duplicados_busca(org, ano, mes):
+    # Preparação dos Dados 
+    df_temp = df.loc[(df.ORGAO == org) & (df['DATA'].dt.year == ano) & (df['DATA'].dt.month == mes)]
+    duplicados = df_temp[df_temp.duplicated(['NOME'], keep=False)].sort_values('NOME')
+    duplicados = duplicados.drop(columns=['DATA', 'ORGAO'])
+
+    return duplicados
+
+### Servidores com maior líquido disponível
+def serv_liq():
+    # Preparação dos Dados 
+    df_temp = df.loc[(df['LIQUIDO DISPONIVEL(R$)'] > 35000)]
+    df_out  = pd.DataFrame()
+
+    df_out['Nome']  = df_temp['NOME']
+    df_out['Líquido Disponível(R$)'] = df_temp['LIQUIDO DISPONIVEL(R$)']
+    df_out['Órgão'] = df_temp['ORGAO']
+    df_out['Data']  = df_temp['DATA'].dt.date
+
+    df_out = df_out.sort_values(by='Líquido Disponível(R$)', ascending=False)
+
+    return df_out
 
 def serv_aumento(mes, ano, orgao, valor):
     # Cálculo do mês anterior
@@ -174,6 +247,7 @@ def serv_aumento(mes, ano, orgao, valor):
     orgs_aum_prin   = orgs_aum[(orgs_aum['Remuneração Legal Total (Soma)'] > valor)]
     orgs_corte_prin = orgs_aum[(orgs_aum['Remuneração Legal Total (Soma)'] < -valor)]
 
+    # Plot
     fig = px.bar(orgs_aum_prin, x='Nome', y='Remuneração Legal Total (Soma)', width=graph_x, height=700)    
     fig.add_trace(
         go.Bar(
@@ -184,52 +258,3 @@ def serv_aumento(mes, ano, orgao, valor):
     )
 
     return fig
-
-def serv_duplicados(filter):
-    # Preparação dos dados
-    df_temp    = df[['NOME', 'DATA', 'ORGAO']]
-    df_bool    = df_temp.duplicated()
-    duplicados = df_temp[df_bool]
-    duplicados = duplicados.rename(columns={'NOME':'Número de Servidores'})
-
-    if (filter == 'data'):
-        duplicados_data  = duplicados.groupby(duplicados['DATA'].dt.year)['Número de Servidores'].count()
-        
-        return duplicados_data
-
-    duplicados_orgao = duplicados.groupby(['ORGAO'], as_index=False)['Número de Servidores'].count()
-    duplicados_orgao = duplicados_orgao.sort_values('Número de Servidores', ascending=False)
-
-    return duplicados_orgao
-
-def serv_duplicados_busca(org, ano, mes):
-    df_temp = df.loc[(df.ORGAO == org) & (df['DATA'].dt.year == ano) & (df['DATA'].dt.month == mes)]
-    duplicados = df_temp[df_temp.duplicated(['NOME'], keep=False)].sort_values('NOME')
-    duplicados = duplicados.drop(columns=['DATA', 'ORGAO'])
-
-    return duplicados
-
-def serv_busca(nome, filter='orgao'):
-    df_bool = (df['NOME'] == nome)
-    registros_serv = df.loc[df_bool].sort_values('DATA')
-    if (filter == 'orgao'):
-        fig = px.line(registros_serv, title='Remuneração de '+nome+'por Órgão e Data', y='REMUNERACAO LEGAL TOTAL(R$)', x='DATA', color='ORGAO', width=graph_x, height=graph_y)
-    elif (filter == 'cargo'):
-        fig = px.line(registros_serv, title='Remuneração Legal Total de '+nome+' por Cargo e Data', y='REMUNERACAO LEGAL TOTAL(R$)', x='DATA', color='CARGO', width=graph_x, height=graph_y)
-    else:
-        fig = px.line(registros_serv, title='Remuneração Legal Total de '+nome+' por Função e Data', y='REMUNERACAO LEGAL TOTAL(R$)', x='DATA', color='FUNCAO', width=graph_x, height=graph_y)
-
-    return fig
-
-def serv_liq():
-    df_temp = df.loc[(df['LIQUIDO DISPONIVEL(R$)'] > 35000)]
-    df_out  = pd.DataFrame()
-
-    df_out['Nome']  = df_temp['NOME']
-    df_out['Líquido Disponível(R$)'] = df_temp['LIQUIDO DISPONIVEL(R$)']
-    df_out['Órgão'] = df_temp['ORGAO']
-    df_out['Data']  = df_temp['DATA'].dt.date
-
-    df_out = df_out.sort_values(by='Líquido Disponível(R$)', ascending=False)
-
-    return df_out
