@@ -96,7 +96,7 @@ def load_layout(app):
                         )
                     ]),
                     html.Div(id='org-aum-corte', className='sub-plot section', children=[
-                        html.H1('Aumento/Corte no orçamento'),
+                        html.H1('Aumento/Corte na remuneração'),
                         html.H3(id='org_aum_corte_H3'),
                         html.Div(className='options-container', children=[
                             html.Div(children=[
@@ -378,7 +378,7 @@ def load_layout(app):
                         ]
                     ),
                     html.Div(id='serv-aum-corte', className='sub-plot section', children=[
-                        html.H1('Aumento/Corte no orçamento'),
+                        html.H1('Aumento/Corte na remuneração'),
                         html.H3(id='serv_aum_corte_H3'),
                         html.Div(className='options-container', children=[
                             html.Div(children=[
