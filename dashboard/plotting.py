@@ -58,6 +58,54 @@ def org_rem_total_ind(input):
 
     return fig
 
+### Orgãos com o maior aumento de um mês para o outro
+def org_aumento(mes, ano, valor):
+    # Preparação dos Dados 
+    # Cálculo do mês anterior
+    if mes == 1:
+        mes_ant = 12
+        ano_ant = ano-1
+    else:
+        mes_ant = mes-1
+        ano_ant = ano
+
+    df_mes_atual    = df.loc[(df['DATA'].dt.month == mes) & (df['DATA'].dt.year == ano)]
+    df_mes_atual    = df_mes_atual.groupby(['ORGAO', 'DATA'], as_index=False)['REMUNERACAO LEGAL TOTAL(R$)'].sum()
+    df_mes_anterior = df.loc[(df['DATA'].dt.month == mes_ant) & (df['DATA'].dt.year == ano_ant)]
+    df_mes_anterior = df_mes_anterior.groupby(['ORGAO', 'DATA'], as_index=False)['REMUNERACAO LEGAL TOTAL(R$)'].sum()
+
+    rem_atual       = df_mes_atual[['ORGAO', 'REMUNERACAO LEGAL TOTAL(R$)', 'DATA']]
+    rem_anterior    = df_mes_anterior[['ORGAO', 'REMUNERACAO LEGAL TOTAL(R$)', 'DATA']]
+
+    inner_join      = pd.merge(rem_anterior, rem_atual, how='inner', on='ORGAO', suffixes=(' ANTERIOR', ' ATUAL'))
+
+    diff            = inner_join['REMUNERACAO LEGAL TOTAL(R$) ATUAL'] - inner_join['REMUNERACAO LEGAL TOTAL(R$) ANTERIOR']
+    diff            = diff.sort_values(ascending=False)
+
+    orgs_aum     = pd.DataFrame()
+    orgs_aum['Órgão'] = rem_atual['ORGAO']
+    orgs_aum['Remuneração Legal Total (Soma)'] = diff
+    orgs_aum = orgs_aum.sort_values('Remuneração Legal Total (Soma)', ascending=False)
+
+    orgs_aum_prin   = orgs_aum[(orgs_aum['Remuneração Legal Total (Soma)'] > valor)]
+    orgs_corte_prin = orgs_aum[(orgs_aum['Remuneração Legal Total (Soma)'] < -valor)]
+    
+    # Plot
+    fig = px.bar(
+        orgs_aum_prin, 
+        y='Remuneração Legal Total (Soma)', x='Órgão', 
+        width=graph_x, height=graph_y
+    )
+    fig.add_trace(
+        go.Bar(
+            x = orgs_corte_prin['Órgão'],
+            y = orgs_corte_prin['Remuneração Legal Total (Soma)'],
+            base = 0
+        )
+    )
+
+    return fig
+
 ## SERVIDORES
 ### Órgãos com mais servidores registrados
 def serv_num_reg():
@@ -110,53 +158,6 @@ def serv_mais_org():
     df_temp.rename(columns={'NOME':'Número de Servidores'})
 
     return df_temp
-
-def org_aumento(mes, ano, valor):
-    # Preparação dos Dados 
-    # Cálculo do mês anterior
-    if mes == 1:
-        mes_ant = 12
-        ano_ant = ano-1
-    else:
-        mes_ant = mes-1
-        ano_ant = ano
-
-    df_mes_atual    = df.loc[(df['DATA'].dt.month == mes) & (df['DATA'].dt.year == ano)]
-    df_mes_atual    = df_mes_atual.groupby(['ORGAO', 'DATA'], as_index=False)['REMUNERACAO LEGAL TOTAL(R$)'].sum()
-    df_mes_anterior = df.loc[(df['DATA'].dt.month == mes_ant) & (df['DATA'].dt.year == ano_ant)]
-    df_mes_anterior = df_mes_anterior.groupby(['ORGAO', 'DATA'], as_index=False)['REMUNERACAO LEGAL TOTAL(R$)'].sum()
-
-    rem_atual       = df_mes_atual[['ORGAO', 'REMUNERACAO LEGAL TOTAL(R$)', 'DATA']]
-    rem_anterior    = df_mes_anterior[['ORGAO', 'REMUNERACAO LEGAL TOTAL(R$)', 'DATA']]
-
-    inner_join      = pd.merge(rem_anterior, rem_atual, how='inner', on='ORGAO', suffixes=(' ANTERIOR', ' ATUAL'))
-
-    diff            = inner_join['REMUNERACAO LEGAL TOTAL(R$) ATUAL'] - inner_join['REMUNERACAO LEGAL TOTAL(R$) ANTERIOR']
-    diff            = diff.sort_values(ascending=False)
-
-    orgs_aum     = pd.DataFrame()
-    orgs_aum['Órgão'] = rem_atual['ORGAO']
-    orgs_aum['Remuneração Legal Total (Soma)'] = diff
-    orgs_aum = orgs_aum.sort_values('Remuneração Legal Total (Soma)', ascending=False)
-
-    orgs_aum_prin   = orgs_aum[(orgs_aum['Remuneração Legal Total (Soma)'] > valor)]
-    orgs_corte_prin = orgs_aum[(orgs_aum['Remuneração Legal Total (Soma)'] < -valor)]
-    
-    # Plot
-    fig = px.bar(
-        orgs_aum_prin, 
-        y='Remuneração Legal Total (Soma)', x='Órgão', 
-        width=graph_x, height=graph_y
-    )
-    fig.add_trace(
-        go.Bar(
-            x = orgs_corte_prin['Órgão'],
-            y = orgs_corte_prin['Remuneração Legal Total (Soma)'],
-            base = 0
-        )
-    )
-
-    return fig
 
 ### Busca de servidores
 def serv_busca(nome, filter='orgao'):
