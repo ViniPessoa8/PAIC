@@ -1,6 +1,7 @@
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 import pathlib 
 import os
 
@@ -58,7 +59,7 @@ def org_rem_total_ind(input):
 
     return fig
 
-### Orgãos com o maior aumento de um mês para o outro
+### Orgãos com o maior aumento/corte de um mês para o outro
 def org_aumento(mes, ano, valor):
     # Preparação dos Dados 
     # Cálculo do mês anterior
@@ -148,7 +149,7 @@ def serv_num_ativos():
 
     return fig
 
-
+## Servidores com mais órgãos diferentes
 def serv_mais_org():
     # Preparação dos Dados 
     df_temp = df.drop_duplicates(['NOME','ORGAO'])
@@ -217,6 +218,7 @@ def serv_liq():
 
     return df_out
 
+### Servidores com o maior aumento/corte
 def serv_aumento(mes, ano, orgao, valor):
     # Cálculo do mês anterior
     if mes == 1:
@@ -249,13 +251,30 @@ def serv_aumento(mes, ano, orgao, valor):
     orgs_corte_prin = orgs_aum[(orgs_aum['Remuneração Legal Total (Soma)'] < -valor)]
 
     # Plot
-    fig = px.bar(orgs_aum_prin, x='Nome', y='Remuneração Legal Total (Soma)', width=graph_x, height=700)    
+    fig = make_subplots(
+        y_title = 'Remuneração Legal Total (R$)'
+    )
     fig.add_trace(
         go.Bar(
-            y = orgs_corte_prin['Remuneração Legal Total (Soma)'], 
-            x = orgs_corte_prin['Nome'],
-            base=0
+            name = 'Aumentos',
+            y    = orgs_aum_prin['Remuneração Legal Total (Soma)'], 
+            x    = orgs_aum_prin['Nome'],
+            base = 0
         )
+    )
+    fig.add_trace(
+        go.Bar(
+            name = 'Cortes',
+            y    = orgs_corte_prin['Remuneração Legal Total (Soma)'], 
+            x    = orgs_corte_prin['Nome'],
+            base = 0
+        )
+    )
+    fig.update_layout(
+        title_text = 'Servidores com o maior aumento/corte',
+        title_font_size = 17,
+        width = graph_x,
+        height = graph_y
     )
 
     return fig
