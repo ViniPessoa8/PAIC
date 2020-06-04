@@ -44,13 +44,6 @@ def org_rem_total(init, end):
             mode='lines+markers',
             name=orgao
         ))
-    # fig = px.line(
-    #     df_rem_total,
-    #     title='Remuneração Legal Total de cada órgão ', 
-    #     x='DATA', y="REMUNERACAO LEGAL TOTAL(R$)", 
-    #     color='ORGAO', 
-    #     width=graph_x, height=graph_y
-    # )
     fig.update_yaxes(automargin=True)
 
     return fig
@@ -70,12 +63,6 @@ def org_rem_total_ind(orgao):
         mode='lines+markers',
         name=orgao
     ))
-    # fig = px.line(
-    #     df_org, 
-    #     title='Remuneração Legal Total - '+input,
-    #     x='DATA', y='REMUNERACAO LEGAL TOTAL(R$)',
-    #     width=graph_x, height=graph_y
-    # )
 
     return fig
 
@@ -137,19 +124,6 @@ def org_aumento(mes, ano, valor):
         width = graph_x,
         height = graph_y
     )
-    # fig = px.bar(
-    #     orgs_aum_prin, 
-    #     y='Remuneração Legal Total (Soma)', x='Órgão', 
-    #     width=graph_x, height=graph_y
-    # )
-    # fig.add_trace(
-    #     go.Bar(
-    #         title='Cortes'
-    #         x = orgs_corte_prin['Órgão'],
-    #         y = orgs_corte_prin['Remuneração Legal Total (Soma)'],
-    #         base = 0
-    #     )
-    # )
 
     return fig
 
