@@ -133,7 +133,7 @@ def serv_busca(nome, filter='orgao'):
     # Preparação dos Dados 
     df_bool = (df['NOME'] == nome)
     registros_serv = df.loc[df_bool].sort_values('DATA')
-    layout = go.Layout(width=graph_x, height=graph_y)
+    layout = go.Layout(width=graph_x, height=graph_y, showlegend=True)
 
     # Plot
     if (filter == 'orgao'):
