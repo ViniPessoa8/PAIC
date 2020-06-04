@@ -114,18 +114,44 @@ def org_aumento(mes, ano, valor):
     orgs_corte_prin = orgs_aum[(orgs_aum['Remuneração Legal Total (Soma)'] < -valor)]
     
     # Plot
-    fig = px.bar(
-        orgs_aum_prin, 
-        y='Remuneração Legal Total (Soma)', x='Órgão', 
-        width=graph_x, height=graph_y
+    fig = make_subplots(
+        y_title = 'Remuneração Legal Total (R$)'
     )
     fig.add_trace(
         go.Bar(
-            x = orgs_corte_prin['Órgão'],
-            y = orgs_corte_prin['Remuneração Legal Total (Soma)'],
+            name = 'Aumentos',
+            y    = orgs_aum_prin['Remuneração Legal Total (Soma)'], 
+            x    = orgs_aum_prin['Órgão'],
             base = 0
         )
     )
+    fig.add_trace(
+        go.Bar(
+            name = 'Cortes',
+            y    = orgs_corte_prin['Remuneração Legal Total (Soma)'], 
+            x    = orgs_corte_prin['Órgão'],
+            base = 0
+        )
+    )
+    fig.update_layout(
+        title_text = 'Servidores com o maior aumento/corte',
+        title_font_size = 17,
+        width = graph_x,
+        height = graph_y
+    )
+    # fig = px.bar(
+    #     orgs_aum_prin, 
+    #     y='Remuneração Legal Total (Soma)', x='Órgão', 
+    #     width=graph_x, height=graph_y
+    # )
+    # fig.add_trace(
+    #     go.Bar(
+    #         title='Cortes'
+    #         x = orgs_corte_prin['Órgão'],
+    #         y = orgs_corte_prin['Remuneração Legal Total (Soma)'],
+    #         base = 0
+    #     )
+    # )
 
     return fig
 
