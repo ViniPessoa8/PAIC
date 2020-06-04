@@ -108,6 +108,58 @@ def org_aumento(mes, ano, valor):
     return fig
 
 ## SERVIDORES
+### Busca de servidores
+def serv_busca(nome, filter='orgao'):
+    # Preparação dos Dados 
+    df_bool = (df['NOME'] == nome)
+    registros_serv = df.loc[df_bool].sort_values('DATA')
+    layout = go.Layout(width=graph_x, height=graph_y)
+
+    # Plot
+    if (filter == 'orgao'):
+        fig = go.Figure(layout=layout)
+        fig.update_layout(title='Remuneração Legal Total de '+nome+' por Cargo e Data')
+        for orgao in registros_serv['ORGAO'].drop_duplicates():
+            print(orgao)
+            df_temp = registros_serv.loc[(registros_serv['ORGAO'] == orgao)] 
+            fig.add_trace(go.Scatter(
+                x=df_temp['DATA'], 
+                y=df_temp['REMUNERACAO LEGAL TOTAL(R$)'],
+                mode='lines+markers',
+                name=orgao
+            ))
+    elif (filter == 'cargo'):
+        fig = go.Figure(
+            layout=layout,
+        )
+        fig.update_layout(title='Remuneração Legal Total de '+nome+' por Cargo e Data')
+        for cargo in registros_serv['CARGO'].drop_duplicates():
+            print(cargo)
+            df_temp = registros_serv.loc[(registros_serv['CARGO'] == cargo)] 
+            fig.add_trace(go.Scatter(
+                x=df_temp['DATA'], 
+                y=df_temp['REMUNERACAO LEGAL TOTAL(R$)'],
+                mode='lines+markers',
+                name=cargo
+            ))
+    else:
+        fig = go.Figure(layout=layout)
+        fig.update_layout(
+            title='Remuneração Legal Total de '+nome+' por Cargo e Data'
+            )
+        for funcao in registros_serv['FUNCAO'].drop_duplicates():
+            print(funcao)
+            title='Remuneração Legal Total de '+nome+' por Função e Data', 
+            df_temp = registros_serv.loc[(registros_serv['FUNCAO'] == funcao)] 
+            fig.add_trace(go.Scatter(
+                x=df_temp['DATA'], 
+                y=df_temp['REMUNERACAO LEGAL TOTAL(R$)'],
+                mode='lines+markers',
+                name=funcao
+            ))
+
+    return fig
+
 ### Órgãos com mais servidores registrados
 def serv_num_reg():
     # Preparação dos Dados 
@@ -159,22 +211,6 @@ def serv_mais_org():
     df_temp.rename(columns={'NOME':'Número de Servidores'})
 
     return df_temp
-
-### Busca de servidores
-def serv_busca(nome, filter='orgao'):
-    # Preparação dos Dados 
-    df_bool = (df['NOME'] == nome)
-    registros_serv = df.loc[df_bool].sort_values('DATA')
-
-    # Plot
-    if (filter == 'orgao'):
-        fig = px.line(registros_serv, title='Remuneração de '+nome+'por Órgão e Data', y='REMUNERACAO LEGAL TOTAL(R$)', x='DATA', color='ORGAO', width=graph_x, height=graph_y)
-    elif (filter == 'cargo'):
-        fig = px.line(registros_serv, title='Remuneração Legal Total de '+nome+' por Cargo e Data', y='REMUNERACAO LEGAL TOTAL(R$)', x='DATA', color='CARGO', width=graph_x, height=graph_y)
-    else:
-        fig = px.line(registros_serv, title='Remuneração Legal Total de '+nome+' por Função e Data', y='REMUNERACAO LEGAL TOTAL(R$)', x='DATA', color='FUNCAO', width=graph_x, height=graph_y)
-
-    return fig
 
 ### Servidores duplicados
 def serv_duplicados(filter):
