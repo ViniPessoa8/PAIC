@@ -424,10 +424,10 @@ def load_layout(app):
                                 id         = 'slider_serv_aum',
                                 className  = 'slider-2',
                                 min        = 0,
-                                max        = 500000,
+                                max        = 100000,
                                 step       = None,
                                 value      = 0,
-                                marks      = {0:'0', 10000:'10K', 50000:'50K', 100000:'100K', 500000:'500K'}
+                                marks      = {0:'0', 1000:'1K', 10000:'10K', 50000:'50K', 100000:'100K'}
                             ),
                         ]),
                         dcc.Graph(
