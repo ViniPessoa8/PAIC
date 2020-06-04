@@ -33,29 +33,51 @@ def org_rem_total(init, end):
     df_rem_total = df_temp.loc[(rem > init) & (rem < end)]
 
     # Plot
-    fig = px.line(
-        df_rem_total,
-        title='Remuneração Legal Total de cada órgão ', 
-        x='DATA', y="REMUNERACAO LEGAL TOTAL(R$)", 
-        color='ORGAO', 
-        width=graph_x, height=graph_y
-    )
+    layout = go.Layout(width=graph_x, height=graph_y)
+    fig = go.Figure(layout=layout)
+    fig.update_layout(title='Remuneração Legal Total de cada órgão ')
+    for orgao in df_rem_total['ORGAO'].drop_duplicates():
+        print(orgao)
+        df_temp = df_rem_total.loc[(df_rem_total['ORGAO'] == orgao)] 
+        fig.add_trace(go.Scatter(
+            x=df_temp['DATA'], 
+            y=df_temp['REMUNERACAO LEGAL TOTAL(R$)'],
+            mode='lines+markers',
+            name=orgao
+        ))
+    # fig = px.line(
+    #     df_rem_total,
+    #     title='Remuneração Legal Total de cada órgão ', 
+    #     x='DATA', y="REMUNERACAO LEGAL TOTAL(R$)", 
+    #     color='ORGAO', 
+    #     width=graph_x, height=graph_y
+    # )
     fig.update_yaxes(automargin=True)
 
     return fig
 
 ### Soma da remuneração legal total individual de um órgão, por mês.
-def org_rem_total_ind(input):
+def org_rem_total_ind(orgao):
     # Preparação dos Dados 
-    df_org = df.loc[(df.ORGAO == input), ['REMUNERACAO LEGAL TOTAL(R$)', 'DATA', 'ORGAO']].groupby(by=['DATA'], as_index=False).sum()
+    df_org = df.loc[(df.ORGAO == orgao), ['REMUNERACAO LEGAL TOTAL(R$)', 'DATA', 'ORGAO']].groupby(by=['DATA'], as_index=False).sum()
 
     # Plot
-    fig = px.line(
-        df_org, 
-        title='Remuneração Legal Total - '+input,
-        x='DATA', y='REMUNERACAO LEGAL TOTAL(R$)',
-        width=graph_x, height=graph_y
-    )
+    layout = go.Layout(width=graph_x, height=graph_y)
+    fig = go.Figure(layout=layout)
+    fig.update_layout(title='Remuneração Legal Total - '+orgao)
+    print(orgao)
+    fig.add_trace(go.Scatter(
+        x=df_org['DATA'], 
+        y=df_org['REMUNERACAO LEGAL TOTAL(R$)'],
+        mode='lines+markers',
+        name=orgao
+    ))
+    # fig = px.line(
+    #     df_org, 
+    #     title='Remuneração Legal Total - '+input,
+    #     x='DATA', y='REMUNERACAO LEGAL TOTAL(R$)',
+    #     width=graph_x, height=graph_y
+    # )
 
     return fig
 
