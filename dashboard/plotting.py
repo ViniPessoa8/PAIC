@@ -331,3 +331,50 @@ def serv_aumento(mes, ano, orgao, valor):
     )
 
     return fig
+
+def serv_aum_geral():
+    # Preparação dos dados
+    df_serv_aum = pd.DataFrame()
+    dfs   = []
+
+    for ano in anos:
+        print("\n", ano)
+        for mes in meses:
+            print(mes, end=' ')
+            if mes == 1:
+                mes_ant  = 12
+                ano_ant  = ano - 1
+            else:
+                mes_ant  = mes - 1
+                ano_ant  = ano
+
+            df_mes_atual    = df.loc[(df['DATA'].dt.month == mes) & (df['DATA'].dt.year == ano)]
+            df_mes_atual    = df_mes_atual.groupby(['ORGAO', 'DATA', 'NOME'], as_index=False).head()
+            df_mes_anterior = df.loc[(df['DATA'].dt.month == mes_ant) & (df['DATA'].dt.year == ano_ant)]
+            df_mes_anterior = df_mes_anterior.groupby(['ORGAO', 'DATA', 'NOME'], as_index=False).head()
+
+            rem_atual         = df_mes_atual[['ORGAO','NOME', 'DATA', 'REMUNERACAO LEGAL TOTAL(R$)']]
+            rem_atual.loc[:, 'DATA'] = rem_atual['DATA'].dt.date
+            rem_atual         = rem_atual.groupby(['ORGAO', 'NOME', 'DATA'], as_index=False).sum()
+
+            rem_anterior         = df_mes_anterior[['ORGAO', 'NOME', 'DATA', 'REMUNERACAO LEGAL TOTAL(R$)']]
+            rem_anterior.loc[:, 'DATA'] = rem_anterior['DATA'].dt.date
+            rem_anterior         = rem_anterior.groupby(['ORGAO', 'NOME', 'DATA'], as_index=False).sum()
+
+            inner_join   = pd.merge(rem_anterior, rem_atual[['ORGAO', 'NOME', 'DATA', 'REMUNERACAO LEGAL TOTAL(R$)']], how='inner', left_on=['ORGAO', 'NOME'], right_on=['ORGAO', 'NOME'], suffixes=('_anterior', '_atual'))
+            diff         = inner_join['REMUNERACAO LEGAL TOTAL(R$)_atual'] - inner_join['REMUNERACAO LEGAL TOTAL(R$)_anterior']
+            diff         = diff.sort_values(ascending=False)
+
+            df_temp = pd.DataFrame()
+            df_temp.loc[:,'Nome']    = inner_join['NOME']
+            df_temp.loc[:,'Aumento'] = diff
+            df_temp.loc[:,'Órgão']   = inner_join['ORGAO']
+            df_temp.loc[:,'Data']    = inner_join['DATA_atual']
+
+            dfs.append(df_temp)
+
+    # Saída
+    df_serv_aum = pd.concat(dfs)
+    df_serv_aum = df_serv_aum.sort_values(['Aumento'], ascending=False).head(50)
+
+    return df_serv_aum
