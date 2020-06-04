@@ -37,7 +37,6 @@ def org_rem_total(init, end):
     fig = go.Figure(layout=layout)
     fig.update_layout(title='Remuneração Legal Total de cada órgão ')
     for orgao in df_rem_total['ORGAO'].drop_duplicates():
-        print(orgao)
         df_temp = df_rem_total.loc[(df_rem_total['ORGAO'] == orgao)] 
         fig.add_trace(go.Scatter(
             x=df_temp['DATA'], 
@@ -65,7 +64,6 @@ def org_rem_total_ind(orgao):
     layout = go.Layout(width=graph_x, height=graph_y)
     fig = go.Figure(layout=layout)
     fig.update_layout(title='Remuneração Legal Total - '+orgao)
-    print(orgao)
     fig.add_trace(go.Scatter(
         x=df_org['DATA'], 
         y=df_org['REMUNERACAO LEGAL TOTAL(R$)'],
@@ -168,7 +166,6 @@ def serv_busca(nome, filter='orgao'):
         fig = go.Figure(layout=layout)
         fig.update_layout(title='Remuneração Legal Total de '+nome+' por Cargo e Data')
         for orgao in registros_serv['ORGAO'].drop_duplicates():
-            print(orgao)
             df_temp = registros_serv.loc[(registros_serv['ORGAO'] == orgao)] 
             fig.add_trace(go.Scatter(
                 x=df_temp['DATA'], 
@@ -182,7 +179,6 @@ def serv_busca(nome, filter='orgao'):
         )
         fig.update_layout(title='Remuneração Legal Total de '+nome+' por Cargo e Data')
         for cargo in registros_serv['CARGO'].drop_duplicates():
-            print(cargo)
             df_temp = registros_serv.loc[(registros_serv['CARGO'] == cargo)] 
             fig.add_trace(go.Scatter(
                 x=df_temp['DATA'], 
@@ -196,7 +192,6 @@ def serv_busca(nome, filter='orgao'):
             title='Remuneração Legal Total de '+nome+' por Cargo e Data'
             )
         for funcao in registros_serv['FUNCAO'].drop_duplicates():
-            print(funcao)
             title='Remuneração Legal Total de '+nome+' por Função e Data', 
             df_temp = registros_serv.loc[(registros_serv['FUNCAO'] == funcao)] 
             fig.add_trace(go.Scatter(
