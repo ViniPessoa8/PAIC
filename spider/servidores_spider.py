@@ -11,9 +11,14 @@ import re
 project_path = os.getcwd()
 csv_path = project_path.replace('spider', 'csv/')
 log_file_path = project_path.replace('spider', 'log/')
+driver_path = ''
 pastas = {}
+driver_path = project_path.replace('spider', 'bin/chromedriver') 
 
 #### Funções ####
+def get_driver_path():
+    print(os.name)
+
 def finaliza_spider(webdriver):
     webdriver.quit()
     with get_log_file() as f:        
@@ -23,7 +28,6 @@ def inicia_web_driver(url):
     with get_log_file() as f:
         f.write("[INFO] Iniciando web driver\n")
     options     = webdriver.ChromeOptions()
-    driver_path = project_path.replace('spider', 'bin/chromedriver') 
 
     # Define as preferências do webdriver
     prefs = { 
@@ -231,10 +235,14 @@ def remove_arquivos(direc):
             f.write("[INFO] Removendo arquivos de '"+direc+"'\n")
         shutil.rmtree(direc)
 
+def prepare_log():
+    path = log_file_path+'spider_log.txt'
+    print(path)
+
 #### MAIN ####
 def main():
-    os.remove(log_file_path+'spider_log.txt')
-    remove_arquivos(csv_path)
+    prepare_log()
+    #remove_arquivos(csv_path)
     b = inicia_web_driver('http://www.transparencia.am.gov.br/pessoal/')
     orgaos = get_orgaos(b)
     
