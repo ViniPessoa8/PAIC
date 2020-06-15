@@ -97,7 +97,7 @@ def load_layout(app):
                     ]),
                     html.Div(id='org-aum-corte', className='sub-plot section', children=[
                         html.H1('Aumento/Corte na remuneração'),
-                        html.H3(id='org_aum_corte_H3'),
+                        html.H2(id='org_aum_corte_H3'),
                         html.Div(className='options-container', children=[
                             html.Div(children=[
                                 html.H3('Mês'),
@@ -186,14 +186,14 @@ def load_layout(app):
                         className='sub-plot section',
                         children=[
                             html.H1('Numero de Funcionários'),
-                            html.H1(children=[
+                            html.H2(children=[
                                 'Registrados (', anos.min(), ' - ', anos.max(), ')'
                             ]),
                             dcc.Graph(
                                 id='graph_serv_num_reg',
                                 figure=pl.serv_num_reg()
                             ),
-                            html.H1(children=[
+                            html.H2(children=[
                                 'Ativos (', dt_formatada, ')'
                             ]),
                             dcc.Graph(
@@ -206,7 +206,7 @@ def load_layout(app):
                         id='serv-mais-org',
                         className='sub-plot section',
                         children=[
-                            html.H1('Funcionários presentes em mais de um órgão.'),
+                            html.H1('Funcionários presentes em mais de um órgão'),
                             dt.DataTable(
                                 id='dt_serv_mais_org',
                                 columns=[{"name": col, "id": col} for col in pl.serv_mais_org().columns],
@@ -233,7 +233,7 @@ def load_layout(app):
                         id='serv-dupl-mesmo-org',
                         className='sub-plot section',
                         children=[
-                            html.H1('Servidores duplicados no mesmo órgão.'),
+                            html.H1('Servidores duplicados no mesmo órgão'),
                             html.Div(
                                 className='serv_dupl_container',
                                 children=[
@@ -379,7 +379,7 @@ def load_layout(app):
                     ),
                     html.Div(id='serv-aum-corte', className='sub-plot section', children=[
                         html.H1('Aumento/Corte na remuneração'),
-                        html.H3(id='serv_aum_corte_H3'),
+                        html.H2(id='serv_aum_corte_H3'),
                         html.Div(className='options-container', children=[
                             html.Div(children=[
                                 html.H3('Mês'),

@@ -326,8 +326,8 @@ def serv_aumento(mes, ano, orgao, valor):
     fig.update_layout(
         title_text = 'Servidores com o maior aumento/corte',
         title_font_size = 17,
-        width = graph_x,
-        height = graph_y
+        width = graph_x - 200,
+        height = graph_y + 200
     )
 
     return fig
