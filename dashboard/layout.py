@@ -50,10 +50,10 @@ def load_layout(app):
                     html.A(className='sum-header', href='#servidores', children=['Servidores']),
                     html.A(className='', href='#serv-busca', children=['Busca']),
                     html.A(className='', href='#serv-reg', children=['Quantidade por órgão']),
+                    html.A(className='', href='#serv-aum-corte', children=['Aumentos e Cortes']),
                     html.A(className='', href='#serv-mais-org', children=['Presentes em mais de um órgão']),
                     html.A(className='', href='#serv-dupl-mesmo-org', children=['Duplicados no mesmo órgão']),
                     html.A(className='', href='#serv-liq', children=['Maior Líquido']),
-                    html.A(className='', href='#serv-aum-corte', children=['Aumentos e Cortes'])
                 ])
             ]),
             html.Div(className='plot-container', children=[
@@ -202,6 +202,63 @@ def load_layout(app):
                             )
                         ]
                     ),
+                    html.Div(id='serv-aum-corte', className='sub-plot section', children=[
+                        html.H1('Aumento/Corte na remuneração'),
+                        html.H2(id='serv_aum_corte_H3'),
+                        html.Div(className='options-container', children=[
+                            html.Div(children=[
+                                html.H3('Mês'),
+                                dcc.Dropdown(
+                                    id='dropdown_meses_2',
+                                    className='input',
+                                    options=[{'label':i, 'value':i} for i in meses],
+                                    value=dt_atual.month,
+                                    placeholder='Mês',
+                                    clearable=False,
+                                    searchable=False
+                                ),
+                            ]),
+                            html.Div(children=[
+                                html.H3('Ano'),
+                                dcc.Dropdown(
+                                    id='dropdown_anos_2',
+                                    className='input',
+                                    options=[{'label':i, 'value':i} for i in anos],
+                                    value=dt_atual.year,
+                                    placeholder='Ano',
+                                    clearable=False,
+                                    searchable=False
+                                )
+                            ]),
+                            html.Div(children=[
+                                html.H3('Órgão'),
+                                dcc.Dropdown(
+                                    id='dropdown_orgao',
+                                    className='input',
+                                    options=[{'label':i, 'value':i} for i in orgaos],
+                                    value=orgaos[0],
+                                    placeholder='Órgão',
+                                    clearable=False,
+                                    searchable=False
+                                )
+                            ])
+                        ]),
+                        html.Div(children=[
+                            html.H3('Valor mínimo'),
+                            dcc.Slider(
+                                id         = 'slider_serv_aum',
+                                className  = 'slider-2',
+                                min        = 0,
+                                max        = 100000,
+                                step       = None,
+                                value      = 0,
+                                marks      = {0:'0', 1000:'1K', 10000:'10K', 50000:'50K', 100000:'100K'}
+                            ),
+                        ]),
+                        dcc.Graph(
+                            id='graph_serv_aumento_bar',
+                        )
+                    ]),
                     html.Div(
                         id='serv-mais-org',
                         className='sub-plot section',
@@ -377,63 +434,6 @@ def load_layout(app):
                             )
                         ]
                     ),
-                    html.Div(id='serv-aum-corte', className='sub-plot section', children=[
-                        html.H1('Aumento/Corte na remuneração'),
-                        html.H2(id='serv_aum_corte_H3'),
-                        html.Div(className='options-container', children=[
-                            html.Div(children=[
-                                html.H3('Mês'),
-                                dcc.Dropdown(
-                                    id='dropdown_meses_2',
-                                    className='input',
-                                    options=[{'label':i, 'value':i} for i in meses],
-                                    value=dt_atual.month,
-                                    placeholder='Mês',
-                                    clearable=False,
-                                    searchable=False
-                                ),
-                            ]),
-                            html.Div(children=[
-                                html.H3('Ano'),
-                                dcc.Dropdown(
-                                    id='dropdown_anos_2',
-                                    className='input',
-                                    options=[{'label':i, 'value':i} for i in anos],
-                                    value=dt_atual.year,
-                                    placeholder='Ano',
-                                    clearable=False,
-                                    searchable=False
-                                )
-                            ]),
-                            html.Div(children=[
-                                html.H3('Órgão'),
-                                dcc.Dropdown(
-                                    id='dropdown_orgao',
-                                    className='input',
-                                    options=[{'label':i, 'value':i} for i in orgaos],
-                                    value=orgaos[0],
-                                    placeholder='Órgão',
-                                    clearable=False,
-                                    searchable=False
-                                )
-                            ])
-                        ]),
-                        html.Div(children=[
-                            html.H3('Valor mínimo'),
-                            dcc.Slider(
-                                id         = 'slider_serv_aum',
-                                className  = 'slider-2',
-                                min        = 0,
-                                max        = 100000,
-                                step       = None,
-                                value      = 0,
-                                marks      = {0:'0', 1000:'1K', 10000:'10K', 50000:'50K', 100000:'100K'}
-                            ),
-                        ]),
-                        dcc.Graph(
-                            id='graph_serv_aumento_bar',
-                        )
-                    ]),
                     html.Div(id='serv-aum-geral', className='sub-plot section', children=[
                         html.H1('Aumento/Corte na remuneração Geral'),
                         dcc.Graph(

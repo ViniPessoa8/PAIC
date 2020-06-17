@@ -227,59 +227,6 @@ def serv_num_ativos():
 
     return fig
 
-## Servidores com mais órgãos diferentes
-def serv_mais_org():
-    # Preparação dos Dados 
-    df_temp = df.drop_duplicates(['NOME','ORGAO'])
-    df_temp = df_temp.groupby('NOME', as_index=False)[['ORGAO']].count()
-    df_temp = df_temp[df_temp['ORGAO'] > 1]
-    df_temp = df_temp.sort_values(['ORGAO'], ascending=False)
-    df_temp.rename(columns={'NOME':'Número de Servidores'})
-
-    return df_temp
-
-### Servidores duplicados
-def serv_duplicados(filter):
-    # Preparação dos Dados 
-    df_temp    = df[['NOME', 'DATA', 'ORGAO']]
-    df_bool    = df_temp.duplicated()
-    duplicados = df_temp[df_bool]
-    duplicados = duplicados.rename(columns={'NOME':'Número de Servidores'})
-
-    if (filter == 'data'):
-        duplicados_data  = duplicados.groupby(duplicados['DATA'].dt.year)['Número de Servidores'].count()
-        
-        return duplicados_data
-
-    duplicados_orgao = duplicados.groupby(['ORGAO'], as_index=False)['Número de Servidores'].count()
-    duplicados_orgao = duplicados_orgao.sort_values('Número de Servidores', ascending=False)
-
-    return duplicados_orgao
-
-### Busca de servidores duplicados
-def serv_duplicados_busca(org, ano, mes):
-    # Preparação dos Dados 
-    df_temp = df.loc[(df.ORGAO == org) & (df['DATA'].dt.year == ano) & (df['DATA'].dt.month == mes)]
-    duplicados = df_temp[df_temp.duplicated(['NOME'], keep=False)].sort_values('NOME')
-    duplicados = duplicados.drop(columns=['DATA', 'ORGAO'])
-
-    return duplicados
-
-### Servidores com maior líquido disponível
-def serv_liq():
-    # Preparação dos Dados 
-    df_temp = df.loc[(df['LIQUIDO DISPONIVEL(R$)'] > 35000)]
-    df_out  = pd.DataFrame()
-
-    df_out['Nome']  = df_temp['NOME']
-    df_out['Líquido Disponível(R$)'] = df_temp['LIQUIDO DISPONIVEL(R$)']
-    df_out['Órgão'] = df_temp['ORGAO']
-    df_out['Data']  = df_temp['DATA'].dt.date
-
-    df_out = df_out.sort_values(by='Líquido Disponível(R$)', ascending=False)
-
-    return df_out
-
 ### Servidores com o maior aumento/corte
 def serv_aumento(mes, ano, orgao, valor):
     # Cálculo do mês anterior
@@ -342,6 +289,59 @@ def serv_aumento(mes, ano, orgao, valor):
     )
 
     return fig
+
+## Servidores com mais órgãos diferentes
+def serv_mais_org():
+    # Preparação dos Dados 
+    df_temp = df.drop_duplicates(['NOME','ORGAO'])
+    df_temp = df_temp.groupby('NOME', as_index=False)[['ORGAO']].count()
+    df_temp = df_temp[df_temp['ORGAO'] > 1]
+    df_temp = df_temp.sort_values(['ORGAO'], ascending=False)
+    df_temp.rename(columns={'NOME':'Número de Servidores'})
+
+    return df_temp
+
+### Servidores duplicados
+def serv_duplicados(filter):
+    # Preparação dos Dados 
+    df_temp    = df[['NOME', 'DATA', 'ORGAO']]
+    df_bool    = df_temp.duplicated()
+    duplicados = df_temp[df_bool]
+    duplicados = duplicados.rename(columns={'NOME':'Número de Servidores'})
+
+    if (filter == 'data'):
+        duplicados_data  = duplicados.groupby(duplicados['DATA'].dt.year)['Número de Servidores'].count()
+        
+        return duplicados_data
+
+    duplicados_orgao = duplicados.groupby(['ORGAO'], as_index=False)['Número de Servidores'].count()
+    duplicados_orgao = duplicados_orgao.sort_values('Número de Servidores', ascending=False)
+
+    return duplicados_orgao
+
+### Busca de servidores duplicados
+def serv_duplicados_busca(org, ano, mes):
+    # Preparação dos Dados 
+    df_temp = df.loc[(df.ORGAO == org) & (df['DATA'].dt.year == ano) & (df['DATA'].dt.month == mes)]
+    duplicados = df_temp[df_temp.duplicated(['NOME'], keep=False)].sort_values('NOME')
+    duplicados = duplicados.drop(columns=['DATA', 'ORGAO'])
+
+    return duplicados
+
+### Servidores com maior líquido disponível
+def serv_liq():
+    # Preparação dos Dados 
+    df_temp = df.loc[(df['LIQUIDO DISPONIVEL(R$)'] > 35000)]
+    df_out  = pd.DataFrame()
+
+    df_out['Nome']  = df_temp['NOME']
+    df_out['Líquido Disponível(R$)'] = df_temp['LIQUIDO DISPONIVEL(R$)']
+    df_out['Órgão'] = df_temp['ORGAO']
+    df_out['Data']  = df_temp['DATA'].dt.date
+
+    df_out = df_out.sort_values(by='Líquido Disponível(R$)', ascending=False)
+
+    return df_out
 
 def serv_aum_geral():
     # Preparação dos dados
