@@ -434,13 +434,13 @@ def load_layout(app):
                             )
                         ]
                     ),
-                    html.Div(id='serv-aum-geral', className='sub-plot section', children=[
-                        html.H1('Aumento/Corte na remuneração Geral'),
-                        dcc.Graph(
-                            id = 'graph_serv_aumento_geral',
-                            # figure = pl.serv_aum_geral()
-                        )
-                    ])
+                    # html.Div(id='serv-aum-geral', className='sub-plot section', children=[
+                    #     html.H1('Aumento/Corte na remuneração Geral'),
+                    #     dcc.Graph(
+                    #         id = 'graph_serv_aumento_geral',
+                    #         # figure = pl.serv_aum_geral()
+                    #     )
+                    # ])
                 ])
             ])
         ]),
