@@ -42,7 +42,9 @@ def org_rem_total(init, end):
             x=df_temp['DATA'], 
             y=df_temp['REMUNERACAO LEGAL TOTAL(R$)'],
             mode='lines+markers',
-            name=orgao
+            name=orgao,
+            hovertemplate='Valor: R$%{y}<br>Data: %{x}',
+            # hoverinfo='x+y+name',
         ))
     fig.update_yaxes(automargin=True)
 
@@ -61,7 +63,8 @@ def org_rem_total_ind(orgao):
         x=df_org['DATA'], 
         y=df_org['REMUNERACAO LEGAL TOTAL(R$)'],
         mode='lines+markers',
-        name=orgao
+        name=orgao,
+        hovertemplate='Valor: R$%{y}<br>Data: %{x}',
     ))
 
     return fig
@@ -107,7 +110,8 @@ def org_aumento(mes, ano, valor):
             name = 'Aumentos',
             y    = orgs_aum_prin['Remuneração Legal Total (Soma)'], 
             x    = orgs_aum_prin['Órgão'],
-            base = 0
+            base = 0,
+            hovertemplate='%{x}: %{y}',
         )
     )
     fig.add_trace(
@@ -115,14 +119,16 @@ def org_aumento(mes, ano, valor):
             name = 'Cortes',
             y    = orgs_corte_prin['Remuneração Legal Total (Soma)'], 
             x    = orgs_corte_prin['Órgão'],
-            base = 0
+            base = 0,
+            hovertemplate='%{x}: %{y}',
         )
     )
     fig.update_layout(
         title_text = 'Servidores com o maior aumento/corte',
         title_font_size = 17,
         width = graph_x,
-        height = graph_y
+        height = graph_y,
+        # hovertemplate='Valor: %{y}<br>Data: %{x}',
     )
 
     return fig
@@ -145,7 +151,8 @@ def serv_busca(nome, filter='orgao'):
                 x=df_temp['DATA'], 
                 y=df_temp['REMUNERACAO LEGAL TOTAL(R$)'],
                 mode='lines+markers',
-                name=orgao
+                name=orgao,
+                hovertemplate='Valor: %{y}<br>Data: %{x}',
             ))
     elif (filter == 'cargo'):
         fig = go.Figure(
@@ -158,7 +165,8 @@ def serv_busca(nome, filter='orgao'):
                 x=df_temp['DATA'], 
                 y=df_temp['REMUNERACAO LEGAL TOTAL(R$)'],
                 mode='lines+markers',
-                name=cargo
+                name=cargo,
+                hovertemplate='Valor: %{y}<br>Data: %{x}',
             ))
     else:
         fig = go.Figure(layout=layout)
@@ -172,7 +180,8 @@ def serv_busca(nome, filter='orgao'):
                 x=df_temp['DATA'], 
                 y=df_temp['REMUNERACAO LEGAL TOTAL(R$)'],
                 mode='lines+markers',
-                name=funcao
+                name=funcao,
+                hovertemplate='Valor: %{y}<br>Data: %{x}',
             ))
 
     return fig
@@ -191,7 +200,7 @@ def serv_num_reg():
         df_temp, 
         x='Órgão', y='Funcionários', 
         title='Número de funcionários registrados (Por órgão)', 
-        height=700, width=graph_x
+        height=700, width=graph_x,
     )
 
     return fig
@@ -312,7 +321,8 @@ def serv_aumento(mes, ano, orgao, valor):
             name = 'Aumentos',
             y    = orgs_aum_prin['Remuneração Legal Total (Soma)'], 
             x    = orgs_aum_prin['Nome'],
-            base = 0
+            base = 0,
+            hovertemplate='Nome: %{x}<br>Valor: %{y}',
         )
     )
     fig.add_trace(
@@ -320,7 +330,8 @@ def serv_aumento(mes, ano, orgao, valor):
             name = 'Cortes',
             y    = orgs_corte_prin['Remuneração Legal Total (Soma)'], 
             x    = orgs_corte_prin['Nome'],
-            base = 0
+            base = 0,
+            hovertemplate='Nome: %{x}<br>Valor: %{y}',
         )
     )
     fig.update_layout(
