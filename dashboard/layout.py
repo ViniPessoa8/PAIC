@@ -25,7 +25,6 @@ df_teste = df[df['DATA'] == dt_atual][['NOME', 'ORGAO']].head(10)
 
 def load_layout(app):    
     component = html.Div(className='container', children=[
-        html.Div(id='datalist-container', className='datalist-container'),
         html.Div(className='header-container', children=[
             html.H1(className='header', children=[
                 'Transparência do Governo do Amazonas'
@@ -35,9 +34,11 @@ def load_layout(app):
             ]),
             html.P(children=[
                 'Fonte: ',
-                html.A(href='http://www.transparencia.am.gov.br/pessoal/', children=[
-                    'http://www.transparencia.am.gov.br/pessoal/'
-                ])
+                html.A(
+                    href='http://www.transparencia.am.gov.br/pessoal/', 
+                    children=['http://www.transparencia.am.gov.br/pessoal/'],
+                    target='_blank'
+                )
             ]),
         ]),
         html.Div(className='main-container', children =[
