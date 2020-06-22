@@ -53,7 +53,7 @@ def load_layout(app):
                     html.A(className='', href='#serv-reg', children=['Quantidade por órgão']),
                     html.A(className='', href='#serv-aum-corte', children=['Aumentos e Cortes']),
                     html.A(className='', href='#serv-mais-org', children=['Presentes em mais de um órgão']),
-                    html.A(className='', href='#serv-dupl-mesmo-org', children=['Duplicados no mesmo órgão']),
+                    html.A(className='', href='#serv-dupl-mesmo-org', children=['Duplicados']),
                     html.A(className='', href='#serv-liq', children=['Maior Líquido']),
                 ])
             ]),
@@ -291,12 +291,13 @@ def load_layout(app):
                         id='serv-dupl-mesmo-org',
                         className='sub-plot section',
                         children=[
-                            html.H1('Servidores duplicados no mesmo órgão'),
+                            html.H1('Servidores Duplicados'),
+                            html.H2('No mesmo órgão'),
                             html.Div(
                                 className='serv_dupl_container',
                                 children=[
                                     html.Div(className='dt-container', children=[
-                                        html.H1('Por órgão'),
+                                        html.H3('Por órgão'),
                                         dt.DataTable(
                                             id='dt_serv_dupl_org',
                                             columns=[{'name': col, 'id': col} for col in pl.serv_duplicados('org').columns],
@@ -319,7 +320,7 @@ def load_layout(app):
                                         )
                                     ]),
                                     html.Div(children=[
-                                        html.H1('Por ano'),
+                                        html.H3('Por ano'),
                                         dt.DataTable(
                                             id='dt_serv_dupl_ano',
                                             columns=[{'name': col, 'id': col} for col in pl.serv_duplicados('data').reset_index().columns],
@@ -343,10 +344,10 @@ def load_layout(app):
                                     ])
                                 ]
                             ),
-                            html.H1('Busca de servidores duplicados'),
+                            html.H2('Busca'),
                             html.Div(className='options-container', children=[
                                 html.Div(children=[
-                                    html.H1('Órgão'),
+                                    html.H3('Órgão'),
                                     dcc.Dropdown(
                                         id='dropdown_busca_org',
                                         className='input',
@@ -358,7 +359,7 @@ def load_layout(app):
                                     )
                                 ]),
                                 html.Div(children=[
-                                    html.H1('Ano'),
+                                    html.H3('Ano'),
                                     dcc.Dropdown(
                                         id='dropdown_busca_ano',
                                         className='input',
@@ -370,7 +371,7 @@ def load_layout(app):
                                     )
                                 ]),
                                 html.Div(children=[
-                                    html.H1('Mês'),
+                                    html.H3('Mês'),
                                     dcc.Dropdown(
                                         id='dropdown_busca_mes',
                                         className='input',
@@ -447,8 +448,9 @@ def load_layout(app):
         ]),
         html.Footer(className='footer', children=[
             html.Div(className='footer-image-container', children=[
-                html.Img(src=app.get_asset_url('media/UEA-EST.png')),
-                html.Img(src=app.get_asset_url('media/LSI.jpg')),
+                html.Img(src=app.get_asset_url('media/download.png')),
+                html.Img(src=app.get_asset_url('media/UEA-Logo.png')),
+                html.Img(src=app.get_asset_url('media/LSI-Logo.png')),
             ])
         ])
     ])

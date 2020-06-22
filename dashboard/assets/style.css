@@ -194,13 +194,17 @@ body {
     padding-left: 150px;
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-evenly;
     align-items: center;
+    justify-items: center;
 }
 
 .footer-image-container img {
-    width: auto;
-    height: fit-content;
+    /* width: auto; */
+    max-width: 300px;
+    max-height: 150px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .footer {
@@ -244,4 +248,8 @@ a:hover {
 
 #serv-submit-btn {
     margin-left: 10px;
+}
+
+h3 {
+    font-size: 20px;
 }
