@@ -37,9 +37,16 @@ def load_layout(app):
                 html.A(
                     href='http://www.transparencia.am.gov.br/pessoal/', 
                     children=['http://www.transparencia.am.gov.br/pessoal/'],
-                    target='_blank'
+                    target='_blank',
                 )
             ]),
+            html.P( children=[
+                html.A(
+                    href=str(pl.ds_path),
+                    children=['Dataset (.csv)'],
+                    download='ds_servidores_gov_AM.csv'
+                ) 
+            ])
         ]),
         html.Div(className='main-container', children =[
             html.Div(className='sidenav', children=[
