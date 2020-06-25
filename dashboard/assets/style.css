@@ -100,11 +100,13 @@ body {
 }
 
 .header-container p {
+    font-size: 25px;
     font-weight: lighter;
 }
 
 .header-container a {
-    color: var(--color-4)
+    color: var(--color-4);
+    text-decoration: underline;
 }
 
 .header-container a:hover {
