@@ -138,14 +138,14 @@ body {
     position: inherit;
     width: 100%;
     text-align: center;
-    font-size: 40px;
+    font-size: 50px;
     margin: 0;
     padding: 0;
     color: var(--color-2);
     background-color: var(--color-4);
 }
 
-.plot-header h4 {
+.plot-header h3 {
     padding: 15px;
     margin: 0;
 }
@@ -246,8 +246,4 @@ a:hover {
 
 #serv-submit-btn {
     margin-left: 10px;
-}
-
-h3 {
-    font-size: 20px;
 }
