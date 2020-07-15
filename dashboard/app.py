@@ -112,7 +112,7 @@ def serv_busca_duplicados(org, ano, mes):
     [Input('serv_busca_input','value')]
 )
 def serv_busca(nome):
-    
+
     if((nome == None) or (nome not in pl.nomes.values)):
         raise PreventUpdate
     else:    
