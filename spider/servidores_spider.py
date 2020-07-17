@@ -8,12 +8,19 @@ import shutil
 import re
 
 #### Global Variables ####
-project_path = os.getcwd()
-csv_path = project_path.replace('spider', 'csv/')
-log_file_path = project_path.replace('spider', 'log/')
-driver_path = ''
-pastas = {}
-driver_path = project_path.replace('spider', 'bin/chromedriver') 
+# project_path  = os.getcwd().replace('spider', '')
+project_path  = os.path.dirname(os.path.abspath(__file__)).replace('spider', '')
+csv_path      = project_path + 'csv/'
+log_file_path = project_path + 'log/'
+driver_path   = project_path + 'bin/chromedriver' 
+pastas        = {}
+
+# DEBUG #
+print('Project path: ' + project_path)
+print('csv path:' + csv_path)
+print('log file path: ' + log_file_path) 
+print('driver path: ' + driver_path)
+# DEBUG #
 
 #### Funções ####
 def get_driver_path():
@@ -50,7 +57,7 @@ def get_log_file():
     if not os.path.isdir(log_file_path):
         os.mkdir(log_file_path)
     
-    log_file = open(log_file_path+'spider_log.txt', 'at')
+    log_file = open(log_file_path+'/spider_log.txt', 'at')
     return log_file
         
 
