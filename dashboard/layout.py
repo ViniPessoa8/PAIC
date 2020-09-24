@@ -276,9 +276,6 @@ def load_layout(app):
                                 id='dt_serv_mais_org',
                                 columns=[{"name": col, "id": col} for col in pl.serv_mais_org().columns],
                                 data=pl.serv_mais_org().to_dict('records'),
-                                row_selectable='single',
-                                selected_columns=[],
-                                # selected_rows=[],
                                 style_table={
                                     'display': 'flex',
                                     'flex-direction': 'column',

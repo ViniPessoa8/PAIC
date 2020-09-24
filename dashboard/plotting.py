@@ -4,6 +4,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import pathlib 
 import os
+import math
 
 # Configurações do Gráfico
 graph_x = 1000
@@ -24,6 +25,16 @@ meses  = df['DATA'].dt.month.drop_duplicates().sort_values()
 nomes  = df['NOME'].drop_duplicates()
 
 # Métodos
+## Util
+def formata_valor(valor):
+  resultado = 0
+  if (valor < 1000):
+    return 'R$'+str(valor)
+  elif (valor < 1000000):
+    return 'R$'+str(math.trunc(valor/1000))+'K'
+  elif (valor < 1000000000):
+    return 'R$'+str(math.trunc(valor/1000000))+'M'
+
 ## ÓRGÃO
 ### Soma da remuneração legal total por órgão
 def org_rem_total(init, end):
@@ -33,9 +44,10 @@ def org_rem_total(init, end):
     df_rem_total = df_temp.loc[(rem > init) & (rem < end)]
 
     # Plot
+    title_str = 'Remuneração Legal Total de cada órgão ('+formata_valor(init)+' - '+formata_valor(end)+')'
     layout = go.Layout(width=graph_x, height=graph_y)
     fig = go.Figure(layout=layout)
-    fig.update_layout(title='Remuneração Legal Total de cada órgão ')
+    fig.update_layout(title=title_str)
     for orgao in df_rem_total['ORGAO'].drop_duplicates():
         df_temp = df_rem_total.loc[(df_rem_total['ORGAO'] == orgao)] 
         fig.add_trace(go.Scatter(
@@ -124,7 +136,7 @@ def org_aumento(mes, ano, valor):
         )
     )
     fig.update_layout(
-        title_text = 'Servidores com o maior aumento/corte',
+        title_text = 'Órgãos com o maior aumento/corte na remuneração legal total de '+str(mes)+'/'+str(ano),
         title_font_size = 17,
         width = graph_x,
         height = graph_y,
@@ -144,7 +156,7 @@ def serv_busca(nome, filter='orgao'):
     # Plot
     if (filter == 'orgao'):
         fig = go.Figure(layout=layout)
-        fig.update_layout(title='Remuneração Legal Total de '+nome+' por Cargo e Data')
+        fig.update_layout(title='Remuneração Legal Total de '+nome+' por órgão e data')
         for orgao in registros_serv['ORGAO'].drop_duplicates():
             df_temp = registros_serv.loc[(registros_serv['ORGAO'] == orgao)] 
             fig.add_trace(go.Scatter(
@@ -158,7 +170,7 @@ def serv_busca(nome, filter='orgao'):
         fig = go.Figure(
             layout=layout,
         )
-        fig.update_layout(title='Remuneração Legal Total de '+nome+' por Cargo e Data')
+        fig.update_layout(title='Remuneração Legal Total de '+nome+' por cargo e data')
         for cargo in registros_serv['CARGO'].drop_duplicates():
             df_temp = registros_serv.loc[(registros_serv['CARGO'] == cargo)] 
             fig.add_trace(go.Scatter(
@@ -171,7 +183,7 @@ def serv_busca(nome, filter='orgao'):
     else:
         fig = go.Figure(layout=layout)
         fig.update_layout(
-            title='Remuneração Legal Total de '+nome+' por Cargo e Data'
+            title='Remuneração Legal Total de '+nome+' por função e data'
             )
         for funcao in registros_serv['FUNCAO'].drop_duplicates():
             title='Remuneração Legal Total de '+nome+' por Função e Data', 
